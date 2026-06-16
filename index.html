@@ -1,55 +1,286 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-PT">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AD Pastéis Estatísticas</title>
+
 <style>
-body{font-family:Arial;background:#0a1b3d;color:white;padding:20px}
-select,button{width:100%;padding:15px;margin:5px 0;font-size:18px;border-radius:10px}
-button{background:#1e88e5;color:white;border:none}
-#contador{background:white;color:black;padding:15px;border-radius:10px;margin-top:20px}
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#071326;
+  color:#fff;
+}
+.app{
+  max-width:520px;
+  margin:auto;
+  padding:15px;
+}
+h1{
+  text-align:center;
+  margin:10px 0 0;
+}
+.sub{
+  text-align:center;
+  color:#ffd21a;
+  font-weight:bold;
+  margin-bottom:15px;
+}
+.card{
+  background:#fff;
+  color:#111;
+  border-radius:18px;
+  padding:15px;
+  margin-bottom:15px;
+}
+label{
+  font-weight:bold;
+  display:block;
+  margin-top:12px;
+}
+select,button{
+  width:100%;
+  padding:14px;
+  margin-top:8px;
+  font-size:17px;
+  border-radius:12px;
+  border:1px solid #ccc;
+}
+button{
+  color:white;
+  border:0;
+  font-weight:bold;
+}
+.green{background:#26a626}
+.blue{background:#087dcc}
+.red{background:#e93421}
+.orange{background:#f28b12}
+.purple{background:#8b1bc4}
+.cyan{background:#0aa6ad}
+.pink{background:#d91b76}
+.yellow{background:#ffd21a;color:#111}
+.dark{background:#101b31}
+.danger{background:#d71920}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.stat{
+  display:flex;
+  justify-content:space-between;
+  background:#f2f4f8;
+  padding:10px;
+  border-radius:10px;
+  margin:6px 0;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
+}
+th,td{
+  border:1px solid #ddd;
+  padding:6px;
+  text-align:center;
+}
+th{
+  background:#101b31;
+  color:white;
+}
+.log{
+  background:#f2f4f8;
+  padding:8px;
+  border-radius:10px;
+  margin:6px 0;
+  font-size:13px;
+}
 </style>
 </head>
+
 <body>
+<div class="app">
 
-<h1>AD Pastéis</h1>
+<h1>AD PASTÉIS</h1>
+<div class="sub">Estatísticas de Jogo</div>
 
-<select id="jogador">
-<option>Jogador 1</option>
-<option>Jogador 2</option>
-<option>Jogador 3</option>
-<option>Jogador 4</option>
-<option>Jogador 5</option>
-<option>Jogador 6</option>
-<option>Jogador 7</option>
-<option>Jogador 8</option>
-<option>Jogador 9</option>
-<option>Jogador 10</option>
-<option>Jogador 11</option>
-<option>Jogador 12</option>
-</select>
+<div class="card">
+  <h2>Registo de Ação</h2>
 
-<button onclick="registar('Remate jogo corrido')">Remate jogo corrido</button>
-<button onclick="registar('Remate livre')">Remate livre</button>
-<button onclick="registar('Golo dentro da área')">Golo dentro da área</button>
-<button onclick="registar('Golo fora da área')">Golo fora da área</button>
-<button onclick="registar('Golo atrás do meio campo')">Golo atrás do meio campo</button>
-<button onclick="registar('Golo de cabeça')">Golo de cabeça</button>
-<button onclick="registar('Golo de canto')">Golo de canto</button>
+  <label>Período</label>
+  <select id="periodo">
+    <option>1.º período</option>
+    <option>2.º período</option>
+    <option>3.º período</option>
+  </select>
 
-<div id="contador">
-Total de registos: <span id="total">0</span>
+  <label>Minuto</label>
+  <select id="minuto"></select>
+
+  <label>Jogador</label>
+  <select id="jogador"></select>
+
+  <label>Tipo de ação</label>
+  <div class="grid">
+    <button class="green" onclick="registar('Remate jogo corrido')">Remate jogo corrido</button>
+    <button class="blue" onclick="registar('Remate livre')">Remate livre</button>
+    <button class="red" onclick="registar('Golo dentro da área')">Golo dentro da área</button>
+    <button class="orange" onclick="registar('Golo fora da área')">Golo fora da área</button>
+    <button class="purple" onclick="registar('Golo atrás do meio campo')">Golo atrás do meio campo</button>
+    <button class="cyan" onclick="registar('Golo de cabeça')">Golo de cabeça</button>
+    <button class="pink" onclick="registar('Golo de canto')">Golo de canto</button>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Resumo da Equipa</h2>
+  <div id="resumo"></div>
+</div>
+
+<div class="card">
+  <h2>Estatísticas por Jogador</h2>
+  <div style="overflow-x:auto">
+    <table id="tabela"></table>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Ações Registadas</h2>
+  <div id="historico"></div>
+  <button class="yellow" onclick="exportarCSV()">Exportar CSV</button>
+  <button class="danger" onclick="limpar()">Limpar tudo</button>
+</div>
+
 </div>
 
 <script>
-let total=0;
+const jogadores = [];
+for(let i=1;i<=12;i++){
+  jogadores.push("Jogador " + i);
+}
+
+const acoes = [
+  "Remate jogo corrido",
+  "Remate livre",
+  "Golo dentro da área",
+  "Golo fora da área",
+  "Golo atrás do meio campo",
+  "Golo de cabeça",
+  "Golo de canto"
+];
+
+let registos = JSON.parse(localStorage.getItem("adpasteis_registos")) || [];
+
+const jogadorSelect = document.getElementById("jogador");
+const minutoSelect = document.getElementById("minuto");
+
+jogadores.forEach(j=>{
+  let op=document.createElement("option");
+  op.textContent=j;
+  jogadorSelect.appendChild(op);
+});
+
+for(let i=0;i<=40;i++){
+  let op=document.createElement("option");
+  op.textContent=i + "'";
+  minutoSelect.appendChild(op);
+}
 
 function registar(acao){
- total++;
- document.getElementById("total").innerHTML=total;
- alert(document.getElementById("jogador").value+" - "+acao);
+  const registo = {
+    jogador: document.getElementById("jogador").value,
+    periodo: document.getElementById("periodo").value,
+    minuto: document.getElementById("minuto").value,
+    acao: acao,
+    data: new Date().toLocaleString("pt-PT")
+  };
+
+  registos.unshift(registo);
+  localStorage.setItem("adpasteis_registos", JSON.stringify(registos));
+  atualizar();
 }
+
+function contar(filtro){
+  return registos.filter(filtro).length;
+}
+
+function atualizar(){
+  const resumo = document.getElementById("resumo");
+  resumo.innerHTML = "";
+
+  acoes.forEach(a=>{
+    resumo.innerHTML += `
+      <div class="stat">
+        <b>${a}</b>
+        <b>${contar(r=>r.acao===a)}</b>
+      </div>`;
+  });
+
+  let totalGolos = contar(r=>r.acao.startsWith("Golo"));
+  resumo.innerHTML += `
+    <div class="stat" style="background:#101b31;color:white">
+      <b>Total de golos</b>
+      <b>${totalGolos}</b>
+    </div>`;
+
+  const tabela = document.getElementById("tabela");
+  tabela.innerHTML = "<tr><th>Jogador</th><th>RJC</th><th>RL</th><th>GDA</th><th>GFA</th><th>GMC</th><th>GCab</th><th>GCanto</th><th>Golos</th></tr>";
+
+  jogadores.forEach(j=>{
+    let golos = contar(r=>r.jogador===j && r.acao.startsWith("Golo"));
+    tabela.innerHTML += `
+      <tr>
+        <td>${j}</td>
+        <td>${contar(r=>r.jogador===j && r.acao==="Remate jogo corrido")}</td>
+        <td>${contar(r=>r.jogador===j && r.acao==="Remate livre")}</td>
+        <td>${contar(r=>r.jogador===j && r.acao==="Golo dentro da área")}</td>
+        <td>${contar(r=>r.jogador===j && r.acao==="Golo fora da área")}</td>
+        <td>${contar(r=>r.jogador===j && r.acao==="Golo atrás do meio campo")}</td>
+        <td>${contar(r=>r.jogador===j && r.acao==="Golo de cabeça")}</td>
+        <td>${contar(r=>r.jogador===j && r.acao==="Golo de canto")}</td>
+        <td>${golos}</td>
+      </tr>`;
+  });
+
+  const historico = document.getElementById("historico");
+  historico.innerHTML = "";
+
+  registos.slice(0,30).forEach(r=>{
+    historico.innerHTML += `
+      <div class="log">
+        <b>${r.acao}</b><br>
+        ${r.jogador} · ${r.periodo} · ${r.minuto}<br>
+        ${r.data}
+      </div>`;
+  });
+}
+
+function limpar(){
+  if(confirm("Queres apagar todos os registos?")){
+    registos = [];
+    localStorage.removeItem("adpasteis_registos");
+    atualizar();
+  }
+}
+
+function exportarCSV(){
+  let csv = "Data,Período,Minuto,Jogador,Ação\n";
+  registos.forEach(r=>{
+    csv += `"${r.data}","${r.periodo}","${r.minuto}","${r.jogador}","${r.acao}"\n`;
+  });
+
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "estatisticas_ad_pasteis.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+atualizar();
 </script>
 
 </body>
