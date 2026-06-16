@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AD Pastéis Treinos</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#071326;
+  color:white;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image:url("logo-pasteis.png");
+  background-repeat:no-repeat;
+  background-position:center 56%;
+  background-size:min(86vw,580px);
+  opacity:.08;
+  z-index:-1;
+  pointer-events:none;
+}
+.app{max-width:540px;margin:auto;padding:10px 10px 90px}
+.card{
+  background:rgba(255,255,255,.62);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  color:#111;
+  border-radius:14px;
+  padding:10px;
+  margin:8px 0;
+  border:1px solid rgba(255,255,255,.25);
+}
+.top{
+  background:rgba(16,27,49,.82);
+  border-radius:16px;
+  padding:12px;
+  color:white;
+  position:relative;
+  border:1px solid rgba(255,255,255,.18);
+}
+h1{margin:0;font-size:20px}
+h2,h3{margin:4px 0 8px}
+label{font-size:13px;font-weight:bold;display:block;margin-top:8px}
+button,input,select,textarea{
+  width:100%;
+  padding:10px;
+  margin-top:6px;
+  font-size:15px;
+  border-radius:10px;
+  border:1px solid #ccc;
+}
+button{border:0;color:white;font-weight:bold}
+textarea{height:70px}
+.green{background:#26a626}.blue{background:#087dcc}.red{background:#d71920}.orange{background:#f28b12}.dark{background:#101b31}.yellow{background:#ffd21a;color:#111}.danger{background:#d71920}
+.players{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.playerBtn{background:#eef1f6;color:#111;border:1px solid #ccc;font-size:12px;padding:9px;min-height:39px}
+.playerBtn.presente{border:2px solid #26a626}
+.playerBtn.falta{border:2px solid #d71920}
+.hidden{display:none!important}
+.stat,.log{background:rgba(241,243,246,.92);padding:8px;border-radius:8px;margin:5px 0;font-size:13px}
+.stat{display:flex;justify-content:space-between;gap:8px}
+.small{font-size:12px;opacity:.9}
+.settingsBtn{position:absolute;right:8px;top:8px;width:36px;height:36px;border-radius:50%;padding:0;margin:0;background:#ffd21a;color:#111;font-size:18px}
+.tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px}
+.tabs button{font-size:13px;padding:9px;background:#101b31}
+.activeTab{background:#d71920!important}
+.exerciseCard{background:rgba(16,27,49,.86);color:white;border-radius:12px;padding:10px;margin:8px 0}
+.counterRow{display:grid;grid-template-columns:1fr 55px 55px 55px;gap:5px;align-items:center;background:rgba(255,255,255,.10);padding:7px;border-radius:8px;margin:5px 0;color:white}
+.counterRow button{margin:0;padding:7px}
+.summaryBox{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;text-align:center}
+.summaryBox div{background:rgba(16,27,49,.9);color:white;border-radius:10px;padding:8px}
+@media(max-width:420px){
+ .players{grid-template-columns:repeat(3,1fr)}
+ .tabs button{font-size:12px;padding:8px}
+ .counterRow{grid-template-columns:1fr 48px 48px 48px;font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<div class="app" id="paginaPrincipal">
+  <div class="top">
+    <button class="settingsBtn" onclick="abrirDefinicoes()">⚙️</button>
+    <h1>AD PASTÉIS — TREINOS</h1>
+    <div class="small" id="infoTreino">Treino</div>
+    <div class="tabs">
+      <button id="tabPresencas" class="activeTab" onclick="mostrarAba('presencas')">Presenças</button>
+      <button id="tabExercicios" onclick="mostrarAba('exercicios')">Exercícios</button>
+      <button id="tabRelatorio" onclick="mostrarAba('relatorio')">Relatório</button>
+    </div>
+  </div>
+
+  <div id="abaPresencas">
+    <div class="card">
+      <h3>Presenças</h3>
+      <div class="summaryBox">
+        <div><b id="totalPresentes">0</b><br><span class="small">Presentes</span></div>
+        <div><b id="totalFaltas">0</b><br><span class="small">Faltas</span></div>
+        <div><b id="totalAtrasos">0</b><br><span class="small">Atrasos</span></div>
+      </div>
+      <div id="presencasGrid" class="players" style="margin-top:8px"></div>
+      <p class="small">Toque no jogador para alternar: Presente → Atraso → Falta.</p>
+    </div>
+
+    <div class="card">
+      <h3>Avaliação rápida</h3>
+      <label>Jogador</label>
+      <select id="jogadorAvaliacao"></select>
+      <label>Atitude</label>
+      <input id="atitude" type="range" min="1" max="5" value="3" oninput="atualizarValoresAvaliacao()">
+      <div class="small" id="valorAtitude">Atitude: 3/5</div>
+      <label>Intensidade</label>
+      <input id="intensidade" type="range" min="1" max="5" value="3" oninput="atualizarValoresAvaliacao()">
+      <div class="small" id="valorIntensidade">Intensidade: 3/5</div>
+      <label>Concentração</label>
+      <input id="concentracao" type="range" min="1" max="5" value="3" oninput="atualizarValoresAvaliacao()">
+      <div class="small" id="valorConcentracao">Concentração: 3/5</div>
+      <label>Observação individual</label>
+      <textarea id="obsIndividual" placeholder="Ex: melhorou tomada de decisão..."></textarea>
+      <button class="red" onclick="guardarAvaliacao()">Guardar avaliação</button>
+    </div>
+  </div>
+
+  <div id="abaExercicios" class="hidden">
+    <div class="card">
+      <h3>Novo exercício</h3>
+      <label>Nome do exercício</label>
+      <input id="nomeExercicio" placeholder="Ex: Finalização após passe">
+      <label>Tipo</label>
+      <select id="tipoExercicio">
+        <option value="individual">Individual</option>
+        <option value="coletivo">Coletivo</option>
+        <option value="grupos">Grupos</option>
+      </select>
+      <button class="red" onclick="criarExercicio()">Criar exercício</button>
+    </div>
+
+    <div class="card">
+      <h3>Exercícios do treino</h3>
+      <div id="listaExercicios"></div>
+    </div>
+  </div>
+
+  <div id="abaRelatorio" class="hidden">
+    <div class="card">
+      <h3>Resumo do treino</h3>
+      <div id="resumoTreino"></div>
+    </div>
+    <div class="card">
+      <button class="yellow" onclick="exportarCSV()">Exportar CSV</button>
+      <button class="danger" onclick="limparTreino()">Limpar treino atual</button>
+    </div>
+  </div>
+</div>
+
+<div id="paginaDefinicoes" class="app hidden">
+  <div class="card">
+    <h2>Definições</h2>
+    <label>Data do treino</label>
+    <input id="dataTreino" type="date">
+    <label>Equipa / Escalão</label>
+    <input id="equipaTreino" value="AD Pastéis">
+    <label>Número total de jogadores</label>
+    <input id="totalJogadores" type="number" min="1" value="12">
+    <label>Objetivo do treino</label>
+    <textarea id="objetivoTreino" placeholder="Ex: melhorar finalização e reação à perda"></textarea>
+    <label>Detalhes extra</label>
+    <textarea id="detalhesTreino" placeholder="Local, condições, notas gerais..."></textarea>
+    <button class="green" onclick="guardarDefinicoes()">Guardar definições</button>
+    <button class="dark" onclick="fecharDefinicoes()">Voltar</button>
+  </div>
+
+  <div class="card">
+    <button class="dark" onclick="toggle('editarJogadores')">Editar jogadores</button>
+    <div id="editarJogadores" class="hidden"></div>
+  </div>
+
+  <div class="card">
+    <button class="danger" onclick="resetCompleto()">Reset completo da app</button>
+  </div>
+</div>
+
+<script>
+let totalJogadores=parseInt(localStorage.getItem("treino_total_jogadores")||"12");
+let jogadores=JSON.parse(localStorage.getItem("treino_jogadores"))||[];
+if(jogadores.length===0){for(let i=1;i<=totalJogadores;i++)jogadores.push("Jogador "+i)}
+
+let presencas=JSON.parse(localStorage.getItem("treino_presencas"))||{};
+let exercicios=JSON.parse(localStorage.getItem("treino_exercicios"))||[];
+let avaliacoes=JSON.parse(localStorage.getItem("treino_avaliacoes"))||[];
+
+function hojeISO(){
+ const d=new Date();
+ return d.toISOString().split("T")[0];
+}
+function toggle(id){document.getElementById(id).classList.toggle("hidden")}
+
+function carregarBase(){
+ if(!localStorage.getItem("treino_data")) localStorage.setItem("treino_data",hojeISO());
+ document.getElementById("dataTreino").value=localStorage.getItem("treino_data")||hojeISO();
+ document.getElementById("equipaTreino").value=localStorage.getItem("treino_equipa")||"AD Pastéis";
+ document.getElementById("totalJogadores").value=totalJogadores;
+ document.getElementById("objetivoTreino").value=localStorage.getItem("treino_objetivo")||"";
+ document.getElementById("detalhesTreino").value=localStorage.getItem("treino_detalhes")||"";
+ atualizarInfoTreino();
+}
+function atualizarInfoTreino(){
+ const equipa=localStorage.getItem("treino_equipa")||"AD Pastéis";
+ const data=localStorage.getItem("treino_data")||hojeISO();
+ const objetivo=localStorage.getItem("treino_objetivo")||"";
+ document.getElementById("infoTreino").innerHTML=equipa+" · "+data+(objetivo?("<br>"+objetivo):"");
+}
+function abrirDefinicoes(){
+ document.getElementById("paginaPrincipal").classList.add("hidden");
+ document.getElementById("paginaDefinicoes").classList.remove("hidden");
+ carregarBase();
+ renderEditarJogadores();
+}
+function fecharDefinicoes(){
+ document.getElementById("paginaDefinicoes").classList.add("hidden");
+ document.getElementById("paginaPrincipal").classList.remove("hidden");
+ atualizarTudo();
+}
+function guardarDefinicoes(){
+ totalJogadores=Math.max(1,parseInt(document.getElementById("totalJogadores").value)||12);
+ while(jogadores.length<totalJogadores)jogadores.push("Jogador "+(jogadores.length+1));
+ while(jogadores.length>totalJogadores)jogadores.pop();
+
+ localStorage.setItem("treino_total_jogadores",totalJogadores);
+ localStorage.setItem("treino_jogadores",JSON.stringify(jogadores));
+ localStorage.setItem("treino_data",document.getElementById("dataTreino").value||hojeISO());
+ localStorage.setItem("treino_equipa",document.getElementById("equipaTreino").value||"AD Pastéis");
+ localStorage.setItem("treino_objetivo",document.getElementById("objetivoTreino").value||"");
+ localStorage.setItem("treino_detalhes",document.getElementById("detalhesTreino").value||"");
+ atualizarTudo();
+ alert("Definições guardadas.");
+}
+function renderEditarJogadores(){
+ let ed=document.getElementById("editarJogadores");
+ ed.innerHTML="";
+ jogadores.forEach((j,i)=>{ed.innerHTML+=`<input id="nomeJog${i}" value="${j}">`});
+ ed.innerHTML+=`<button class="green" onclick="guardarJogadores()">Guardar jogadores</button><button class="danger" onclick="reporJogadores()">Repor Jogador 1-${totalJogadores}</button>`;
+}
+function guardarJogadores(){
+ const antigos=[...jogadores];
+ jogadores=jogadores.map((j,i)=>document.getElementById("nomeJog"+i).value||("Jogador "+(i+1)));
+ let novasPresencas={};
+ antigos.forEach((antigo,i)=>{novasPresencas[jogadores[i]]=presencas[antigo]||"Presente"});
+ presencas=novasPresencas;
+ exercicios.forEach(ex=>{
+  if(ex.dados){
+   let novos={};
+   antigos.forEach((antigo,i)=>{if(ex.dados[antigo])novos[jogadores[i]]=ex.dados[antigo]});
+   ex.dados=novos;
+  }
+ });
+ avaliacoes.forEach(a=>{let idx=antigos.indexOf(a.jogador);if(idx>=0)a.jogador=jogadores[idx]});
+ guardarTudo();
+ atualizarTudo();
+ renderEditarJogadores();
+}
+function reporJogadores(){
+ jogadores=[];
+ for(let i=1;i<=totalJogadores;i++)jogadores.push("Jogador "+i);
+ presencas={};
+ guardarTudo();
+ atualizarTudo();
+ renderEditarJogadores();
+}
+function guardarTudo(){
+ localStorage.setItem("treino_jogadores",JSON.stringify(jogadores));
+ localStorage.setItem("treino_presencas",JSON.stringify(presencas));
+ localStorage.setItem("treino_exercicios",JSON.stringify(exercicios));
+ localStorage.setItem("treino_avaliacoes",JSON.stringify(avaliacoes));
+}
+function mostrarAba(aba){
+ ["presencas","exercicios","relatorio"].forEach(x=>{
+  document.getElementById("aba"+x.charAt(0).toUpperCase()+x.slice(1)).classList.add("hidden");
+  document.getElementById("tab"+x.charAt(0).toUpperCase()+x.slice(1)).classList.remove("activeTab");
+ });
+ document.getElementById("aba"+aba.charAt(0).toUpperCase()+aba.slice(1)).classList.remove("hidden");
+ document.getElementById("tab"+aba.charAt(0).toUpperCase()+aba.slice(1)).classList.add("activeTab");
+ atualizarTudo();
+}
+function renderPresencas(){
+ let grid=document.getElementById("presencasGrid");
+ grid.innerHTML="";
+ let presentes=0,faltas=0,atrasos=0;
+ jogadores.forEach(j=>{
+  if(!presencas[j])presencas[j]="Presente";
+  if(presencas[j]==="Presente")presentes++;
+  if(presencas[j]==="Falta")faltas++;
+  if(presencas[j]==="Atraso")atrasos++;
+  let b=document.createElement("button");
+  b.className="playerBtn "+(presencas[j]==="Falta"?"falta":presencas[j]==="Presente"?"presente":"");
+  b.innerHTML=j+"<br><span class='small'>"+presencas[j]+"</span>";
+  b.onclick=()=>alternarPresenca(j);
+  grid.appendChild(b);
+ });
+ document.getElementById("totalPresentes").innerHTML=presentes;
+ document.getElementById("totalFaltas").innerHTML=faltas;
+ document.getElementById("totalAtrasos").innerHTML=atrasos;
+ localStorage.setItem("treino_presencas",JSON.stringify(presencas));
+}
+function alternarPresenca(j){
+ const ordem=["Presente","Atraso","Falta"];
+ let atual=presencas[j]||"Presente";
+ let prox=ordem[(ordem.indexOf(atual)+1)%ordem.length];
+ presencas[j]=prox;
+ guardarTudo();
+ renderPresencas();
+}
+function renderSelectAvaliacao(){
+ let sel=document.getElementById("jogadorAvaliacao");
+ sel.innerHTML="";
+ jogadores.forEach(j=>{let op=document.createElement("option");op.textContent=j;sel.appendChild(op)});
+}
+function atualizarValoresAvaliacao(){
+ document.getElementById("valorAtitude").innerHTML="Atitude: "+document.getElementById("atitude").value+"/5";
+ document.getElementById("valorIntensidade").innerHTML="Intensidade: "+document.getElementById("intensidade").value+"/5";
+ document.getElementById("valorConcentracao").innerHTML="Concentração: "+document.getElementById("concentracao").value+"/5";
+}
+function guardarAvaliacao(){
+ avaliacoes.unshift({
+  data:localStorage.getItem("treino_data")||hojeISO(),
+  jogador:document.getElementById("jogadorAvaliacao").value,
+  atitude:document.getElementById("atitude").value,
+  intensidade:document.getElementById("intensidade").value,
+  concentracao:document.getElementById("concentracao").value,
+  observacao:document.getElementById("obsIndividual").value
+ });
+ document.getElementById("obsIndividual").value="";
+ guardarTudo();
+ alert("Avaliação guardada.");
+ atualizarTudo();
+}
+function criarExercicio(){
+ let nome=document.getElementById("nomeExercicio").value.trim();
+ let tipo=document.getElementById("tipoExercicio").value;
+ if(!nome){alert("Escreve o nome do exercício.");return}
+ let ex={id:Date.now(),nome,tipo,dados:{}};
+ if(tipo==="individual"){
+  jogadores.forEach(j=>ex.dados[j]={acertos:0,erros:0});
+ }else if(tipo==="coletivo"){
+  ex.dados["Equipa"]={acertos:0,erros:0};
+ }else{
+  ex.dados["Grupo 1"]={acertos:0,erros:0};
+  ex.dados["Grupo 2"]={acertos:0,erros:0};
+ }
+ exercicios.unshift(ex);
+ document.getElementById("nomeExercicio").value="";
+ guardarTudo();
+ renderExercicios();
+}
+function renderExercicios(){
+ let box=document.getElementById("listaExercicios");
+ box.innerHTML="";
+ if(exercicios.length===0){box.innerHTML="<div class='log'>Ainda não existem exercícios.</div>";return}
+ exercicios.forEach(ex=>{
+  let html=`<div class="exerciseCard"><h3>${ex.nome}</h3><div class="small">Tipo: ${ex.tipo}</div>`;
+  Object.keys(ex.dados).forEach(nome=>{
+   let d=ex.dados[nome];
+   let total=d.acertos+d.erros;
+   let eficacia=total>0?Math.round((d.acertos/total)*100):0;
+   html+=`<div class="counterRow">
+     <div><b>${nome}</b><br><span class="small">✓ ${d.acertos} · ✕ ${d.erros} · ${eficacia}%</span></div>
+     <button class="green" onclick="alterarExercicio(${ex.id},'${nome}','acertos',1)">✓+</button>
+     <button class="danger" onclick="alterarExercicio(${ex.id},'${nome}','erros',1)">✕+</button>
+     <button class="orange" onclick="desfazerExercicio(${ex.id},'${nome}')">↶</button>
+   </div>`;
+  });
+  html+=`<button class="danger" onclick="apagarExercicio(${ex.id})">Apagar exercício</button></div>`;
+  box.innerHTML+=html;
+ });
+}
+function alterarExercicio(id,nome,campo,valor){
+ let ex=exercicios.find(e=>e.id===id);
+ if(!ex)return;
+ ex.dados[nome][campo]=Math.max(0,ex.dados[nome][campo]+valor);
+ guardarTudo();
+ renderExercicios();
+ renderResumo();
+}
+function desfazerExercicio(id,nome){
+ let ex=exercicios.find(e=>e.id===id);
+ if(!ex)return;
+ if(ex.dados[nome].erros>0)ex.dados[nome].erros--;
+ else if(ex.dados[nome].acertos>0)ex.dados[nome].acertos--;
+ guardarTudo();
+ renderExercicios();
+ renderResumo();
+}
+function apagarExercicio(id){
+ if(!confirm("Apagar este exercício?"))return;
+ exercicios=exercicios.filter(e=>e.id!==id);
+ guardarTudo();
+ renderExercicios();
+ renderResumo();
+}
+function renderResumo(){
+ let box=document.getElementById("resumoTreino");
+ let totalAcertos=0,totalErros=0;
+ exercicios.forEach(ex=>Object.values(ex.dados).forEach(d=>{totalAcertos+=d.acertos;totalErros+=d.erros}));
+ let total=totalAcertos+totalErros;
+ let eficacia=total>0?Math.round((totalAcertos/total)*100):0;
+ let pres=Object.values(presencas).filter(x=>x==="Presente").length;
+ let fal=Object.values(presencas).filter(x=>x==="Falta").length;
+ let atr=Object.values(presencas).filter(x=>x==="Atraso").length;
+ box.innerHTML=`<div class="stat"><b>Acertos totais</b><span>${totalAcertos}</span></div>
+ <div class="stat"><b>Erros totais</b><span>${totalErros}</span></div>
+ <div class="stat"><b>Eficácia global</b><span>${eficacia}%</span></div>
+ <div class="stat"><b>Presenças</b><span>${pres}</span></div>
+ <div class="stat"><b>Atrasos</b><span>${atr}</span></div>
+ <div class="stat"><b>Faltas</b><span>${fal}</span></div>`;
+ box.innerHTML+="<h3>Ranking individual</h3>";
+ let rankings=[];
+ jogadores.forEach(j=>{
+  let a=0,e=0;
+  exercicios.filter(ex=>ex.tipo==="individual").forEach(ex=>{
+   if(ex.dados[j]){a+=ex.dados[j].acertos;e+=ex.dados[j].erros}
+  });
+  let t=a+e;
+  if(t>0)rankings.push({j,a,e,ef:Math.round((a/t)*100)});
+ });
+ rankings.sort((x,y)=>y.ef-x.ef);
+ if(rankings.length===0)box.innerHTML+="<div class='log'>Sem dados individuais ainda.</div>";
+ rankings.forEach((r,i)=>box.innerHTML+=`<div class="stat"><b>${i+1}.º ${r.j}</b><span>${r.ef}% · ✓${r.a} ✕${r.e}</span></div>`);
+}
+function exportarCSV(){
+ let data=localStorage.getItem("treino_data")||hojeISO();
+ let equipa=localStorage.getItem("treino_equipa")||"AD Pastéis";
+ let objetivo=localStorage.getItem("treino_objetivo")||"";
+ let detalhes=localStorage.getItem("treino_detalhes")||"";
+ let csv="Data,Equipa,Objetivo,Detalhes,Secao,Tipo,Exercicio,Jogador_Grupo,Acertos,Erros,Total,Eficacia,Estado,Atitude,Intensidade,Concentracao,Observacao\n";
+ jogadores.forEach(j=>{
+  csv+=`"${data}","${equipa}","${objetivo}","${detalhes}","Presença","","","${j}","","","","","${presencas[j]||"Presente"}","","","",""\n`;
+ });
+ exercicios.forEach(ex=>{
+  Object.keys(ex.dados).forEach(nome=>{
+   let d=ex.dados[nome];
+   let total=d.acertos+d.erros;
+   let ef=total>0?Math.round((d.acertos/total)*100):0;
+   csv+=`"${data}","${equipa}","${objetivo}","${detalhes}","Exercício","${ex.tipo}","${ex.nome}","${nome}","${d.acertos}","${d.erros}","${total}","${ef}%","","","","",""\n`;
+  });
+ });
+ avaliacoes.forEach(a=>{
+  csv+=`"${data}","${equipa}","${objetivo}","${detalhes}","Avaliação","","","${a.jogador}","","","","","","${a.atitude}","${a.intensidade}","${a.concentracao}","${a.observacao}"\n`;
+ });
+ let blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+ let url=URL.createObjectURL(blob);
+ let a=document.createElement("a");
+ a.href=url;
+ a.download="treino_"+equipa+"_"+data+".csv";
+ a.click();
+ URL.revokeObjectURL(url);
+}
+function limparTreino(){
+ if(!confirm("Apagar dados do treino atual?"))return;
+ presencas={};
+ exercicios=[];
+ avaliacoes=[];
+ guardarTudo();
+ atualizarTudo();
+}
+function resetCompleto(){
+ if(confirm("Apagar tudo e repor a app?")){localStorage.clear();location.reload()}
+}
+function atualizarTudo(){
+ carregarBase();
+ renderPresencas();
+ renderSelectAvaliacao();
+ atualizarValoresAvaliacao();
+ renderExercicios();
+ renderResumo();
+ renderEditarJogadores();
+}
+carregarBase();
+atualizarTudo();
+</script>
+</body>
+</html>
