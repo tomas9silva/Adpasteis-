@@ -299,7 +299,7 @@ function renderJogadores(){
 }
 function renderAcoes(){
  let grid=document.getElementById("acoesGrid");grid.innerHTML="";
- acoes.forEach((a,i)=>{let b=document.createElement("button");b.textContent=a;b.className=["dark"][i];b.onclick=()=>selecionarAcao(a);grid.appendChild(b)})
+ acoes.forEach((a,i)=>{let b=document.createElement("button");b.textContent=a;b.className=["dark", "dark", "dark", "dark", "dark", "dark", "dark", "dark"][i];b.onclick=()=>selecionarAcao(a);grid.appendChild(b)})
 }
 function toggleDetalhes(){detalhesAbertos=!detalhesAbertos;atualizar()}
 function selecionarAcao(a){acaoTemp=a;atualizarAcaoFloat()}
