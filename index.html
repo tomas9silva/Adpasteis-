@@ -1,1 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AD Pastéis Estatísticas</title>
+<style>
+body{font-family:Arial;background:#0a1b3d;color:white;padding:20px}
+select,button{width:100%;padding:15px;margin:5px 0;font-size:18px;border-radius:10px}
+button{background:#1e88e5;color:white;border:none}
+#contador{background:white;color:black;padding:15px;border-radius:10px;margin-top:20px}
+</style>
+</head>
+<body>
 
+<h1>AD Pastéis</h1>
+
+<select id="jogador">
+<option>Jogador 1</option>
+<option>Jogador 2</option>
+<option>Jogador 3</option>
+<option>Jogador 4</option>
+<option>Jogador 5</option>
+<option>Jogador 6</option>
+<option>Jogador 7</option>
+<option>Jogador 8</option>
+<option>Jogador 9</option>
+<option>Jogador 10</option>
+<option>Jogador 11</option>
+<option>Jogador 12</option>
+</select>
+
+<button onclick="registar('Remate jogo corrido')">Remate jogo corrido</button>
+<button onclick="registar('Remate livre')">Remate livre</button>
+<button onclick="registar('Golo dentro da área')">Golo dentro da área</button>
+<button onclick="registar('Golo fora da área')">Golo fora da área</button>
+<button onclick="registar('Golo atrás do meio campo')">Golo atrás do meio campo</button>
+<button onclick="registar('Golo de cabeça')">Golo de cabeça</button>
+<button onclick="registar('Golo de canto')">Golo de canto</button>
+
+<div id="contador">
+Total de registos: <span id="total">0</span>
+</div>
+
+<script>
+let total=0;
+
+function registar(acao){
+ total++;
+ document.getElementById("total").innerHTML=total;
+ alert(document.getElementById("jogador").value+" - "+acao);
+}
+</script>
+
+</body>
+</html>
