@@ -281,7 +281,50 @@ function exportarCSV(){
 }
 
 atualizar();
-</script>
+  let tempo = 12 * 60;
+let intervalo = null;
 
+function atualizarCronometro(){
+  let minutos = Math.floor(tempo / 60);
+  let segundos = tempo % 60;
+
+  document.getElementById("cronometro").innerHTML =
+    String(minutos).padStart(2,"0") + ":" + String(segundos).padStart(2,"0");
+}
+
+function iniciarCronometro(){
+  if(intervalo !== null) return;
+
+  intervalo = setInterval(function(){
+    if(tempo > 0){
+      tempo--;
+      atualizarCronometro();
+    } else {
+      pausarCronometro();
+      alert("Fim do período");
+    }
+  }, 1000);
+}
+
+function pausarCronometro(){
+  clearInterval(intervalo);
+  intervalo = null;
+}
+
+function reporCronometro(){
+  pausarCronometro();
+  tempo = 12 * 60;
+  atualizarCronometro();
+}
+
+atualizarCronometro();
+</script>
+<div class="card">
+  <h2>Cronómetro</h2>
+  <h1 id="cronometro">12:00</h1>
+  <button class="green" onclick="iniciarCronometro()">Iniciar</button>
+  <button class="orange" onclick="pausarCronometro()">Pausar</button>
+  <button class="danger" onclick="reporCronometro()">Repor 12:00</button>
+</div>
 </body>
 </html>
