@@ -2,283 +2,273 @@
 <html lang="pt-PT">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AD Pastéis Estatísticas</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AD Pastéis Stats</title>
 <style>
-body{margin:0;font-family:Arial,sans-serif;background:#071326;color:white}
-.app{max-width:520px;margin:auto;padding:15px}
-h1{text-align:center;margin:10px 0 0}
-.sub{text-align:center;color:#ffd21a;font-weight:bold;margin-bottom:15px}
-.card{background:white;color:#111;border-radius:18px;padding:15px;margin-bottom:15px}
-label{font-weight:bold;display:block;margin-top:12px}
-select,button,input{width:100%;padding:14px;margin-top:8px;font-size:17px;border-radius:12px;border:1px solid #ccc}
-button{color:white;border:0;font-weight:bold}
-.green{background:#26a626}.blue{background:#087dcc}.red{background:#e93421}.orange{background:#f28b12}
-.purple{background:#8b1bc4}.cyan{background:#0aa6ad}.pink{background:#d91b76}.yellow{background:#ffd21a;color:#111}.danger{background:#d71920}.dark{background:#101b31}
+body{margin:0;font-family:Arial;background:#071326;color:white}
+.app{max-width:520px;margin:auto;padding:10px}
+.top{display:flex;justify-content:space-between;align-items:center;background:#101b31;padding:10px;border-radius:14px;margin-bottom:10px}
+h1{font-size:20px;margin:0;color:white}
+#cronometro{font-size:28px;font-weight:bold;color:#ffd21a}
+.card{background:white;color:#111;border-radius:14px;padding:12px;margin-bottom:10px}
+.row{display:flex;gap:8px}
+button,select,input{width:100%;padding:12px;margin-top:7px;font-size:16px;border-radius:10px;border:1px solid #ccc}
+button{border:0;color:white;font-weight:bold}
+.green{background:#26a626}.blue{background:#087dcc}.red{background:#e93421}.orange{background:#f28b12}.purple{background:#8b1bc4}.cyan{background:#0aa6ad}.pink{background:#d91b76}.yellow{background:#ffd21a;color:#111}.dark{background:#101b31}.danger{background:#d71920}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.stat{display:flex;justify-content:space-between;background:#f2f4f8;padding:10px;border-radius:10px;margin:6px 0}
-table{width:100%;border-collapse:collapse;font-size:12px}
-th,td{border:1px solid #ddd;padding:6px;text-align:center}
-th{background:#101b31;color:white}
-.log{background:#f2f4f8;padding:8px;border-radius:10px;margin:6px 0;font-size:13px}
-#cronometro{text-align:center;font-size:46px;color:#101b31}
+.stat{display:flex;justify-content:space-between;background:#f1f3f6;padding:8px;border-radius:8px;margin:5px 0}
+.small{font-size:13px}
+.hidden{display:none}
+.playerCard{background:#101b31;color:white;border-radius:12px;padding:10px;margin-top:8px}
+.log{background:#f1f3f6;padding:8px;border-radius:8px;margin:5px 0;font-size:13px}
 </style>
 </head>
-
 <body>
 <div class="app">
 
-<h1>AD PASTÉIS</h1>
-<div class="sub">Estatísticas de Jogo</div>
-
-<div class="card">
-<h2>Cronómetro</h2>
-<div id="cronometro">12:00</div>
-<button class="green" onclick="iniciarCronometro()">Iniciar</button>
-<button class="orange" onclick="pausarCronometro()">Pausar</button>
-<button class="danger" onclick="reporCronometro()">Repor 12:00</button>
+<div class="top">
+  <h1>AD PASTÉIS</h1>
+  <div id="cronometro">12:00</div>
 </div>
 
 <div class="card">
-<h2>Registo de Ação</h2>
-
-<label>Período</label>
-<select id="periodo">
-<option>1.º período</option>
-<option>2.º período</option>
-<option>3.º período</option>
-</select>
-
-<label>Minuto</label>
-<select id="minuto"></select>
-
-<label>Jogador</label>
-<select id="jogador"></select>
-
-<label>Tipo de ação</label>
-<div class="grid">
-<button class="green" onclick="selecionarAcao('Remate jogo corrido')">Remate jogo corrido</button>
-<button class="blue" onclick="selecionarAcao('Remate livre')">Remate livre</button>
-<button class="red" onclick="selecionarAcao('Golo dentro da área')">Golo dentro da área</button>
-<button class="orange" onclick="selecionarAcao('Golo fora da área')">Golo fora da área</button>
-<button class="purple" onclick="selecionarAcao('Golo atrás do meio campo')">Golo atrás do meio campo</button>
-<button class="cyan" onclick="selecionarAcao('Golo de cabeça')">Golo de cabeça</button>
-<button class="pink" onclick="selecionarAcao('Golo de canto')">Golo de canto</button>
-</div>
+  <div class="row">
+    <button class="green" onclick="iniciarCronometro()">Iniciar</button>
+    <button class="orange" onclick="pausarCronometro()">Pausar</button>
+    <button class="danger" onclick="reporCronometro()">Repor</button>
+  </div>
 </div>
 
 <div class="card">
-<h2>Ação Selecionada</h2>
-<div id="acaoSelecionada">Nenhuma ação selecionada</div>
-<button class="green" onclick="confirmarAcao()">Confirmar ação</button>
-<button class="orange" onclick="desfazerUltima()">Desfazer última ação</button>
+  <label>Período</label>
+  <select id="periodo">
+    <option>1.º período</option>
+    <option>2.º período</option>
+    <option>3.º período</option>
+  </select>
+
+  <label>Jogador</label>
+  <select id="jogador" onchange="atualizar()"></select>
+
+  <div class="playerCard" id="cartaoJogador"></div>
 </div>
 
 <div class="card">
-<h2>Resumo da Equipa</h2>
-<div id="resumo"></div>
+  <h3>Ações</h3>
+  <div class="grid">
+    <button class="green" onclick="selecionarAcao('Remate jogo corrido')">Remate jogo corrido</button>
+    <button class="blue" onclick="selecionarAcao('Remate livre')">Remate livre</button>
+    <button class="red" onclick="selecionarAcao('Golo dentro da área')">Golo dentro da área</button>
+    <button class="orange" onclick="selecionarAcao('Golo fora da área')">Golo fora da área</button>
+    <button class="purple" onclick="selecionarAcao('Golo atrás do meio campo')">Golo atrás do meio campo</button>
+    <button class="cyan" onclick="selecionarAcao('Golo de cabeça')">Golo de cabeça</button>
+    <button class="pink" onclick="selecionarAcao('Golo de canto')">Golo de canto</button>
+  </div>
 </div>
 
 <div class="card">
-<h2>Estatísticas por Jogador</h2>
-<div style="overflow-x:auto">
-<table id="tabela"></table>
-</div>
+  <h3>Ação selecionada</h3>
+  <div id="acaoSelecionada">Nenhuma ação selecionada</div>
+  <button class="green" onclick="confirmarAcao()">Confirmar ação</button>
+  <button class="orange" onclick="desfazerUltima()">Desfazer última ação</button>
 </div>
 
 <div class="card">
-<h2>Ações Registadas</h2>
-<div id="historico"></div>
-<button class="yellow" onclick="exportarCSV()">Exportar CSV</button>
-<button class="danger" onclick="limpar()">Limpar jogo</button>
+  <button class="dark" onclick="toggle('editar')">Editar jogadores</button>
+  <div id="editar" class="hidden"></div>
+</div>
+
+<div class="card">
+  <button class="dark" onclick="toggle('subs')">Substituições</button>
+  <div id="subs" class="hidden">
+    <label>Sai</label>
+    <select id="sai"></select>
+    <label>Entra</label>
+    <select id="entra"></select>
+    <button class="green" onclick="confirmarSub()">Confirmar substituição</button>
+    <div id="historicoSubs"></div>
+  </div>
+</div>
+
+<div class="card">
+  <button class="dark" onclick="toggle('estatisticas')">Estatísticas completas</button>
+  <div id="estatisticas" class="hidden"></div>
+</div>
+
+<div class="card">
+  <button class="dark" onclick="toggle('historico')">Histórico</button>
+  <div id="historico" class="hidden"></div>
+  <button class="yellow" onclick="exportarCSV()">Exportar CSV</button>
+  <button class="danger" onclick="limpar()">Limpar jogo</button>
 </div>
 
 </div>
 
 <script>
-let jogadores = JSON.parse(localStorage.getItem("adpasteis_jogadores")) || [];
-if(jogadores.length===0){
-  for(let i=1;i<=12;i++){jogadores.push("Jogador " + i);}
-}
+let jogadores=JSON.parse(localStorage.getItem("jogadores_pasteis"))||[];
+if(jogadores.length===0){for(let i=1;i<=12;i++)jogadores.push("Jogador "+i)}
 
-const acoes = [
-"Remate jogo corrido",
-"Remate livre",
-"Golo dentro da área",
-"Golo fora da área",
-"Golo atrás do meio campo",
-"Golo de cabeça",
-"Golo de canto"
-];
-
-let registos = JSON.parse(localStorage.getItem("adpasteis_registos")) || [];
-let acaoTemporaria = null;
-
-const jogadorSelect = document.getElementById("jogador");
-const minutoSelect = document.getElementById("minuto");
-
-function carregarJogadores(){
-  jogadorSelect.innerHTML="";
-  jogadores.forEach(j=>{
-    let op=document.createElement("option");
-    op.textContent=j;
-    jogadorSelect.appendChild(op);
-  });
-}
-
-for(let i=0;i<=40;i++){
-  let op=document.createElement("option");
-  op.textContent=i + "'";
-  minutoSelect.appendChild(op);
-}
-
-function selecionarAcao(acao){
-  acaoTemporaria = acao;
-  document.getElementById("acaoSelecionada").innerHTML =
-  "<b>" + document.getElementById("jogador").value + "</b><br>" +
-  acao + "<br>" +
-  document.getElementById("periodo").value + " · " +
-  document.getElementById("minuto").value;
-}
-
-function confirmarAcao(){
-  if(!acaoTemporaria){
-    alert("Seleciona primeiro uma ação.");
-    return;
-  }
-  registar(acaoTemporaria);
-  acaoTemporaria = null;
-  document.getElementById("acaoSelecionada").innerHTML = "Nenhuma ação selecionada";
-}
-
-function registar(acao){
-  const registo = {
-    jogador: document.getElementById("jogador").value,
-    periodo: document.getElementById("periodo").value,
-    minuto: document.getElementById("minuto").value,
-    acao: acao,
-    data: new Date().toLocaleString("pt-PT")
-  };
-  registos.unshift(registo);
-  localStorage.setItem("adpasteis_registos", JSON.stringify(registos));
-  atualizar();
-}
-
-function desfazerUltima(){
-  if(registos.length===0){
-    alert("Não há ações para desfazer.");
-    return;
-  }
-  registos.shift();
-  localStorage.setItem("adpasteis_registos", JSON.stringify(registos));
-  atualizar();
-}
-
-function contar(filtro){
-  return registos.filter(filtro).length;
-}
-
-function atualizar(){
-  const resumo=document.getElementById("resumo");
-  resumo.innerHTML="";
-
-  acoes.forEach(a=>{
-    resumo.innerHTML+=`<div class="stat"><b>${a}</b><b>${contar(r=>r.acao===a)}</b></div>`;
-  });
-
-  resumo.innerHTML+=`<div class="stat" style="background:#101b31;color:white"><b>Total de golos</b><b>${contar(r=>r.acao.startsWith("Golo"))}</b></div>`;
-
-  const tabela=document.getElementById("tabela");
-  tabela.innerHTML="<tr><th>Jogador</th><th>RJC</th><th>RL</th><th>GDA</th><th>GFA</th><th>GMC</th><th>GCab</th><th>GCanto</th><th>Golos</th></tr>";
-
-  jogadores.forEach(j=>{
-    tabela.innerHTML+=`
-    <tr>
-    <td>${j}</td>
-    <td>${contar(r=>r.jogador===j && r.acao==="Remate jogo corrido")}</td>
-    <td>${contar(r=>r.jogador===j && r.acao==="Remate livre")}</td>
-    <td>${contar(r=>r.jogador===j && r.acao==="Golo dentro da área")}</td>
-    <td>${contar(r=>r.jogador===j && r.acao==="Golo fora da área")}</td>
-    <td>${contar(r=>r.jogador===j && r.acao==="Golo atrás do meio campo")}</td>
-    <td>${contar(r=>r.jogador===j && r.acao==="Golo de cabeça")}</td>
-    <td>${contar(r=>r.jogador===j && r.acao==="Golo de canto")}</td>
-    <td>${contar(r=>r.jogador===j && r.acao.startsWith("Golo"))}</td>
-    </tr>`;
-  });
-
-  const historico=document.getElementById("historico");
-  historico.innerHTML="";
-  registos.slice(0,30).forEach(r=>{
-    historico.innerHTML+=`
-    <div class="log">
-    <b>${r.acao}</b><br>
-    ${r.jogador} · ${r.periodo} · ${r.minuto}<br>
-    ${r.data}
-    </div>`;
-  });
-}
-
-function limpar(){
-  if(confirm("Queres apagar todos os registos?")){
-    registos=[];
-    localStorage.removeItem("adpasteis_registos");
-    atualizar();
-  }
-}
-
-function exportarCSV(){
-  let csv="Data,Período,Minuto,Jogador,Ação\n";
-  registos.forEach(r=>{
-    csv+=`"${r.data}","${r.periodo}","${r.minuto}","${r.jogador}","${r.acao}"\n`;
-  });
-  const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a");
-  a.href=url;
-  a.download="estatisticas_ad_pasteis.csv";
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
+let registos=JSON.parse(localStorage.getItem("registos_pasteis"))||[];
+let substituicoes=JSON.parse(localStorage.getItem("subs_pasteis"))||[];
+let acaoTemp=null;
 let tempo=12*60;
 let intervalo=null;
 
-function atualizarCronometro(){
-  let minutos=Math.floor(tempo/60);
-  let segundos=tempo%60;
-  document.getElementById("cronometro").innerHTML =
-  String(minutos).padStart(2,"0") + ":" + String(segundos).padStart(2,"0");
+const acoes=[
+"Remate jogo corrido","Remate livre","Golo dentro da área","Golo fora da área",
+"Golo atrás do meio campo","Golo de cabeça","Golo de canto"
+];
+
+function tempoAtual(){
+ let m=Math.floor(tempo/60),s=tempo%60;
+ return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+}
+
+function carregarJogadores(){
+ let selects=["jogador","sai","entra"];
+ selects.forEach(id=>{
+  let sel=document.getElementById(id);
+  sel.innerHTML="";
+  jogadores.forEach(j=>{
+   let op=document.createElement("option");
+   op.textContent=j;
+   sel.appendChild(op);
+  });
+ });
+
+ let ed=document.getElementById("editar");
+ ed.innerHTML="";
+ jogadores.forEach((j,i)=>{
+  ed.innerHTML+=`<input id="nome${i}" value="${j}">`;
+ });
+ ed.innerHTML+=`<button class="green" onclick="guardarNomes()">Guardar nomes</button>
+ <button class="danger" onclick="reporNomes()">Repor Jogador 1-12</button>`;
+}
+
+function guardarNomes(){
+ jogadores=jogadores.map((j,i)=>document.getElementById("nome"+i).value||("Jogador "+(i+1)));
+ localStorage.setItem("jogadores_pasteis",JSON.stringify(jogadores));
+ carregarJogadores();atualizar();
+}
+
+function reporNomes(){
+ jogadores=[];for(let i=1;i<=12;i++)jogadores.push("Jogador "+i);
+ localStorage.setItem("jogadores_pasteis",JSON.stringify(jogadores));
+ carregarJogadores();atualizar();
+}
+
+function contar(f){return registos.filter(f).length}
+
+function selecionarAcao(a){
+ acaoTemp=a;
+ document.getElementById("acaoSelecionada").innerHTML=
+ "<b>"+document.getElementById("jogador").value+"</b><br>"+a+"<br>"+
+ document.getElementById("periodo").value+" · "+tempoAtual();
+}
+
+function confirmarAcao(){
+ if(!acaoTemp){alert("Seleciona primeiro uma ação.");return}
+ registos.unshift({
+  jogador:document.getElementById("jogador").value,
+  periodo:document.getElementById("periodo").value,
+  tempo:tempoAtual(),
+  acao:acaoTemp,
+  data:new Date().toLocaleString("pt-PT")
+ });
+ localStorage.setItem("registos_pasteis",JSON.stringify(registos));
+ acaoTemp=null;
+ document.getElementById("acaoSelecionada").innerHTML="Nenhuma ação selecionada";
+ atualizar();
+}
+
+function desfazerUltima(){
+ if(registos.length===0){alert("Não há ações para desfazer.");return}
+ registos.shift();
+ localStorage.setItem("registos_pasteis",JSON.stringify(registos));
+ atualizar();
+}
+
+function confirmarSub(){
+ let s=document.getElementById("sai").value;
+ let e=document.getElementById("entra").value;
+ substituicoes.unshift({
+  sai:s,entra:e,periodo:document.getElementById("periodo").value,
+  tempo:tempoAtual(),data:new Date().toLocaleString("pt-PT")
+ });
+ localStorage.setItem("subs_pasteis",JSON.stringify(substituicoes));
+ atualizar();
+}
+
+function atualizar(){
+ let j=document.getElementById("jogador").value||jogadores[0];
+ document.getElementById("cartaoJogador").innerHTML=
+ `<b>${j}</b><br>
+ ⚽ Golos: ${contar(r=>r.jogador===j && r.acao.startsWith("Golo"))}<br>
+ 🎯 Remates jogo corrido: ${contar(r=>r.jogador===j && r.acao==="Remate jogo corrido")}<br>
+ 🥅 Remates livres: ${contar(r=>r.jogador===j && r.acao==="Remate livre")}`;
+
+ let est=document.getElementById("estatisticas");
+ est.innerHTML="";
+ jogadores.forEach(p=>{
+  est.innerHTML+=`<div class="stat"><b>${p}</b><span>⚽ ${contar(r=>r.jogador===p && r.acao.startsWith("Golo"))} | 🎯 ${contar(r=>r.jogador===p && r.acao==="Remate jogo corrido")} | 🥅 ${contar(r=>r.jogador===p && r.acao==="Remate livre")}</span></div>`;
+ });
+
+ let hist=document.getElementById("historico");
+ hist.innerHTML="";
+ registos.slice(0,40).forEach(r=>{
+  hist.innerHTML+=`<div class="log"><b>${r.acao}</b><br>${r.jogador} · ${r.periodo} · ${r.tempo}<br>${r.data}</div>`;
+ });
+
+ let hs=document.getElementById("historicoSubs");
+ hs.innerHTML="";
+ substituicoes.slice(0,20).forEach(s=>{
+  hs.innerHTML+=`<div class="log"><b>Substituição</b><br>Sai: ${s.sai}<br>Entra: ${s.entra}<br>${s.periodo} · ${s.tempo}</div>`;
+ });
+}
+
+function toggle(id){
+ document.getElementById(id).classList.toggle("hidden");
 }
 
 function iniciarCronometro(){
-  if(intervalo!==null)return;
-  intervalo=setInterval(function(){
-    if(tempo>0){
-      tempo--;
-      atualizarCronometro();
-    }else{
-      pausarCronometro();
-      alert("Fim do período");
-    }
-  },1000);
+ if(intervalo)return;
+ intervalo=setInterval(()=>{
+  if(tempo>0){tempo--;atualizarCronometro()}
+  else{pausarCronometro();alert("Fim do período")}
+ },1000);
 }
 
-function pausarCronometro(){
-  clearInterval(intervalo);
-  intervalo=null;
+function pausarCronometro(){clearInterval(intervalo);intervalo=null}
+
+function reporCronometro(){pausarCronometro();tempo=12*60;atualizarCronometro()}
+
+function atualizarCronometro(){
+ document.getElementById("cronometro").innerHTML=tempoAtual();
 }
 
-function reporCronometro(){
-  pausarCronometro();
-  tempo=12*60;
-  atualizarCronometro();
+function limpar(){
+ if(confirm("Apagar todos os registos deste jogo?")){
+  registos=[];substituicoes=[];
+  localStorage.removeItem("registos_pasteis");
+  localStorage.removeItem("subs_pasteis");
+  atualizar();
+ }
+}
+
+function exportarCSV(){
+ let csv="Tipo,Data,Periodo,Tempo,Jogador,Acao,Sai,Entra\n";
+ registos.forEach(r=>csv+=`"Ação","${r.data}","${r.periodo}","${r.tempo}","${r.jogador}","${r.acao}","",""\n`);
+ substituicoes.forEach(s=>csv+=`"Substituição","${s.data}","${s.periodo}","${s.tempo}","","","${s.sai}","${s.entra}"\n`);
+ let blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+ let url=URL.createObjectURL(blob);
+ let a=document.createElement("a");
+ a.href=url;a.download="estatisticas_ad_pasteis.csv";a.click();
+ URL.revokeObjectURL(url);
 }
 
 carregarJogadores();
 atualizarCronometro();
 atualizar();
 </script>
-
 </body>
 </html>
