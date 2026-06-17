@@ -256,6 +256,17 @@ button{border:0;color:white;font-weight:bold}
  align-items:center;
  justify-content:center;
  z-index:99999;
+ overflow:hidden;
+}
+
+.landingPage::before{
+ content:"";
+ position:absolute;
+ inset:0;
+ background:url("logo-pasteis.png") center center/320px no-repeat;
+ opacity:.06;
+ pointer-events:none;
+}
 }
 
 .landingContent{
