@@ -489,9 +489,20 @@ function esc(str){return String(str).replace(/\\/g,"\\\\").replace(/'/g,"\\'").r
 
 function pickMap(e){
  if(e.target.id==="attackBtn")return;
+
  let r=e.currentTarget.getBoundingClientRect();
- flow={x:Math.round(((e.clientX-r.left)/r.width)*100),y:Math.round(((e.clientY-r.top)/r.height)*100),jogador:null,acao:null,step:"player"};
- renderFlow(); renderMap();
+
+ flow={
+  x:Math.round(((e.clientX-r.left)/r.width)*100),
+  y:Math.round(((e.clientY-r.top)/r.height)*100),
+  jogador:null,
+  acao:null,
+  step:"player"
+ };
+
+ abrirPopupJogadores();
+ renderMap();
+}
 }
 function choosePlayer(j){flow.jogador=j;active=j;flow.step="action";renderFlow();renderPlayerCard()}
 function chooseAction(a){flow.acao=a;flow.step="confirm";renderFlow()}
