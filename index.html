@@ -421,6 +421,7 @@ button{border:0;color:white;font-weight:bold}
    <h3>Jogador selecionado</h3>
    <div id="playerCard" class="playerCard" onclick="toggleDetails()"></div>
  </div>
+</div>
 
 <div class="app hidden" id="settingsPage">
  <div class="card"><h2>Definições</h2><label>Equipa da casa</label><input id="setCasa"><label>Equipa adversária</label><input id="setFora"><label>Número total de jogadores</label><input id="setTotal" type="number" min="1"><label>Jogadores em campo</label><input id="setCampo" type="number" min="1"><label>Duração do período</label><input id="setDur" type="number" min="1"><label>Detalhes do jogo</label><textarea id="detalhes"></textarea><button class="green" onclick="saveSettings()">Guardar</button><button class="dark" onclick="closeSettings()">Voltar</button></div>
@@ -503,7 +504,6 @@ function pickMap(e){
  abrirPopupJogadores();
  renderMap();
 }
-}
 function choosePlayer(j){
  flow.jogador=j;
  active=j;
@@ -585,9 +585,7 @@ function cancelMapFlow(){
  renderMap();
 }
 function renderFlow(){
-function renderFlow(){
  return;
-
 }
 function renderMap(){
  let p=$("pitch");
@@ -616,7 +614,7 @@ function renderPlayerCard(){
 function toggleDetails(){details=!details;renderPlayerCard()}
 function undo(){if(!reg.length){alert("Não há ações para desfazer.");return}reg.shift();localStorage.setItem("registos_pasteis",JSON.stringify(reg));renderAll()}
 
-function openSettings(){$("main").classList.add("hidden");$("settingsPage").classList.remove("hidden");$("setCasa").value=$("casa").value;$("setFora").value=$("fora").value;$("setTotal").value=total;$("setCampo").value=inField;$("setDur").value=dur;$("detalhes").value=localStorage.getItem("detalhes_jogo_pasteis")||"";renderEditNames();renderStats();renderHistory()}
+function openSettings(){$("main").classList.add("hidden");$("settingsPage").classList.remove("hidden");$("setCasa").value=$("casa").value;$("setFora").value=$("fora").value;$("setTotal").value=total;$("setCampo").value=inField;$("setDur").value=dur;$("detalhes").value=localStorage.getItem("detalhes_jogo_pasteis")||"";renderEditNames();renderStats();renderReport();renderHistory()}
 function closeSettings(){$("settingsPage").classList.add("hidden");$("main").classList.remove("hidden")}
 function saveSettings(){total=Math.max(1,+$("setTotal").value||12);inField=Math.max(1,Math.min(+$("setCampo").value||5,total));dur=Math.max(1,+$("setDur").value||12);localStorage.setItem("total_jogadores_pasteis",total);localStorage.setItem("jogadores_campo_pasteis",inField);localStorage.setItem("duracao_periodo_pasteis",dur);localStorage.setItem("equipa_casa_pasteis",$("setCasa").value||"Equipa da Casa");localStorage.setItem("equipa_fora_pasteis",$("setFora").value||"");localStorage.setItem("detalhes_jogo_pasteis",$("detalhes").value||"");while(jogadores.length<total)jogadores.push("Jogador "+(jogadores.length+1));while(jogadores.length>total)jogadores.pop();campo=jogadores.slice(0,inField);banco=jogadores.slice(inField);active=jogadores[0]||"Jogador 1";time=dur*60;pause();saveAll();loadGame();updateTimer();renderAll();alert("Definições guardadas.")}
 function renderEditNames(){let e=$("editNames");e.innerHTML="";jogadores.forEach((j,i)=>e.innerHTML+=`<input id="nome${i}" value="${j}">`);e.innerHTML+=`<button class="green" onclick="saveNames()">Guardar nomes</button><button class="danger" onclick="resetNames()">Repor Jogador 1-${total}</button>`}
