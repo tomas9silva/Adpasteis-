@@ -211,6 +211,44 @@ button{border:0;color:white;font-weight:bold}
  border-radius:8px;
 }
 
+
+.percentReport{
+ background:rgba(16,27,49,.94);
+ color:white;
+ border-radius:12px;
+ padding:10px;
+ margin:10px 0;
+ font-size:13px;
+}
+.percentGrid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:6px;
+ margin-top:8px;
+}
+.percentItem{
+ background:rgba(255,255,255,.10);
+ border:1px solid rgba(255,255,255,.15);
+ border-radius:10px;
+ padding:8px;
+}
+.percentItem b{
+ color:#ffd21a;
+ font-size:18px;
+}
+.percentBar{
+ height:9px;
+ background:rgba(255,255,255,.18);
+ border-radius:10px;
+ overflow:hidden;
+ margin-top:5px;
+}
+.percentFill{
+ height:100%;
+ background:#ffd21a;
+ border-radius:10px;
+}
+
 @media(max-width:420px){
  .score{grid-template-columns:1fr 72px 1fr 82px;gap:4px}
  .players{grid-template-columns:repeat(3,1fr)}
@@ -449,6 +487,101 @@ function apagarAcaoPorIndice(idx){
  }
 }
 
+
+function percentagem(parte,total){
+ if(!total || total<=0)return 0;
+ return Math.round((parte/total)*100);
+}
+
+function contarAcaoPorTexto(texto){
+ return reg.filter(r=>r.acao===texto).length;
+}
+
+function contarComecaCom(texto){
+ return reg.filter(r=>r.acao&&r.acao.startsWith(texto)).length;
+}
+
+function jogadorTopo(filtro){
+ let arr=jogadores
+  .map(j=>({j,n:reg.filter(r=>r.jogador===j&&filtro(r)).length}))
+  .sort((a,b)=>b.n-a.n);
+ return arr[0]&&arr[0].n>0?`${arr[0].j} (${arr[0].n})`:"-";
+}
+
+function zonaCampo(x){
+ if(x<33)return "Zona defensiva";
+ if(x<66)return "Meio-campo";
+ return "Zona ofensiva";
+}
+
+function zonaMaisUsada(){
+ let eventos=reg.filter(r=>r.x!==""&&r.x!==undefined);
+ let zonas={"Zona defensiva":0,"Meio-campo":0,"Zona ofensiva":0};
+ eventos.forEach(r=>zonas[zonaCampo(Number(r.x))]++);
+ let top=Object.entries(zonas).sort((a,b)=>b[1]-a[1])[0];
+ return top&&top[1]>0?`${top[0]} (${top[1]})`:"-";
+}
+
+function renderRelatorioPercentual(){
+ let golos=contarComecaCom("Golo");
+ let rematesJogo=contarAcaoPorTexto("Remate jogo corrido");
+ let rematesLivre=contarAcaoPorTexto("Remate livre");
+ let rematesFora=contarAcaoPorTexto("Remate fora");
+ let rematesBloq=contarAcaoPorTexto("Remate bloqueado");
+ let defesas=contarAcaoPorTexto("Defesa");
+ let assist=contarAcaoPorTexto("Assistência");
+ let passesFalhados=contarAcaoPorTexto("Passe falhado");
+ let golosSofridos=contarAcaoPorTexto("Golo sofrido");
+
+ let totalRemates=rematesJogo+rematesLivre+rematesFora+rematesBloq+golos;
+ let totalAcoes=reg.length;
+ let eficacia=percentagem(golos,totalRemates);
+ let rematesBaliza=totalRemates-rematesFora-rematesBloq;
+ let acertoBaliza=percentagem(rematesBaliza,totalRemates);
+ let pesoGolos=percentagem(golos,totalAcoes);
+ let pesoRemates=percentagem(totalRemates,totalAcoes);
+ let pesoDefesas=percentagem(defesas,totalAcoes);
+ let pesoAssist=percentagem(assist,totalAcoes);
+
+ function item(titulo,valor,sub,pct){
+  return `<div class="percentItem">
+   ${titulo}<br>
+   <b>${valor}</b>
+   <div class="small">${sub}</div>
+   <div class="percentBar"><div class="percentFill" style="width:${Math.min(100,Math.max(0,pct))}%"></div></div>
+  </div>`;
+ }
+
+ return `<div class="percentReport">
+  <h3>📊 Relatório percentual</h3>
+  <b>Resumo do jogo:</b> ${$("casa").value||"AD Pastéis"} ${casaGoals}-${foraGoals} ${$("fora").value||"Adversário"}<br>
+  <div class="percentGrid">
+   ${item("Eficácia de finalização",eficacia+"%","Golos / total de remates",eficacia)}
+   ${item("Remates à baliza",acertoBaliza+"%","Remates que não foram fora/bloqueados",acertoBaliza)}
+   ${item("Peso dos remates",pesoRemates+"%","Remates no total de ações",pesoRemates)}
+   ${item("Peso dos golos",pesoGolos+"%","Golos no total de ações",pesoGolos)}
+   ${item("Peso das defesas",pesoDefesas+"%","Defesas no total de ações",pesoDefesas)}
+   ${item("Peso das assistências",pesoAssist+"%","Assistências no total de ações",pesoAssist)}
+  </div>
+  <br>
+  <b>Totais:</b><br>
+  ⚽ Golos: ${golos}<br>
+  🎯 Remates totais: ${totalRemates}<br>
+  ❌ Remates fora: ${rematesFora}<br>
+  🚫 Remates bloqueados: ${rematesBloq}<br>
+  🧤 Defesas: ${defesas}<br>
+  🎁 Assistências: ${assist}<br>
+  ⚠️ Passes falhados: ${passesFalhados}<br>
+  🔴 Golos sofridos: ${golosSofridos}<br><br>
+  <b>Destaques:</b><br>
+  Melhor marcador: ${jogadorTopo(r=>r.acao&&r.acao.startsWith("Golo"))}<br>
+  Mais remates: ${jogadorTopo(r=>r.acao&&r.acao.startsWith("Remate"))}<br>
+  Mais assistências: ${jogadorTopo(r=>r.acao==="Assistência")}<br>
+  Mais defesas: ${jogadorTopo(r=>r.acao==="Defesa")}<br>
+  Zona mais usada: ${zonaMaisUsada()}
+ </div>`;
+}
+
 function renderStats(){
  let st=$("stats");
  if(!st)return;
@@ -495,6 +628,8 @@ function renderStats(){
   bloco+=`</div></div>`;
   st.innerHTML+=bloco;
  });
+
+ st.innerHTML+=renderRelatorioPercentual();
 }
 function renderHistory(){let h=$("history");if(!h)return;h.innerHTML="";reg.slice(0,150).forEach(r=>{let loc=(r.x!==""&&r.x!==undefined)?` · X:${r.x}% Y:${r.y}%`:"";let atk=r.attackSide==="left"?" · ataque esquerda":" · ataque direita";h.innerHTML+=`<div class="log"><b>${r.emoji||acaoObj(r.acao).emoji} ${r.acao}</b><br>${r.jogador} · ${r.periodo} · ${r.tempo}${loc}${atk}<br>${r.data}</div>`})}
 function clearGame(){if(confirm("Apagar todos os registos deste jogo?")){reg=[];subs=[];casaGoals=0;foraGoals=0;localStorage.removeItem("registos_pasteis");localStorage.removeItem("subs_pasteis");localStorage.setItem("golos_casa_pasteis",0);localStorage.setItem("golos_fora_pasteis",0);loadGame();renderAll()}}
