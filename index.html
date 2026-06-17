@@ -347,7 +347,20 @@ button{border:0;color:white;font-weight:bold}
  border:1px solid rgba(255,255,255,.35);
  font-size:22px;
 }
+.linePeriod{
+ grid-template-columns:1fr 52px;
+ align-items:center;
+}
 
+#subMini{
+ width:52px;
+ height:40px;
+ margin:0;
+ padding:0;
+ font-size:18px;
+ background:#d71920;
+ border-radius:10px;
+}
 @media(max-width:420px){
  .score{grid-template-columns:1fr 72px 1fr 82px;gap:4px}
  .players{grid-template-columns:repeat(3,1fr)}
@@ -412,11 +425,6 @@ button{border:0;color:white;font-weight:bold}
    <h3>Jogador selecionado</h3>
    <div id="playerCard" class="playerCard" onclick="toggleDetails()"></div>
  </div>
-
- <div class="card">
-   <button class="danger" onclick="openSubs()">🔄 SUBSTITUIÇÃO</button>
- </div>
-</div>
 
 <div class="app hidden" id="settingsPage">
  <div class="card"><h2>Definições</h2><label>Equipa da casa</label><input id="setCasa"><label>Equipa adversária</label><input id="setFora"><label>Número total de jogadores</label><input id="setTotal" type="number" min="1"><label>Jogadores em campo</label><input id="setCampo" type="number" min="1"><label>Duração do período</label><input id="setDur" type="number" min="1"><label>Detalhes do jogo</label><textarea id="detalhes"></textarea><button class="green" onclick="saveSettings()">Guardar</button><button class="dark" onclick="closeSettings()">Voltar</button></div>
