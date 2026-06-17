@@ -376,7 +376,15 @@ button{border:0;color:white;font-weight:bold}
    <input id="fora" class="team" placeholder="Adversário" oninput="saveGame()">
    <div class="timer"><div id="tempo">12:00</div><div class="timerBtns"><button class="green" onclick="start()">▶</button><button class="orange" onclick="pause()">Ⅱ</button><button class="danger" onclick="resetTimer()">↺</button></div></div>
   </div>
-  <div class="line"><select id="periodo"><option>1.º período</option><option>2.º período</option><option>3.º período</option></select><div class="statusBox" id="statusBox">Clica no campo</div></div>
+  <div class="line linePeriod">
+  <select id="periodo">
+    <option>1.º período</option>
+    <option>2.º período</option>
+    <option>3.º período</option>
+  </select>
+
+  <button id="subMini" onclick="openSubs()">🔄</button>
+</div>
  
  </div>
 
