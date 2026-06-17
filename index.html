@@ -188,21 +188,19 @@ let casaGoals=+localStorage.getItem("golos_casa_pasteis")||0, foraGoals=+localSt
 let attackSide=localStorage.getItem("attack_side_pasteis")||"right";
 let flow={x:null,y:null,jogador:null,acao:null,step:"idle"};
 const acoes=[
- const acoes=[
  {nome:"Golo dentro da área",emoji:"⚽"},
  {nome:"Golo fora da área",emoji:"⚽"},
  {nome:"Golo de livre",emoji:"⚽"},
  {nome:"Golo de cabeça",emoji:"⚽"},
  {nome:"Golo de canto",emoji:"⚽"},
- {nome:"Remate jogo corrido",emoji:"✔️"},
- {nome:"Remate livre",emoji:"✔️"},
+ {nome:"Remate jogo corrido",emoji:"🎯"},
+ {nome:"Remate livre",emoji:"🎯"},
  {nome:"Defesa",emoji:"🧤"},
  {nome:"Assistência",emoji:"🎁"},
  {nome:"Remate fora",emoji:"❌"},
- {nome:"Passe falhado",emoji:"⚠️"},
- {nome:"Golo sofrido",emoji:"🔴"}
-];
- 
+ {nome:"Remate bloqueado",emoji:"🚫"},
+ {nome:"Cartão amarelo",emoji:"🟨"},
+ {nome:"Cartão vermelho",emoji:"🟥"}
 ];
 
 function $(id){return document.getElementById(id)} function toggle(id){$(id).classList.toggle("hidden")} function t(){let m=Math.floor(time/60),s=time%60;return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")}
