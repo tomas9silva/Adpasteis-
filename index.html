@@ -511,7 +511,10 @@ function choosePlayer(j){
  renderPlayerCard();
  abrirPopupAcoes();
 }
-function chooseAction(a){flow.acao=a;flow.step="confirm";renderFlow()}
+function chooseAction(a){
+ flow.acao=a;
+ confirmarAcaoRapida();
+}
 function confirmMapFlow(){
  if(flow.step!=="confirm"||!flow.x||!flow.jogador||!flow.acao){alert("Seleciona local, jogador e ação.");return}
  let obj=acaoObj(flow.acao);
