@@ -148,6 +148,10 @@ z-index:1
      <div class="attackLabel">ATAQUE</div>
    </div>
    <div class="small" style="margin-top:6px">Clica no local → escolhe jogador → escolhe ação → confirma.</div>
+  <label style="margin-top:8px">Mapa individual</label>
+<select id="filtroMapa" onchange="mudarFiltroMapa()">
+  <option value="Todos">Todos os jogadores</option>
+</select>
  </div>
 
  <div id="flowPanel" class="flowPanel">
@@ -185,6 +189,7 @@ let active=jogadores[0]||"Jogador 1", outTemp=null, inTemp=null, details=false, 
 let casaGoals=+localStorage.getItem("golos_casa_pasteis")||0, foraGoals=+localStorage.getItem("golos_fora_pasteis")||0;
 let attackSide=localStorage.getItem("attack_side_pasteis")||"right";
 let flow={x:null,y:null,jogador:null,acao:null,step:"idle"};
+ let filtroJogadorMapa="Todos";
 const acoes=[
  {nome:"Golo dentro da área",emoji:"⚽"},
  {nome:"Golo fora da área",emoji:"⚽"},
@@ -246,11 +251,30 @@ function renderFlow(){
 }
 function esc(str){return String(str).replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/"/g,"&quot;")}
 function renderMap(){
- let p=$("pitch");p.querySelectorAll(".mapEmoji,.tempPoint").forEach(m=>m.remove());
- reg.filter(r=>r.x!==""&&r.x!==undefined&&r.y!==""&&r.y!==undefined).forEach((r,i)=>{
-  let m=document.createElement("div");m.className="mapEmoji";m.style.left=r.x+"%";m.style.top=r.y+"%";m.innerText=r.emoji||acaoObj(r.acao).emoji;m.onclick=(ev)=>{ev.stopPropagation();openEvent(i)};p.appendChild(m)
+ let p=$("pitch");
+ p.querySelectorAll(".mapEmoji,.tempPoint").forEach(m=>m.remove());
+
+ reg
+ .filter(r=>r.x!==""&&r.x!==undefined&&r.y!==""&&r.y!==undefined)
+ .filter(r=>filtroJogadorMapa==="Todos" || r.jogador===filtroJogadorMapa)
+ .forEach((r,i)=>{
+  let m=document.createElement("div");
+  m.className="mapEmoji";
+  m.style.left=r.x+"%";
+  m.style.top=r.y+"%";
+  m.innerText=r.emoji||acaoObj(r.acao).emoji;
+  m.onclick=(ev)=>{ev.stopPropagation();openEvent(i)};
+  p.appendChild(m);
  });
- if(flow.x&&flow.y){let tp=document.createElement("div");tp.className="tempPoint";tp.style.left=flow.x+"%";tp.style.top=flow.y+"%";p.appendChild(tp)}
+
+ if(flow.x&&flow.y){
+  let tp=document.createElement("div");
+  tp.className="tempPoint";
+  tp.style.left=flow.x+"%";
+  tp.style.top=flow.y+"%";
+  p.appendChild(tp);
+ }
+}
 }
 function openEvent(i){selectedEventIndex=i;let r=reg[i];$("eventTitle").innerText=(r.emoji||acaoObj(r.acao).emoji)+" "+r.acao;$("eventInfo").innerHTML=`<div class="log"><b>${r.jogador}</b><br>${r.periodo} · ${r.tempo}<br>X:${r.x}% · Y:${r.y}%<br>${r.data}</div>`;$("eventModal").classList.add("show")}
 function closeEvent(){$("eventModal").classList.remove("show");selectedEventIndex=null}
@@ -293,8 +317,25 @@ function clearMapOnly(){if(confirm("Apagar apenas ações com localização no c
 function fullReset(){if(confirm("Apagar tudo e repor a aplicação?")){localStorage.clear();location.reload()}}
 function exportCSV(){let casa=$("casa").value||"Equipa da Casa",fora=$("fora").value||"Equipa Adversária",jogo=casa+" vs "+fora,resultado=casaGoals+"-"+foraGoals,det=localStorage.getItem("detalhes_jogo_pasteis")||"";let csv="Jogo,Resultado,Detalhes,Tipo,Data,Periodo,Tempo,Jogador,Acao,Emoji,Sai,Entra,X,Y,LadoAtaque\n";reg.forEach(r=>csv+=`"${jogo}","${resultado}","${det}","Ação","${r.data}","${r.periodo}","${r.tempo}","${r.jogador}","${r.acao}","${r.emoji||acaoObj(r.acao).emoji}","","","${r.x||""}","${r.y||""}","${r.attackSide||attackSide}"\n`);subs.forEach(s=>csv+=`"${jogo}","${resultado}","${det}","Substituição","${s.data}","${s.periodo}","${s.tempo}","","","","${s.sai}","${s.entra}","","",""\n`);let blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="estatisticas_"+casa+"_vs_"+fora+".csv";a.click();URL.revokeObjectURL(url)}
 
-function renderAll(){renderAttack();renderMap();renderFlow();renderPlayerCard();renderStats();renderHistory();renderSubs()}
-loadGame();updateTimer();renderAll();
+function renderFiltroMapa(){
+ let sel=$("filtroMapa");
+ if(!sel)return;
+
+ let atual=sel.value || filtroJogadorMapa;
+ sel.innerHTML='<option value="Todos">Todos os jogadores</option>';
+
+ jogadores.forEach(j=>{
+  sel.innerHTML+=`<option value="${j}">${j}</option>`;
+ });
+
+ sel.value=atual;
+ filtroJogadorMapa=atual;
+}
+
+function mudarFiltroMapa(){
+ filtroJogadorMapa=$("filtroMapa").value;
+ renderMap();
+}
 </script>
 </body>
 </html>
