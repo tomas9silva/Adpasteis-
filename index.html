@@ -515,6 +515,59 @@ function chooseAction(a){
  flow.acao=a;
  confirmarAcaoRapida();
 }
+function abrirPopupJogadores(){
+ let modal=$("quickModal");
+ let title=$("quickTitle");
+ let content=$("quickContent");
+
+ title.innerHTML="Escolher jogador";
+
+ content.innerHTML="<div class='players'>"+
+  jogadores.map(j=>`<button class="pbtn" onclick="choosePlayer('${esc(j)}')">${j}</button>`).join("")+
+ "</div>";
+
+ modal.classList.add("show");
+}
+
+function abrirPopupAcoes(){
+ let title=$("quickTitle");
+ let content=$("quickContent");
+
+ title.innerHTML=flow.jogador;
+
+ content.innerHTML="<div class='grid'>"+
+  acoes.map(a=>`<button class="actionBtn dark" onclick="chooseAction('${esc(a.nome)}')">${a.emoji} ${a.nome}</button>`).join("")+
+ "</div>";
+}
+
+function confirmarAcaoRapida(){
+ if(!flow.x || !flow.jogador || !flow.acao){
+  alert("Falta local, jogador ou ação.");
+  return;
+ }
+
+ let obj=acaoObj(flow.acao);
+
+ reg.unshift({
+  jogador:flow.jogador,
+  periodo:$("periodo").value,
+  tempo:t(),
+  acao:flow.acao,
+  emoji:obj.emoji,
+  data:new Date().toLocaleString("pt-PT"),
+  x:flow.x,
+  y:flow.y,
+  attackSide:attackSide
+ });
+
+ localStorage.setItem("registos_pasteis",JSON.stringify(reg));
+
+ flow={x:null,y:null,jogador:null,acao:null,step:"idle"};
+
+ $("quickModal").classList.remove("show");
+
+ renderAll();
+}
 function confirmMapFlow(){
  if(flow.step!=="confirm"||!flow.x||!flow.jogador||!flow.acao){alert("Seleciona local, jogador e ação.");return}
  let obj=acaoObj(flow.acao);
