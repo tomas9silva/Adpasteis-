@@ -163,7 +163,6 @@ button{border:0;color:white;font-weight:bold}
  font-size:13px;
 }
 
-
 .collectiveBox{
  background:rgba(241,243,246,.92);
  padding:10px;
@@ -210,7 +209,6 @@ button{border:0;color:white;font-weight:bold}
  font-size:13px;
  border-radius:8px;
 }
-
 
 .percentReport{
  background:rgba(16,27,49,.94);
@@ -267,7 +265,6 @@ button{border:0;color:white;font-weight:bold}
  opacity:.06;
  pointer-events:none;
 }
-}
 
 .landingContent{
  text-align:center;
@@ -300,7 +297,6 @@ button{border:0;color:white;font-weight:bold}
  margin-top:20px;
  letter-spacing:1px;
 }
-}
 
 .enterBtn{
  width:220px;
@@ -315,14 +311,12 @@ button{border:0;color:white;font-weight:bold}
  cursor:pointer;
  transition:.25s;
 }
-}
-}
 
 .enterBtn:hover{
  background:#d71920;
  color:white;
 }
-}
+
 @media(max-width:420px){
  .score{grid-template-columns:1fr 72px 1fr 82px;gap:4px}
  .players{grid-template-columns:repeat(3,1fr)}
@@ -499,7 +493,6 @@ function renderFlow(){
   s.innerHTML=obj.emoji+" "+flow.jogador;
   c.innerHTML=base+`<div class="infoMini"><b>${flow.jogador}</b><br>${obj.emoji} ${flow.acao}<br>${$("periodo").value} · ${t()}</div><button class="green" onclick="confirmMapFlow()">✓ Confirmar</button><button class="danger" onclick="cancelMapFlow()">× Cancelar</button>`;
  }
-}
 function renderMap(){
  let p=$("pitch");
  p.querySelectorAll(".mapEmoji,.tempPoint").forEach(m=>m.remove());
@@ -514,7 +507,7 @@ function renderMap(){
   tp.style.top=flow.y+"%";
   p.appendChild(tp);
  }
-}
+
 function openEvent(i){selectedEventIndex=i;let r=reg[i];$("eventTitle").innerText=(r.emoji||acaoObj(r.acao).emoji)+" "+r.acao;$("eventInfo").innerHTML=`<div class="log"><b>${r.jogador}</b><br>${r.periodo} · ${r.tempo}<br>X:${r.x}% · Y:${r.y}%<br>${r.attackSide==="left"?"⬅️ atacava esquerda":"➡️ atacava direita"}<br>${r.data}</div>`;$("eventModal").classList.add("show")}
 function closeEvent(){$("eventModal").classList.remove("show");selectedEventIndex=null}
 function deleteEvent(){if(selectedEventIndex===null)return;if(confirm("Apagar esta ação?")){reg.splice(selectedEventIndex,1);localStorage.setItem("registos_pasteis",JSON.stringify(reg));closeEvent();renderAll()}}
@@ -579,7 +572,6 @@ function apagarAcaoPorIndice(idx){
   localStorage.setItem("registos_pasteis",JSON.stringify(reg));
   renderAll();
  }
-}
 
 
 function percentagem(parte,total){
