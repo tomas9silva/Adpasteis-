@@ -17,106 +17,101 @@ button{border:0;color:white;font-weight:bold}
 .settings{position:absolute;right:8px;top:8px;width:36px;height:36px;border-radius:50%;padding:0;background:#ffd21a;color:#111;font-size:18px}
 .score{display:grid;grid-template-columns:1fr 82px 1fr 90px;gap:6px;align-items:center;padding-right:38px}
 .team{background:#182542;color:white;text-align:center;font-weight:bold;font-size:13px}
-.scoreline{font-size:30px;font-weight:bold;color:#ffd21a;text-align:center}.scoreBtns{display:grid;grid-template-columns:1fr 1fr;gap:4px}.scoreBtns button{background:#d71920;padding:5px}
-.timer{text-align:center;color:#ffd21a}#tempo{font-size:27px;font-weight:bold}.timerBtns{display:flex;gap:3px}.timerBtns button{height:25px;padding:0;border-radius:50%;font-size:11px}
-.line{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.statusBox{background:rgba(16,27,49,.70);border-radius:12px;padding:8px;text-align:center;color:white;font-size:13px}
-.row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}.row button{font-size:13px;padding:9px}
+.scoreline{font-size:30px;font-weight:bold;color:#ffd21a;text-align:center}
+.scoreBtns{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.scoreBtns button{background:#d71920;padding:5px}
+.timer{text-align:center;color:#ffd21a}
+#tempo{font-size:27px;font-weight:bold}
+.timerBtns{display:flex;gap:3px}
+.timerBtns button{height:25px;padding:0;border-radius:50%;font-size:11px}
+.line{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.statusBox{background:rgba(16,27,49,.70);border-radius:12px;padding:8px;text-align:center;color:white;font-size:13px}
+.row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.row button{font-size:13px;padding:9px}
 .hidden{display:none!important}
-.players{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.pbtn{background:#eef1f6;color:#111;border:1px solid #ccc;font-size:12px;padding:8px;min-height:38px}.pbtn.active{background:#d71920;color:white}.pbtn.campo{border:2px solid #d71920}.pbtn.banco{border:2px solid #087dcc}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.grid button{font-size:13px;padding:10px;min-height:42px}
+.players{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.pbtn{background:#eef1f6;color:#111;border:1px solid #ccc;font-size:12px;padding:8px;min-height:38px}
+.pbtn.active{background:#d71920;color:white}
+.pbtn.campo{border:2px solid #d71920}
+.pbtn.banco{border:2px solid #087dcc}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.grid button{font-size:13px;padding:10px;min-height:42px}
 .playerCard{background:rgba(16,27,49,.75);color:white;border-radius:12px;padding:9px;margin-top:7px;font-size:13px}
-.stat,.log{background:#f1f3f6;padding:8px;border-radius:8px;margin:5px 0;font-size:13px}.stat{display:flex;justify-content:space-between;gap:8px}.small{font-size:12px;opacity:.9}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:2000;display:none;align-items:center;justify-content:center;padding:12px}.modal.show{display:flex}.modalContent{background:white;color:#111;border-radius:18px;padding:14px;max-width:500px;width:100%;max-height:92vh;overflow:auto}
-.editRow{display:grid;grid-template-columns:1fr 42px 42px;gap:6px;align-items:center;background:#f1f3f6;border-radius:8px;padding:7px;margin:5px 0}.editBtn{float:right;width:auto;padding:4px 8px;font-size:12px;background:#ffd21a;color:#111;margin:0}
+.stat,.log{background:#f1f3f6;padding:8px;border-radius:8px;margin:5px 0;font-size:13px}
+.stat{display:flex;justify-content:space-between;gap:8px}
+.small{font-size:12px;opacity:.9}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:2000;display:none;align-items:center;justify-content:center;padding:12px}
+.modal.show{display:flex}
+.modalContent{background:white;color:#111;border-radius:18px;padding:14px;max-width:500px;width:100%;max-height:92vh;overflow:auto}
+.editRow{display:grid;grid-template-columns:1fr 42px 42px;gap:6px;align-items:center;background:#f1f3f6;border-radius:8px;padding:7px;margin:5px 0}
+.editBtn{float:right;width:auto;padding:4px 8px;font-size:12px;background:#ffd21a;color:#111;margin:0}
 
-/* Campo principal */
+/* Campo limpo, grande, sem bancada */
 .pitchCard{background:rgba(16,27,49,.74);color:white;border-radius:16px;padding:10px;margin:8px 0;border:1px solid rgba(255,255,255,.20)}
 .pitch{
-position:relative;
-width:100%;
-aspect-ratio:1.62/1;
-background:
-linear-gradient(90deg,rgba(255,255,255,.16) 0 1px,transparent 1px 25%),
-linear-gradient(135deg,#efd36f,#e5c063 50%,#d4aa52);
-border:3px solid #173f9f;
-border-radius:10px;
-overflow:hidden;
-cursor:pointer;
-touch-action:manipulation;
-box-shadow:0 5px 18px rgba(0,0,0,.35), inset 0 0 0 2px rgba(255,255,255,.25)
+ position:relative;
+ width:100%;
+ aspect-ratio:1.72/1;
+ background:
+  radial-gradient(circle at 50% 50%,rgba(255,255,255,.10),transparent 13%),
+  linear-gradient(135deg,#efcf83,#e6bb66 50%,#d6a75a);
+ border-radius:14px;
+ overflow:hidden;
+ cursor:pointer;
+ touch-action:manipulation;
+ border:3px solid #123b8d;
+ box-shadow:0 5px 18px rgba(0,0,0,.35), inset 0 0 0 2px rgba(255,255,255,.22)
 }
 .pitch:before{
-content:"";
-position:absolute;
-inset:6%;
-border:3px solid #173f9f;
-pointer-events:none;
-z-index:1
+ content:"";
+ position:absolute;
+ inset:6%;
+ border:3px solid #173f9f;
+ pointer-events:none;
+ z-index:1
 }
 .pitch:after{
-content:"";
-position:absolute;
-left:50%;
-top:6%;
-bottom:6%;
-border-left:2px solid rgba(23,63,159,.35);
-pointer-events:none;
-z-index:1
+ content:"";
+ position:absolute;
+ left:50%;
+ top:6%;
+ bottom:6%;
+ border-left:3px solid #173f9f;
+ pointer-events:none;
+ z-index:1
 }
 .area{
  position:absolute;
- top:42%;
- width:3%;
- height:16%;
- border:3px solid #ffd21a;
- background:rgba(255,210,26,.08);
+ top:38%;
+ width:4.5%;
+ height:24%;
+ border:4px solid #ffd21a;
+ background:rgba(255,210,26,.10);
  z-index:2;
  pointer-events:none;
  box-shadow:0 2px 8px rgba(0,0,0,.25)
 }
-
-.left{
- left:4%;
- border-left:0;
-}
-
-.right{
- right:4%;
- border-right:0;
-}
- border-right:0;
-}
-.thirdLine1,.thirdLine2{position:absolute;top:6%;bottom:6%;border-left:2px solid rgba(23,63,159,.28);z-index:1;pointer-events:none}
-.thirdLine1{left:33.33%}.thirdLine2{left:66.66%}
-.cornerFlag{position:absolute;width:10px;height:10px;z-index:2;pointer-events:none}
-.cornerFlag.tl{left:5%;top:5%;border-left:3px solid #d71920;border-top:3px solid #d71920}
-.cornerFlag.tr{right:5%;top:5%;border-right:3px solid #d71920;border-top:3px solid #d71920}
-.cornerFlag.bl{left:5%;bottom:5%;border-left:3px solid #d71920;border-bottom:3px solid #d71920}
-.cornerFlag.br{right:5%;bottom:5%;border-right:3px solid #d71920;border-bottom:3px solid #d71920}
-.attackTiny{position:absolute;right:8px;top:8px;width:46px;height:38px;padding:0;margin:0;border-radius:12px;background:rgba(255,210,26,.95);color:#071326;font-size:23px;z-index:20;box-shadow:0 2px 8px #0005}
- .areaLine{
- position:absolute;
- top:6%;
- bottom:6%;
- border-left:2px dashed rgba(23,63,159,.45);
- z-index:1;
- pointer-events:none;
-}
-
-.leftArea{
- left:29%;
-}
-
-.rightArea{
- left:71%;
-}
-.attackLabel{position:absolute;right:8px;top:49px;z-index:20;font-size:10px;background:rgba(16,27,49,.85);color:white;padding:3px 6px;border-radius:7px;pointer-events:none}
-.mapEmoji{position:absolute;transform:translate(-50%,-50%);font-size:22px;line-height:1;z-index:10;text-shadow:0 2px 5px #000}
+.left{left:4%;border-left:0}
+.right{right:4%;border-right:0}
+.cornerFlag{position:absolute;width:11px;height:11px;z-index:2;pointer-events:none}
+.cornerFlag.tl{left:5.5%;top:5.5%;border-left:4px solid #d71920;border-top:4px solid #d71920}
+.cornerFlag.tr{right:5.5%;top:5.5%;border-right:4px solid #d71920;border-top:4px solid #d71920}
+.cornerFlag.bl{left:5.5%;bottom:5.5%;border-left:4px solid #d71920;border-bottom:4px solid #d71920}
+.cornerFlag.br{right:5.5%;bottom:5.5%;border-right:4px solid #d71920;border-bottom:4px solid #d71920}
+.mapEmoji{position:absolute;transform:translate(-50%,-50%);font-size:22px;line-height:1;z-index:10;text-shadow:0 2px 5px #000;cursor:pointer}
 .tempPoint{position:absolute;width:18px;height:18px;border-radius:50%;background:#d71920;border:3px solid white;transform:translate(-50%,-50%);z-index:9;box-shadow:0 2px 8px #000}
+.attackTiny{position:absolute;right:10px;top:10px;width:44px;height:36px;padding:0;margin:0;border-radius:12px;background:rgba(255,210,26,.95);color:#071326;font-size:22px;z-index:20;box-shadow:0 2px 8px #0005}
+.attackLabel{position:absolute;right:10px;top:48px;z-index:20;font-size:10px;background:rgba(16,27,49,.85);color:white;padding:3px 6px;border-radius:7px;pointer-events:none}
 .flowPanel{background:rgba(255,255,255,.60);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#111;border-radius:14px;padding:10px;margin:8px 0;border:1px solid rgba(255,255,255,.25)}
-.actionBtn{background:#101b31}.actionBtn.active,.pbtn.choose{background:#d71920;color:white}
+.actionBtn{background:#101b31}
+.actionBtn.active,.pbtn.choose{background:#d71920;color:white}
 .infoMini{background:rgba(16,27,49,.9);color:white;border-radius:10px;padding:8px;margin-top:6px;text-align:center}
-@media(max-width:420px){.score{grid-template-columns:1fr 72px 1fr 82px;gap:4px}.players{grid-template-columns:repeat(3,1fr)}#tempo{font-size:23px}.team{font-size:12px;padding:7px}}
+@media(max-width:420px){
+ .score{grid-template-columns:1fr 72px 1fr 82px;gap:4px}
+ .players{grid-template-columns:repeat(3,1fr)}
+ #tempo{font-size:23px}
+ .team{font-size:12px;padding:7px}
+}
 </style>
 </head>
 <body>
@@ -136,8 +131,6 @@ z-index:1
  <div class="pitchCard">
    <h3>Campo interativo</h3>
    <div id="pitch" class="pitch" onclick="pickMap(event)">
-     <div class="thirdLine1"></div>
-     <div class="thirdLine2"></div>
      <div class="area left"></div>
      <div class="area right"></div>
      <div class="cornerFlag tl"></div>
@@ -147,11 +140,7 @@ z-index:1
      <button id="attackBtn" class="attackTiny" onclick="toggleAttack(event)">➡️</button>
      <div class="attackLabel">ATAQUE</div>
    </div>
-   <div class="small" style="margin-top:6px">Clica no local → escolhe jogador → escolhe ação → confirma.</div>
-  <label style="margin-top:8px">Mapa individual</label>
-<select id="filtroMapa" onchange="mudarFiltroMapa()">
-  <option value="Todos">Todos os jogadores</option>
-</select>
+   <div class="small" style="margin-top:6px">Clica no local → escolhe jogador → vê o que já tem → adiciona ação → confirma.</div>
  </div>
 
  <div id="flowPanel" class="flowPanel">
@@ -181,41 +170,43 @@ z-index:1
 <div id="eventModal" class="modal"><div class="modalContent"><h2 id="eventTitle">Ação</h2><div id="eventInfo"></div><button class="danger" onclick="deleteEvent()">Apagar ação</button><button class="dark" onclick="closeEvent()">Fechar</button></div></div>
 
 <script>
-let total=+localStorage.getItem("total_jogadores_pasteis")||12, inField=+localStorage.getItem("jogadores_campo_pasteis")||5, dur=+localStorage.getItem("duracao_periodo_pasteis")||12;
-let jogadores=JSON.parse(localStorage.getItem("jogadores_pasteis")||"[]"); if(!jogadores.length){for(let i=1;i<=total;i++)jogadores.push("Jogador "+i)}
-let campo=JSON.parse(localStorage.getItem("campo_pasteis")||"null")||jogadores.slice(0,inField), banco=JSON.parse(localStorage.getItem("banco_pasteis")||"null")||jogadores.slice(inField);
-let reg=JSON.parse(localStorage.getItem("registos_pasteis")||"[]"), subs=JSON.parse(localStorage.getItem("subs_pasteis")||"[]");
-let active=jogadores[0]||"Jogador 1", outTemp=null, inTemp=null, details=false, time=dur*60, timer=null, selectedEventIndex=null;
-let casaGoals=+localStorage.getItem("golos_casa_pasteis")||0, foraGoals=+localStorage.getItem("golos_fora_pasteis")||0;
+let total=+localStorage.getItem("total_jogadores_pasteis")||12;
+let inField=+localStorage.getItem("jogadores_campo_pasteis")||5;
+let dur=+localStorage.getItem("duracao_periodo_pasteis")||12;
+let jogadores=JSON.parse(localStorage.getItem("jogadores_pasteis")||"[]");
+if(!jogadores.length){for(let i=1;i<=total;i++)jogadores.push("Jogador "+i)}
+let campo=JSON.parse(localStorage.getItem("campo_pasteis")||"null")||jogadores.slice(0,inField);
+let banco=JSON.parse(localStorage.getItem("banco_pasteis")||"null")||jogadores.slice(inField);
+let reg=JSON.parse(localStorage.getItem("registos_pasteis")||"[]");
+let subs=JSON.parse(localStorage.getItem("subs_pasteis")||"[]");
+let active=jogadores[0]||"Jogador 1";
+let outTemp=null, inTemp=null, details=false, time=dur*60, timer=null, selectedEventIndex=null;
+let casaGoals=+localStorage.getItem("golos_casa_pasteis")||0;
+let foraGoals=+localStorage.getItem("golos_fora_pasteis")||0;
 let attackSide=localStorage.getItem("attack_side_pasteis")||"right";
 let flow={x:null,y:null,jogador:null,acao:null,step:"idle"};
- let filtroJogadorMapa="Todos";
+
 const acoes=[
- {nome:"Golo dentro da área",emoji:"⚽"},
- {nome:"Golo fora da área",emoji:"⚽"},
- {nome:"Golo de livre",emoji:"⚽"},
- {nome:"Golo de cabeça",emoji:"⚽"},
- {nome:"Golo de canto",emoji:"⚽"},
- {nome:"Remate jogo corrido",emoji:"✔️"},
- {nome:"Remate livre",emoji:"✔️"},
- {nome:"Defesa",emoji:"🧤"},
- {nome:"Assistência",emoji:"🎁"},
- {nome:"Remate fora",emoji:"❌"},
- {nome:"Passe falhado",emoji:"⚠️"},
- {nome:"Golo sofrido",emoji:"🔴"}
+ {nome:"Golo dentro da área",emoji:"⚽"},{nome:"Golo fora da área",emoji:"⚽"},{nome:"Golo de livre",emoji:"⚽"},{nome:"Golo de cabeça",emoji:"⚽"},{nome:"Golo de canto",emoji:"⚽"},
+ {nome:"Remate jogo corrido",emoji:"🎯"},{nome:"Remate livre",emoji:"🎯"},{nome:"Defesa",emoji:"🧤"},{nome:"Assistência",emoji:"🎁"},{nome:"Remate fora",emoji:"❌"},{nome:"Remate bloqueado",emoji:"🚫"},{nome:"Cartão amarelo",emoji:"🟨"},{nome:"Cartão vermelho",emoji:"🟥"}
 ];
 
-function $(id){return document.getElementById(id)} function toggle(id){$(id).classList.toggle("hidden")} function t(){let m=Math.floor(time/60),s=time%60;return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")}
+function $(id){return document.getElementById(id)}
+function toggle(id){$(id).classList.toggle("hidden")}
+function t(){let m=Math.floor(time/60),s=time%60;return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")}
 function saveAll(){localStorage.setItem("jogadores_pasteis",JSON.stringify(jogadores));localStorage.setItem("campo_pasteis",JSON.stringify(campo));localStorage.setItem("banco_pasteis",JSON.stringify(banco));localStorage.setItem("registos_pasteis",JSON.stringify(reg));localStorage.setItem("subs_pasteis",JSON.stringify(subs))}
-function loadGame(){ $("casa").value=localStorage.getItem("equipa_casa_pasteis")||"AD Pastéis"; $("fora").value=localStorage.getItem("equipa_fora_pasteis")||""; $("gc").innerText=casaGoals; $("gf").innerText=foraGoals}
+function loadGame(){ $("casa").value=localStorage.getItem("equipa_casa_pasteis")||"AD Pastéis"; $("fora").value=localStorage.getItem("equipa_fora_pasteis")||""; $("gc").innerText=casaGoals; $("gf").innerText=foraGoals; renderAttack()}
 function saveGame(){localStorage.setItem("equipa_casa_pasteis",$("casa").value);localStorage.setItem("equipa_fora_pasteis",$("fora").value)}
 function goal(team,v){if(team==="c"){casaGoals=Math.max(0,casaGoals+v);localStorage.setItem("golos_casa_pasteis",casaGoals);$("gc").innerText=casaGoals}else{foraGoals=Math.max(0,foraGoals+v);localStorage.setItem("golos_fora_pasteis",foraGoals);$("gf").innerText=foraGoals}}
 function toggleAttack(ev){ev.stopPropagation();attackSide=attackSide==="right"?"left":"right";localStorage.setItem("attack_side_pasteis",attackSide);renderAttack()}
 function renderAttack(){let b=$("attackBtn");if(b)b.innerHTML=attackSide==="right"?"➡️":"⬅️"}
-function count(f){return reg.filter(f).length} function goals(j){return count(r=>r.jogador===j&&r.acao&&r.acao.startsWith("Golo"))}
+function count(f){return reg.filter(f).length}
+function goals(j){return count(r=>r.jogador===j&&r.acao&&r.acao.startsWith("Golo"))}
 function acaoObj(nome){return acoes.find(a=>a.nome===nome)||{nome,emoji:"✅"}}
+function esc(str){return String(str).replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/"/g,"&quot;")}
 
 function pickMap(e){
+ if(e.target.id==="attackBtn")return;
  let r=e.currentTarget.getBoundingClientRect();
  flow={x:Math.round(((e.clientX-r.left)/r.width)*100),y:Math.round(((e.clientY-r.top)/r.height)*100),jogador:null,acao:null,step:"player"};
  renderFlow(); renderMap();
@@ -241,7 +232,30 @@ function renderFlow(){
  }
  if(flow.step==="action"){
   s.innerHTML=flow.jogador+" · escolhe ação";
-  c.innerHTML=base+`<div class="infoMini"><b>${flow.jogador}</b></div><h3>Escolhe a ação</h3><div class='grid'>`+acoes.map(a=>`<button class="actionBtn" onclick="chooseAction('${esc(a.nome)}')">${a.emoji} ${a.nome}</button>`).join("")+"</div>";
+
+  let resumoJogador=`
+   <div class="infoMini">
+    <b>${flow.jogador}</b><br>
+    ⚽ ${goals(flow.jogador)}
+    &nbsp; 🎯 ${count(r=>r.jogador===flow.jogador&&r.acao&&r.acao.startsWith("Remate"))}
+    &nbsp; 🧤 ${count(r=>r.jogador===flow.jogador&&r.acao==="Defesa")}
+    &nbsp; 🎁 ${count(r=>r.jogador===flow.jogador&&r.acao==="Assistência")}
+   </div>
+  `;
+
+  let listaExistente="<div class='log'><b>Ações já registadas deste jogador</b><br>";
+  let tem=false;
+  acoes.forEach(a=>{
+   let n=count(r=>r.jogador===flow.jogador&&r.acao===a.nome);
+   if(n>0){
+    tem=true;
+    listaExistente+=`${a.emoji} ${a.nome}: <b>${n}</b><br>`;
+   }
+  });
+  if(!tem)listaExistente+="Ainda sem ações registadas.";
+  listaExistente+="</div>";
+
+  c.innerHTML=base+resumoJogador+listaExistente+"<h3>Adicionar nova ação</h3><div class='grid'>"+acoes.map(a=>`<button class="actionBtn dark" onclick="chooseAction('${esc(a.nome)}')">${a.emoji} ${a.nome}</button>`).join("")+"</div>";
  }
  if(flow.step==="confirm"){
   let obj=acaoObj(flow.acao);
@@ -249,24 +263,13 @@ function renderFlow(){
   c.innerHTML=base+`<div class="infoMini"><b>${flow.jogador}</b><br>${obj.emoji} ${flow.acao}<br>${$("periodo").value} · ${t()}</div><button class="green" onclick="confirmMapFlow()">✓ Confirmar</button><button class="danger" onclick="cancelMapFlow()">× Cancelar</button>`;
  }
 }
-function esc(str){return String(str).replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/"/g,"&quot;")}
 function renderMap(){
  let p=$("pitch");
  p.querySelectorAll(".mapEmoji,.tempPoint").forEach(m=>m.remove());
 
- reg
- .filter(r=>r.x!==""&&r.x!==undefined&&r.y!==""&&r.y!==undefined)
- .filter(r=>filtroJogadorMapa==="Todos" || r.jogador===filtroJogadorMapa)
- .forEach((r,i)=>{
-  let m=document.createElement("div");
-  m.className="mapEmoji";
-  m.style.left=r.x+"%";
-  m.style.top=r.y+"%";
-  m.innerText=r.emoji||acaoObj(r.acao).emoji;
-  m.onclick=(ev)=>{ev.stopPropagation();openEvent(i)};
-  p.appendChild(m);
- });
-
+ // Campo limpo por defeito.
+ // As ações continuam guardadas nas estatísticas, histórico e CSV.
+ // Só aparece o ponto temporário enquanto estás a criar uma nova ação.
  if(flow.x&&flow.y){
   let tp=document.createElement("div");
   tp.className="tempPoint";
@@ -275,8 +278,7 @@ function renderMap(){
   p.appendChild(tp);
  }
 }
-}
-function openEvent(i){selectedEventIndex=i;let r=reg[i];$("eventTitle").innerText=(r.emoji||acaoObj(r.acao).emoji)+" "+r.acao;$("eventInfo").innerHTML=`<div class="log"><b>${r.jogador}</b><br>${r.periodo} · ${r.tempo}<br>X:${r.x}% · Y:${r.y}%<br>${r.data}</div>`;$("eventModal").classList.add("show")}
+function openEvent(i){selectedEventIndex=i;let r=reg[i];$("eventTitle").innerText=(r.emoji||acaoObj(r.acao).emoji)+" "+r.acao;$("eventInfo").innerHTML=`<div class="log"><b>${r.jogador}</b><br>${r.periodo} · ${r.tempo}<br>X:${r.x}% · Y:${r.y}%<br>${r.attackSide==="left"?"⬅️ atacava esquerda":"➡️ atacava direita"}<br>${r.data}</div>`;$("eventModal").classList.add("show")}
 function closeEvent(){$("eventModal").classList.remove("show");selectedEventIndex=null}
 function deleteEvent(){if(selectedEventIndex===null)return;if(confirm("Apagar esta ação?")){reg.splice(selectedEventIndex,1);localStorage.setItem("registos_pasteis",JSON.stringify(reg));closeEvent();renderAll()}}
 
@@ -297,7 +299,7 @@ function resetNames(){jogadores=[];for(let i=1;i<=total;i++)jogadores.push("Joga
 
 function openEditStats(){$("editTitle").innerText="Editar estatísticas - "+active;let c=$("editStats");c.innerHTML="";acoes.forEach(a=>c.innerHTML+=`<div class="editRow"><span>${a.emoji} ${a.nome}: <b>${count(r=>r.jogador===active&&r.acao===a.nome)}</b></span><button class="green" onclick="adjust('${esc(a.nome)}',1)">+</button><button class="danger" onclick="adjust('${esc(a.nome)}',-1)">-</button></div>`);$("editModal").classList.add("show")}
 function closeEditStats(){$("editModal").classList.remove("show")}
-function adjust(a,v){let obj=acaoObj(a);if(v>0)reg.unshift({jogador:active,periodo:$("periodo").value,tempo:t(),acao:a,emoji:obj.emoji,data:"Correção manual",x:"",y:""});else{let i=reg.findIndex(r=>r.jogador===active&&r.acao===a);if(i>=0)reg.splice(i,1)}localStorage.setItem("registos_pasteis",JSON.stringify(reg));renderAll();openEditStats()}
+function adjust(a,v){let obj=acaoObj(a);if(v>0)reg.unshift({jogador:active,periodo:$("periodo").value,tempo:t(),acao:a,emoji:obj.emoji,data:"Correção manual",x:"",y:"",attackSide:attackSide});else{let i=reg.findIndex(r=>r.jogador===active&&r.acao===a);if(i>=0)reg.splice(i,1)}localStorage.setItem("registos_pasteis",JSON.stringify(reg));renderAll();openEditStats()}
 
 function openSubs(){$("subsModal").classList.add("show");renderSubs()}
 function closeSubs(){outTemp=null;inTemp=null;$("subsModal").classList.remove("show");renderSubs()}
@@ -311,31 +313,14 @@ function resetTimer(){pause();time=dur*60;updateTimer()}
 function updateTimer(){$("tempo").innerText=t()}
 
 function renderStats(){let st=$("stats");if(!st)return;st.innerHTML="";jogadores.forEach(p=>{st.innerHTML+=`<div class="stat"><b>${p}</b><span>⚽ ${goals(p)} | 🎯 ${count(r=>r.jogador===p&&r.acao&&r.acao.startsWith("Remate"))} | 🧤 ${count(r=>r.jogador===p&&r.acao==="Defesa")} | 🎁 ${count(r=>r.jogador===p&&r.acao==="Assistência")}</span></div>`;acoes.forEach(a=>st.innerHTML+=`<div class="stat"><span>${a.emoji} ${a.nome}</span><b>${count(r=>r.jogador===p&&r.acao===a.nome)}</b></div>`)})}
-function renderHistory(){let h=$("history");if(!h)return;h.innerHTML="";reg.slice(0,150).forEach(r=>{let loc=(r.x!==""&&r.x!==undefined)?` · X:${r.x}% Y:${r.y}%`:"";h.innerHTML+=`<div class="log"><b>${r.emoji||acaoObj(r.acao).emoji} ${r.acao}</b><br>${r.jogador} · ${r.periodo} · ${r.tempo}${loc}<br>${r.data}</div>`})}
+function renderHistory(){let h=$("history");if(!h)return;h.innerHTML="";reg.slice(0,150).forEach(r=>{let loc=(r.x!==""&&r.x!==undefined)?` · X:${r.x}% Y:${r.y}%`:"";let atk=r.attackSide==="left"?" · ataque esquerda":" · ataque direita";h.innerHTML+=`<div class="log"><b>${r.emoji||acaoObj(r.acao).emoji} ${r.acao}</b><br>${r.jogador} · ${r.periodo} · ${r.tempo}${loc}${atk}<br>${r.data}</div>`})}
 function clearGame(){if(confirm("Apagar todos os registos deste jogo?")){reg=[];subs=[];casaGoals=0;foraGoals=0;localStorage.removeItem("registos_pasteis");localStorage.removeItem("subs_pasteis");localStorage.setItem("golos_casa_pasteis",0);localStorage.setItem("golos_fora_pasteis",0);loadGame();renderAll()}}
 function clearMapOnly(){if(confirm("Apagar apenas ações com localização no campo?")){reg=reg.filter(r=>r.x===""||r.x===undefined);localStorage.setItem("registos_pasteis",JSON.stringify(reg));renderAll()}}
 function fullReset(){if(confirm("Apagar tudo e repor a aplicação?")){localStorage.clear();location.reload()}}
 function exportCSV(){let casa=$("casa").value||"Equipa da Casa",fora=$("fora").value||"Equipa Adversária",jogo=casa+" vs "+fora,resultado=casaGoals+"-"+foraGoals,det=localStorage.getItem("detalhes_jogo_pasteis")||"";let csv="Jogo,Resultado,Detalhes,Tipo,Data,Periodo,Tempo,Jogador,Acao,Emoji,Sai,Entra,X,Y,LadoAtaque\n";reg.forEach(r=>csv+=`"${jogo}","${resultado}","${det}","Ação","${r.data}","${r.periodo}","${r.tempo}","${r.jogador}","${r.acao}","${r.emoji||acaoObj(r.acao).emoji}","","","${r.x||""}","${r.y||""}","${r.attackSide||attackSide}"\n`);subs.forEach(s=>csv+=`"${jogo}","${resultado}","${det}","Substituição","${s.data}","${s.periodo}","${s.tempo}","","","","${s.sai}","${s.entra}","","",""\n`);let blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="estatisticas_"+casa+"_vs_"+fora+".csv";a.click();URL.revokeObjectURL(url)}
 
-function renderFiltroMapa(){
- let sel=$("filtroMapa");
- if(!sel)return;
-
- let atual=sel.value || filtroJogadorMapa;
- sel.innerHTML='<option value="Todos">Todos os jogadores</option>';
-
- jogadores.forEach(j=>{
-  sel.innerHTML+=`<option value="${j}">${j}</option>`;
- });
-
- sel.value=atual;
- filtroJogadorMapa=atual;
-}
-
-function mudarFiltroMapa(){
- filtroJogadorMapa=$("filtroMapa").value;
- renderMap();
-}
+function renderAll(){renderAttack();renderMap();renderFlow();renderPlayerCard();renderStats();renderHistory();renderSubs()}
+loadGame();updateTimer();renderAll();
 </script>
 </body>
 </html>
