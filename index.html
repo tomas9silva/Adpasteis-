@@ -504,7 +504,13 @@ function pickMap(e){
  renderMap();
 }
 }
-function choosePlayer(j){flow.jogador=j;active=j;flow.step="action";renderFlow();renderPlayerCard()}
+function choosePlayer(j){
+ flow.jogador=j;
+ active=j;
+ flow.step="action";
+ renderPlayerCard();
+ abrirPopupAcoes();
+}
 function chooseAction(a){flow.acao=a;flow.step="confirm";renderFlow()}
 function confirmMapFlow(){
  if(flow.step!=="confirm"||!flow.x||!flow.jogador||!flow.acao){alert("Seleciona local, jogador e ação.");return}
