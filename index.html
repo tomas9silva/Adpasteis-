@@ -188,6 +188,7 @@ let casaGoals=+localStorage.getItem("golos_casa_pasteis")||0, foraGoals=+localSt
 let attackSide=localStorage.getItem("attack_side_pasteis")||"right";
 let flow={x:null,y:null,jogador:null,acao:null,step:"idle"};
 const acoes=[
+ const acoes=[
  {nome:"Golo dentro da área",emoji:"⚽"},
  {nome:"Golo fora da área",emoji:"⚽"},
  {nome:"Golo de livre",emoji:"⚽"},
@@ -198,8 +199,9 @@ const acoes=[
  {nome:"Defesa",emoji:"🧤"},
  {nome:"Assistência",emoji:"🎁"},
  {nome:"Remate fora",emoji:"❌"},
- {nome:"Passe falhado",emoji:​"⚠️"},​
- {nome:"Golo sofrido",emoji:​"🔴"},
+ {nome:"Passe falhado",emoji:"⚠️"},
+ {nome:"Golo sofrido",emoji:"🔴"}
+];
  
 ];
 
