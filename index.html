@@ -585,45 +585,9 @@ function cancelMapFlow(){
  renderMap();
 }
 function renderFlow(){
- let c=$("flowContent"),s=$("statusBox");
- if(flow.step==="idle"){c.innerHTML="Nenhum local selecionado.";s.innerHTML="Clica no campo";return}
- let base=`<div class="infoMini">📍 Local: X ${flow.x}% · Y ${flow.y}%<br>${attackSide==="right"?"➡️ ataque direita":"⬅️ ataque esquerda"}</div>`;
- if(flow.step==="player"){
-  s.innerHTML="Escolhe jogador";
-  c.innerHTML=base+"<h3>Escolhe o jogador</h3><div class='players'>"+jogadores.map(j=>`<button class="pbtn ${j===active?'active':''}" onclick="choosePlayer('${esc(j)}')">${j}</button>`).join("")+"</div>";
- }
- if(flow.step==="action"){
-  s.innerHTML=flow.jogador+" · escolhe ação";
+function renderFlow(){
+ return;
 
-  let resumoJogador=`
-   <div class="infoMini">
-    <b>${flow.jogador}</b><br>
-    ⚽ ${goals(flow.jogador)}
-    &nbsp; ✔️ ${count(r=>r.jogador===flow.jogador&&r.acao&&r.acao.startsWith("Remate"))}
-    &nbsp; 🧤 ${count(r=>r.jogador===flow.jogador&&r.acao==="Defesa")}
-    &nbsp; 🎁 ${count(r=>r.jogador===flow.jogador&&r.acao==="Assistência")}
-   </div>
-  `;
-
-  let listaExistente="<div class='log'><b>Ações já registadas deste jogador</b><br>";
-  let tem=false;
-  acoes.forEach(a=>{
-   let n=count(r=>r.jogador===flow.jogador&&r.acao===a.nome);
-   if(n>0){
-    tem=true;
-    listaExistente+=`${a.emoji} ${a.nome}: <b>${n}</b><br>`;
-   }
-  });
-  if(!tem)listaExistente+="Ainda sem ações registadas.";
-  listaExistente+="</div>";
-
-  c.innerHTML=base+resumoJogador+listaExistente+"<h3>Adicionar nova ação</h3><div class='grid'>"+acoes.map(a=>`<button class="actionBtn dark" onclick="chooseAction('${esc(a.nome)}')">${a.emoji} ${a.nome}</button>`).join("")+"</div>";
- }
- if(flow.step==="confirm"){
-  let obj=acaoObj(flow.acao);
-  s.innerHTML=obj.emoji+" "+flow.jogador;
-  c.innerHTML=base+`<div class="infoMini"><b>${flow.jogador}</b><br>${obj.emoji} ${flow.acao}<br>${$("periodo").value} · ${t()}</div><button class="green" onclick="confirmMapFlow()">✓ Confirmar</button><button class="danger" onclick="cancelMapFlow()">× Cancelar</button>`;
- }
 }
 function renderMap(){
  let p=$("pitch");
