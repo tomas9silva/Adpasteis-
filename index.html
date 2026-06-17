@@ -366,7 +366,14 @@ button{border:0;color:white;font-weight:bold}
  margin:0 0 8px 0;
  color:white;
 }
-
+.mainTitle{
+ text-align:center;
+ color:white;
+ font-size:58px;
+ font-weight:700;
+ letter-spacing:4px;
+ margin:8px 0 18px 0;
+}
 @media(max-width:420px){
  .score{grid-template-columns:1fr 72px 1fr 82px;gap:4px}
  .players{grid-template-columns:repeat(3,1fr)}
@@ -387,6 +394,10 @@ button{border:0;color:white;font-weight:bold}
   </div>
 </div>
 <div class="app" id="main">
+  <div class="mainTitle">
+    𝕊𝕥𝕒𝕥𝕊
+  </div>
+
  <div class="top">
   <button class="settings" onclick="openSettings()">⚙️</button>
   <div class="score">
