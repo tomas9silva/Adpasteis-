@@ -12,7 +12,7 @@ body:before{content:"";position:fixed;inset:0;background:url("logo-pasteis.png")
 button,input,select,textarea{width:100%;padding:10px;margin-top:6px;font-size:15px;border-radius:10px;border:1px solid #ccc}
 button{border:0;color:white;font-weight:bold}
 .dark{background:#101b31}.red,.danger{background:#d71920}.green{background:#26a626}.orange{background:#f28b12}.yellow{background:#ffd21a;color:#111}.blue{background:#087dcc}
-.card{background:transparent;color:white;border-radius:14px;padding:10px;margin:8px 0;border:1px solid rgba(255,255,255,.15)}
+.card{background:rgba(255,255,255,.58);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#111;border-radius:14px;padding:10px;margin:8px 0;border:1px solid rgba(255,255,255,.25)}
 .top{background:rgba(16,27,49,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.20);border-radius:16px;padding:10px;color:white;position:relative}
 .settings{position:absolute;right:8px;top:8px;width:36px;height:36px;border-radius:50%;padding:0;background:transparent;color:white;font-size:18px;border:1px solid rgba(255,255,255,.25)}
 .score{display:grid;grid-template-columns:1fr 82px 1fr 90px;gap:6px;align-items:center;padding-right:38px}
@@ -36,7 +36,7 @@ button{border:0;color:white;font-weight:bold}
 .pbtn.banco{border:2px solid #087dcc}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .grid button{font-size:13px;padding:10px;min-height:42px}
-.playerCard{background:rgba(255,255,255,.05);color:white;border-radius:12px;padding:9px;margin-top:7px;font-size:13px;border:1px solid rgba(255,255,255,.12)}
+.playerCard{background:rgba(16,27,49,.75);color:white;border-radius:12px;padding:9px;margin-top:7px;font-size:13px}
 .stat,.log{background:#f1f3f6;padding:8px;border-radius:8px;margin:5px 0;font-size:13px}
 .stat{display:flex;justify-content:space-between;gap:8px}
 .small{font-size:12px;opacity:.9}
@@ -353,19 +353,15 @@ button{border:0;color:white;font-weight:bold}
 }
 
 #subMini{
- width:42px;
- height:42px;
+ width:52px;
+ height:40px;
  margin:0;
  padding:0;
  font-size:18px;
  background:#d71920;
- border-radius:12px;
+ border-radius:10px;
 }
 
-.card h3{
- margin:0 0 8px 0;
- color:white;
-}
 .mainTitle{
  text-align:center;
  color:white;
@@ -374,6 +370,7 @@ button{border:0;color:white;font-weight:bold}
  letter-spacing:4px;
  margin:8px 0 18px 0;
 }
+
 @media(max-width:420px){
  .score{grid-template-columns:1fr 72px 1fr 82px;gap:4px}
  .players{grid-template-columns:repeat(3,1fr)}
@@ -388,12 +385,13 @@ button{border:0;color:white;font-weight:bold}
    <h1>𝕊𝕥𝕒𝕥𝕊</h1>
 <p class="landingSub">Match Analysis Platform</p>
 <p class="landingVersion">Version 1.0</p>
-<button onclick="abrirMenu()" class="enterBtn">
+    <button onclick="abrirMenu()" class="enterBtn">
   ENTRAR
 </button>
   </div>
 </div>
- <div id="menuPage" class="landingPage hidden">
+
+<div id="menuPage" class="landingPage hidden">
   <div class="landingContent">
     <h1>𝕊𝕥𝕒𝕥𝕊</h1>
 
@@ -408,11 +406,9 @@ button{border:0;color:white;font-weight:bold}
     </button>
   </div>
 </div>
-<div class="app hidden" id="main">
-  <div class="mainTitle">
-    𝕊𝕥𝕒𝕥𝕊
-  </div>
 
+<div class="app hidden" id="main">
+ <div class="mainTitle">𝕊𝕥𝕒𝕥𝕊</div>
  <div class="top">
   <button class="settings" onclick="openSettings()">⚙️</button>
   <div class="score">
@@ -446,11 +442,11 @@ button{border:0;color:white;font-weight:bold}
      <div class="cornerFlag bl"></div>
      <div class="cornerFlag br"></div>
    </div>
-   
+   <div class="small" style="margin-top:6px">Clica no local → escolhe jogador → escolhe ação → confirma. Os mapas individuais ficam nas estatísticas.</div>
  </div>
 
  <div class="card">
-   <h3>🎯 Jogador ativo</h3>
+   <h3>Jogador selecionado</h3>
    <div id="playerCard" class="playerCard" onclick="toggleDetails()"></div>
  </div>
 </div>
@@ -854,6 +850,8 @@ function clearGame(){if(confirm("Apagar todos os registos deste jogo?")){reg=[];
 function clearMapOnly(){if(confirm("Apagar apenas ações com localização no campo?")){reg=reg.filter(r=>r.x===""||r.x===undefined);localStorage.setItem("registos_pasteis",JSON.stringify(reg));renderAll()}}
 function fullReset(){if(confirm("Apagar tudo e repor a aplicação?")){localStorage.clear();location.reload()}}
 function exportCSV(){let casa=($("casa")?$("casa").value:"AD Pastéis")||"Equipa da Casa",fora=$("fora").value||"Equipa Adversária",jogo=casa+" vs "+fora,resultado=casaGoals+"-"+foraGoals,det=localStorage.getItem("detalhes_jogo_pasteis")||"";let csv="Jogo,Resultado,Detalhes,Tipo,Data,Periodo,Tempo,Jogador,Acao,Emoji,Sai,Entra,X,Y,LadoAtaque\n";reg.forEach(r=>csv+=`"${jogo}","${resultado}","${det}","Ação","${r.data}","${r.periodo}","${r.tempo}","${r.jogador}","${r.acao}","${r.emoji||acaoObj(r.acao).emoji}","","","${r.x||""}","${r.y||""}","${r.attackSide||attackSide}"\n`);subs.forEach(s=>csv+=`"${jogo}","${resultado}","${det}","Substituição","${s.data}","${s.periodo}","${s.tempo}","","","","${s.sai}","${s.entra}","","",""\n`);let blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="estatisticas_"+casa+"_vs_"+fora+".csv";a.click();URL.revokeObjectURL(url)}
+
+
 function abrirMenu(){
  $("landingPage").classList.add("hidden");
  $("menuPage").classList.remove("hidden");
@@ -870,6 +868,7 @@ function entrarTreino(){
  $("menuPage").classList.add("hidden");
  $("main").classList.remove("hidden");
 }
+
 function renderAll(){renderAttack();renderMap();renderFlow();renderPlayerCard();renderStats();renderReport();renderHistory();renderSubs()}
 loadGame();updateTimer();renderAll();
 </script>
