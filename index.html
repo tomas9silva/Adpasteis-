@@ -576,7 +576,14 @@ function confirmMapFlow(){
  flow={x:null,y:null,jogador:null,acao:null,step:"idle"};
  renderAll();
 }
-function cancelMapFlow(){flow={x:null,y:null,jogador:null,acao:null,step:"idle"};renderFlow();renderMap()}
+function cancelMapFlow(){
+ flow={x:null,y:null,jogador:null,acao:null,step:"idle"};
+
+ let modal=$("quickModal");
+ if(modal)modal.classList.remove("show");
+
+ renderMap();
+}
 function renderFlow(){
  let c=$("flowContent"),s=$("statusBox");
  if(flow.step==="idle"){c.innerHTML="Nenhum local selecionado.";s.innerHTML="Clica no campo";return}
