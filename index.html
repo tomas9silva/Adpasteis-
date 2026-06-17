@@ -1,34 +1,48 @@
 <!DOCTYPE html>
 <html lang="pt-PT">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AD Pastéis Jogo</title>
 <style>
-*{box-sizing:border-box} body{margin:0;font-family:Arial;background:#071326;color:white}
-body:before{content:"";position:fixed;inset:0;background:url("logo-pasteis.png") center/75% no-repeat;opacity:.10;z-index:-1}
-.app{max-width:520px;margin:auto;padding:8px 10px 80px}
-.card,.top{background:rgba(255,255,255,.60);backdrop-filter:blur(8px);color:#111;border-radius:14px;padding:10px;margin:8px 0;border:1px solid rgba(255,255,255,.25)}
-.top{background:rgba(16,27,49,.72);color:white;position:relative}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#071326;color:white}
+body:before{content:"";position:fixed;inset:0;background:url("logo-pasteis.png") center 55%/75% no-repeat;opacity:.10;z-index:-1;pointer-events:none}
+.app{max-width:520px;margin:auto;padding:8px 10px 85px}
 button,input,select,textarea{width:100%;padding:10px;margin-top:6px;font-size:15px;border-radius:10px;border:1px solid #ccc}
-button{border:0;color:white;font-weight:bold}.dark{background:#101b31}.red,.danger{background:#d71920}.green{background:#26a626}.orange{background:#f28b12}.yellow{background:#ffd21a;color:#111}
-.score{display:grid;grid-template-columns:1fr 82px 1fr 90px;gap:6px;align-items:center;padding-right:38px}.team{background:#182542;color:white;text-align:center;font-weight:bold;font-size:13px}
+button{border:0;color:white;font-weight:bold}
+.dark{background:#101b31}.red,.danger{background:#d71920}.green{background:#26a626}.orange{background:#f28b12}.yellow{background:#ffd21a;color:#111}.blue{background:#087dcc}
+.card{background:rgba(255,255,255,.58);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#111;border-radius:14px;padding:10px;margin:8px 0;border:1px solid rgba(255,255,255,.25)}
+.top{background:rgba(16,27,49,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.20);border-radius:16px;padding:10px;color:white;position:relative}
+.settings{position:absolute;right:8px;top:8px;width:36px;height:36px;border-radius:50%;padding:0;background:#ffd21a;color:#111;font-size:18px}
+.score{display:grid;grid-template-columns:1fr 82px 1fr 90px;gap:6px;align-items:center;padding-right:38px}
+.team{background:#182542;color:white;text-align:center;font-weight:bold;font-size:13px}
 .scoreline{font-size:30px;font-weight:bold;color:#ffd21a;text-align:center}.scoreBtns{display:grid;grid-template-columns:1fr 1fr;gap:4px}.scoreBtns button{background:#d71920;padding:5px}
 .timer{text-align:center;color:#ffd21a}#tempo{font-size:27px;font-weight:bold}.timerBtns{display:flex;gap:3px}.timerBtns button{height:25px;padding:0;border-radius:50%;font-size:11px}
-.settings{position:absolute;right:8px;top:8px;width:36px;height:36px;border-radius:50%;padding:0;background:#ffd21a;color:#111;font-size:18px}
-.line{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.acaoBox{background:rgba(16,27,49,.70);border-radius:12px;padding:8px;text-align:center;color:white;font-size:13px}
+.line{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.statusBox{background:rgba(16,27,49,.70);border-radius:12px;padding:8px;text-align:center;color:white;font-size:13px}
 .row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}.row button{font-size:13px;padding:9px}
+.hidden{display:none!important}
 .players{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.pbtn{background:#eef1f6;color:#111;border:1px solid #ccc;font-size:12px;padding:8px;min-height:38px}.pbtn.active{background:#d71920;color:white}.pbtn.campo{border:2px solid #d71920}.pbtn.banco{border:2px solid #087dcc}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.grid button{font-size:13px;padding:10px;min-height:42px;background:#101b31}.sub{background:#d71920!important}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.grid button{font-size:13px;padding:10px;min-height:42px}
 .playerCard{background:rgba(16,27,49,.75);color:white;border-radius:12px;padding:9px;margin-top:7px;font-size:13px}
-.hidden{display:none!important}.stat,.log{background:#f1f3f6;padding:8px;border-radius:8px;margin:5px 0;font-size:13px}.stat{display:flex;justify-content:space-between}
+.stat,.log{background:#f1f3f6;padding:8px;border-radius:8px;margin:5px 0;font-size:13px}.stat{display:flex;justify-content:space-between;gap:8px}.small{font-size:12px;opacity:.9}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:2000;display:none;align-items:center;justify-content:center;padding:12px}.modal.show{display:flex}.modalContent{background:white;color:#111;border-radius:18px;padding:14px;max-width:500px;width:100%;max-height:92vh;overflow:auto}
-.pitch{position:relative;width:100%;aspect-ratio:1.65/1;background:#d7b36a;border:4px solid #fff;border-radius:10px;overflow:hidden}
-.pitch:before{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:3px solid rgba(255,255,255,.9)}.pitch:after{content:"";position:absolute;left:50%;top:50%;width:74px;height:74px;border:3px solid rgba(255,255,255,.9);border-radius:50%;transform:translate(-50%,-50%)}
-.area{position:absolute;top:23%;width:16%;height:54%;border:3px solid rgba(255,255,255,.9)}.left{left:0;border-left:0}.right{right:0;border-right:0}
-.marker{position:absolute;width:16px;height:16px;border-radius:50%;transform:translate(-50%,-50%);border:2px solid white;box-shadow:0 2px 8px #0008}.golo{background:#d71920}.remate{background:#ffd21a}.defesa{background:#087dcc}.outro{background:#26a626}
 .editRow{display:grid;grid-template-columns:1fr 42px 42px;gap:6px;align-items:center;background:#f1f3f6;border-radius:8px;padding:7px;margin:5px 0}.editBtn{float:right;width:auto;padding:4px 8px;font-size:12px;background:#ffd21a;color:#111;margin:0}
+
+/* Campo principal */
+.pitchCard{background:rgba(16,27,49,.74);color:white;border-radius:16px;padding:10px;margin:8px 0;border:1px solid rgba(255,255,255,.20)}
+.pitch{position:relative;width:100%;aspect-ratio:1.65/1;background:#d7b36a;border:4px solid #fff;border-radius:10px;overflow:hidden;box-shadow:inset 0 0 0 2px rgba(255,255,255,.35)}
+.pitch:before{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:3px solid rgba(255,255,255,.9);z-index:1}
+.pitch:after{content:"";position:absolute;left:50%;top:50%;width:74px;height:74px;border:3px solid rgba(255,255,255,.9);border-radius:50%;transform:translate(-50%,-50%);z-index:1}
+.area{position:absolute;top:23%;width:16%;height:54%;border:3px solid rgba(255,255,255,.9);z-index:1}.left{left:0;border-left:0}.right{right:0;border-right:0}
+.mapEmoji{position:absolute;transform:translate(-50%,-50%);font-size:22px;line-height:1;z-index:5;text-shadow:0 2px 5px #000}
+.tempPoint{position:absolute;width:18px;height:18px;border-radius:50%;background:#d71920;border:3px solid white;transform:translate(-50%,-50%);z-index:4;box-shadow:0 2px 8px #000}
+.flowPanel{background:rgba(255,255,255,.60);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#111;border-radius:14px;padding:10px;margin:8px 0;border:1px solid rgba(255,255,255,.25)}
+.actionBtn{background:#101b31}.actionBtn.active,.pbtn.choose{background:#d71920;color:white}
+.infoMini{background:rgba(16,27,49,.9);color:white;border-radius:10px;padding:8px;margin-top:6px;text-align:center}
 @media(max-width:420px){.score{grid-template-columns:1fr 72px 1fr 82px;gap:4px}.players{grid-template-columns:repeat(3,1fr)}#tempo{font-size:23px}.team{font-size:12px;padding:7px}}
-</style></head>
+</style>
+</head>
 <body>
 <div class="app" id="main">
  <div class="top">
@@ -39,12 +53,30 @@ button{border:0;color:white;font-weight:bold}.dark{background:#101b31}.red,.dang
    <input id="fora" class="team" placeholder="Adversário" oninput="saveGame()">
    <div class="timer"><div id="tempo">12:00</div><div class="timerBtns"><button class="green" onclick="start()">▶</button><button class="orange" onclick="pause()">Ⅱ</button><button class="danger" onclick="resetTimer()">↺</button></div></div>
   </div>
-  <div class="line"><select id="periodo"><option>1.º período</option><option>2.º período</option><option>3.º período</option></select><div class="acaoBox" id="acaoBox">Sem ação</div></div>
-  <div class="row"><button class="green" onclick="confirmAction()">✓ Confirmar</button><button class="danger" onclick="cancelAction()">× Cancelar</button><button class="orange" onclick="undo()">↶ Desfazer</button></div>
+  <div class="line"><select id="periodo"><option>1.º período</option><option>2.º período</option><option>3.º período</option></select><div class="statusBox" id="statusBox">Clica no campo</div></div>
+  <div class="row"><button class="green" onclick="confirmMapFlow()">✓ Confirmar</button><button class="danger" onclick="cancelMapFlow()">× Cancelar</button><button class="orange" onclick="undo()">↶ Desfazer</button></div>
  </div>
 
- <div class="card"><h3>Jogadores</h3><div id="players" class="players"></div><div id="playerCard" class="playerCard" onclick="toggleDetails()"></div></div>
- <div class="card"><h3>Ações principais</h3><div id="actions" class="grid"></div><button class="sub" onclick="openSubs()">🔄 SUBSTITUIÇÃO</button><button class="dark" onclick="openMap()">📍 CAMPO / MAPA</button></div>
+ <div class="pitchCard">
+   <h3>Campo interativo</h3>
+   <div id="pitch" class="pitch" onclick="pickMap(event)">
+     <div class="area left"></div><div class="area right"></div>
+   </div>
+   <div class="small" style="margin-top:6px">Clica no local → escolhe jogador → escolhe ação → confirma.</div>
+ </div>
+
+ <div id="flowPanel" class="flowPanel">
+   <div id="flowContent">Nenhum local selecionado.</div>
+ </div>
+
+ <div class="card">
+   <h3>Jogador selecionado</h3>
+   <div id="playerCard" class="playerCard" onclick="toggleDetails()"></div>
+ </div>
+
+ <div class="card">
+   <button class="danger" onclick="openSubs()">🔄 SUBSTITUIÇÃO</button>
+ </div>
 </div>
 
 <div class="app hidden" id="settingsPage">
@@ -52,61 +84,130 @@ button{border:0;color:white;font-weight:bold}.dark{background:#101b31}.red,.dang
  <div class="card"><button class="dark" onclick="toggle('editNames')">Editar nomes dos jogadores</button><div id="editNames" class="hidden"></div></div>
  <div class="card"><button class="dark" onclick="toggle('stats')">Estatísticas completas</button><div id="stats" class="hidden"></div></div>
  <div class="card"><button class="dark" onclick="toggle('history')">Histórico</button><div id="history" class="hidden"></div></div>
- <div class="card"><button class="yellow" onclick="exportCSV()">Exportar CSV</button><button class="danger" onclick="clearGame()">Limpar jogo</button><button class="danger" onclick="fullReset()">Reset completo</button></div>
+ <div class="card"><button class="yellow" onclick="exportCSV()">Exportar CSV</button><button class="danger" onclick="clearGame()">Limpar jogo</button><button class="danger" onclick="clearMapOnly()">Limpar só mapa</button><button class="danger" onclick="fullReset()">Reset completo</button></div>
 </div>
 
 <div id="subsModal" class="modal"><div class="modalContent"><h2>Substituição</h2><h4>Em campo</h4><div id="campoGrid" class="players"></div><h4>Banco</h4><div id="bancoGrid" class="players"></div><div id="subInfo" class="playerCard">Seleciona quem sai e quem entra.</div><button class="green" onclick="confirmSub()">Confirmar substituição</button><button class="danger" onclick="closeSubs()">Cancelar</button><div id="subsHist"></div></div></div>
 <div id="editModal" class="modal"><div class="modalContent"><h2 id="editTitle">Editar estatísticas</h2><div id="editStats"></div><button class="danger" onclick="closeEditStats()">Fechar</button></div></div>
-<div id="mapModal" class="modal"><div class="modalContent"><h2>Campo interativo</h2><div id="pitch" class="pitch" onclick="pickMap(event)"><div class="area left"></div><div class="area right"></div></div><div class="grid"><button class="yellow" onclick="clearMap()">Limpar pontos</button><button class="danger" onclick="closeMap()">Fechar</button></div></div></div>
-<div id="mapActionModal" class="modal"><div class="modalContent"><h2>Registar ação no campo</h2><label>Jogador</label><select id="mapPlayer"></select><label>Ação</label><select id="mapAction"></select><div id="mapInfo" class="log">Local selecionado</div><button class="green" onclick="confirmMapAction()">Confirmar</button><button class="danger" onclick="cancelMapAction()">Cancelar</button></div></div>
+<div id="eventModal" class="modal"><div class="modalContent"><h2 id="eventTitle">Ação</h2><div id="eventInfo"></div><button class="danger" onclick="deleteEvent()">Apagar ação</button><button class="dark" onclick="closeEvent()">Fechar</button></div></div>
 
 <script>
 let total=+localStorage.getItem("total_jogadores_pasteis")||12, inField=+localStorage.getItem("jogadores_campo_pasteis")||5, dur=+localStorage.getItem("duracao_periodo_pasteis")||12;
 let jogadores=JSON.parse(localStorage.getItem("jogadores_pasteis")||"[]"); if(!jogadores.length){for(let i=1;i<=total;i++)jogadores.push("Jogador "+i)}
 let campo=JSON.parse(localStorage.getItem("campo_pasteis")||"null")||jogadores.slice(0,inField), banco=JSON.parse(localStorage.getItem("banco_pasteis")||"null")||jogadores.slice(inField);
 let reg=JSON.parse(localStorage.getItem("registos_pasteis")||"[]"), subs=JSON.parse(localStorage.getItem("subs_pasteis")||"[]");
-let active=jogadores[0]||"Jogador 1", tempAction=null, outTemp=null, inTemp=null, details=false, time=dur*60, timer=null, mapPoint=null;
+let active=jogadores[0]||"Jogador 1", outTemp=null, inTemp=null, details=false, time=dur*60, timer=null, selectedEventIndex=null;
 let casaGoals=+localStorage.getItem("golos_casa_pasteis")||0, foraGoals=+localStorage.getItem("golos_fora_pasteis")||0;
-const acoes=["Remate jogo corrido","Remate livre","Golo dentro da área","Golo fora da área","Golo de livre","Golo de cabeça","Golo de canto","Defesa"];
+let flow={x:null,y:null,jogador:null,acao:null,step:"idle"};
+const acoes=[
+ {nome:"Golo dentro da área",emoji:"⚽"},
+ {nome:"Golo fora da área",emoji:"⚽"},
+ {nome:"Golo de livre",emoji:"⚽"},
+ {nome:"Golo de cabeça",emoji:"⚽"},
+ {nome:"Golo de canto",emoji:"⚽"},
+ {nome:"Remate jogo corrido",emoji:"🎯"},
+ {nome:"Remate livre",emoji:"🎯"},
+ {nome:"Defesa",emoji:"🧤"},
+ {nome:"Assistência",emoji:"🎁"},
+ {nome:"Remate fora",emoji:"❌"},
+ {nome:"Remate bloqueado",emoji:"🚫"},
+ {nome:"Cartão amarelo",emoji:"🟨"},
+ {nome:"Cartão vermelho",emoji:"🟥"}
+];
+
 function $(id){return document.getElementById(id)} function toggle(id){$(id).classList.toggle("hidden")} function t(){let m=Math.floor(time/60),s=time%60;return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")}
 function saveAll(){localStorage.setItem("jogadores_pasteis",JSON.stringify(jogadores));localStorage.setItem("campo_pasteis",JSON.stringify(campo));localStorage.setItem("banco_pasteis",JSON.stringify(banco));localStorage.setItem("registos_pasteis",JSON.stringify(reg));localStorage.setItem("subs_pasteis",JSON.stringify(subs))}
 function loadGame(){ $("casa").value=localStorage.getItem("equipa_casa_pasteis")||"AD Pastéis"; $("fora").value=localStorage.getItem("equipa_fora_pasteis")||""; $("gc").innerText=casaGoals; $("gf").innerText=foraGoals}
 function saveGame(){localStorage.setItem("equipa_casa_pasteis",$("casa").value);localStorage.setItem("equipa_fora_pasteis",$("fora").value)}
 function goal(team,v){if(team==="c"){casaGoals=Math.max(0,casaGoals+v);localStorage.setItem("golos_casa_pasteis",casaGoals);$("gc").innerText=casaGoals}else{foraGoals=Math.max(0,foraGoals+v);localStorage.setItem("golos_fora_pasteis",foraGoals);$("gf").innerText=foraGoals}}
-function count(f){return reg.filter(f).length} function goals(j){return count(r=>r.jogador===j&&r.acao.startsWith("Golo"))}
-function renderPlayers(){let g=$("players");g.innerHTML="";jogadores.forEach(j=>{let b=document.createElement("button");b.className="pbtn"+(j===active?" active":"");b.textContent=j;b.onclick=()=>{active=j;renderPlayers();render()};g.appendChild(b)})}
-function renderActions(){let g=$("actions");g.innerHTML="";acoes.forEach(a=>{let b=document.createElement("button");b.className="dark";b.textContent=a;b.onclick=()=>{tempAction=a;renderActionBox()};g.appendChild(b)})}
-function renderActionBox(){$("acaoBox").innerHTML=tempAction?("<b>"+active+"</b><br>"+tempAction):"Sem ação"}
-function confirmAction(){if(!tempAction){alert("Seleciona primeiro uma ação.");return}reg.unshift({jogador:active,periodo:$("periodo").value,tempo:t(),acao:tempAction,data:new Date().toLocaleString("pt-PT"),x:"",y:""});localStorage.setItem("registos_pasteis",JSON.stringify(reg));tempAction=null;render()}
-function cancelAction(){tempAction=null;renderActionBox()} function undo(){if(!reg.length){alert("Não há ações para desfazer.");return}reg.shift();localStorage.setItem("registos_pasteis",JSON.stringify(reg));render();renderMap()}
-function toggleDetails(){details=!details;render()}
-function render(){renderActionBox();let html=`<button class="editBtn" onclick="event.stopPropagation();openEditStats()">✏️ Editar</button><b>${active} ${details?"▲":"▼"}</b><br><span class="small">⚽ ${goals(active)} | 🎯 ${count(r=>r.jogador===active&&r.acao==="Remate jogo corrido")} | 🥅 ${count(r=>r.jogador===active&&r.acao==="Remate livre")} | 🧤 ${count(r=>r.jogador===active&&r.acao==="Defesa")}</span>`; if(details){html+="<hr>";acoes.forEach(a=>html+=`${a}: <b>${count(r=>r.jogador===active&&r.acao===a)}</b><br>`)} $("playerCard").innerHTML=html;
-let st=$("stats");st.innerHTML="";jogadores.forEach(p=>{st.innerHTML+=`<div class="stat"><b>${p}</b><span>⚽ ${goals(p)} | 🎯 ${count(r=>r.jogador===p&&r.acao==="Remate jogo corrido")} | 🥅 ${count(r=>r.jogador===p&&r.acao==="Remate livre")} | 🧤 ${count(r=>r.jogador===p&&r.acao==="Defesa")}</span></div>`;acoes.forEach(a=>st.innerHTML+=`<div class="stat"><span>${a}</span><b>${count(r=>r.jogador===p&&r.acao===a)}</b></div>`)});
-let h=$("history");h.innerHTML="";reg.slice(0,120).forEach(r=>{let loc=(r.x!==""&&r.x!==undefined)?` · X:${r.x}% Y:${r.y}%`:"";h.innerHTML+=`<div class="log"><b>${r.acao}</b><br>${r.jogador} · ${r.periodo} · ${r.tempo}${loc}<br>${r.data}</div>`});
-let sh=$("subsHist");if(sh){sh.innerHTML="";subs.slice(0,40).forEach(s=>sh.innerHTML+=`<div class="log"><b>Substituição</b><br>Sai: ${s.sai}<br>Entra: ${s.entra}<br>${s.periodo} · ${s.tempo}</div>`)}}
-function openSettings(){$("main").classList.add("hidden");$("settingsPage").classList.remove("hidden");$("setCasa").value=$("casa").value;$("setFora").value=$("fora").value;$("setTotal").value=total;$("setCampo").value=inField;$("setDur").value=dur;$("detalhes").value=localStorage.getItem("detalhes_jogo_pasteis")||"";renderEditNames()}
+function count(f){return reg.filter(f).length} function goals(j){return count(r=>r.jogador===j&&r.acao&&r.acao.startsWith("Golo"))}
+function acaoObj(nome){return acoes.find(a=>a.nome===nome)||{nome,emoji:"✅"}}
+
+function pickMap(e){
+ let r=e.currentTarget.getBoundingClientRect();
+ flow={x:Math.round(((e.clientX-r.left)/r.width)*100),y:Math.round(((e.clientY-r.top)/r.height)*100),jogador:null,acao:null,step:"player"};
+ renderFlow(); renderMap();
+}
+function choosePlayer(j){flow.jogador=j;active=j;flow.step="action";renderFlow();renderPlayerCard()}
+function chooseAction(a){flow.acao=a;flow.step="confirm";renderFlow()}
+function confirmMapFlow(){
+ if(flow.step!=="confirm"||!flow.x||!flow.jogador||!flow.acao){alert("Seleciona local, jogador e ação.");return}
+ let obj=acaoObj(flow.acao);
+ reg.unshift({jogador:flow.jogador,periodo:$("periodo").value,tempo:t(),acao:flow.acao,emoji:obj.emoji,data:new Date().toLocaleString("pt-PT"),x:flow.x,y:flow.y});
+ localStorage.setItem("registos_pasteis",JSON.stringify(reg));
+ flow={x:null,y:null,jogador:null,acao:null,step:"idle"};
+ renderAll();
+}
+function cancelMapFlow(){flow={x:null,y:null,jogador:null,acao:null,step:"idle"};renderFlow();renderMap()}
+function renderFlow(){
+ let c=$("flowContent"),s=$("statusBox");
+ if(flow.step==="idle"){c.innerHTML="Nenhum local selecionado.";s.innerHTML="Clica no campo";return}
+ let base=`<div class="infoMini">📍 Local: X ${flow.x}% · Y ${flow.y}%</div>`;
+ if(flow.step==="player"){
+  s.innerHTML="Escolhe jogador";
+  c.innerHTML=base+"<h3>Escolhe o jogador</h3><div class='players'>"+jogadores.map(j=>`<button class="pbtn ${j===active?'active':''}" onclick="choosePlayer('${esc(j)}')">${j}</button>`).join("")+"</div>";
+ }
+ if(flow.step==="action"){
+  s.innerHTML=flow.jogador+" · escolhe ação";
+  c.innerHTML=base+`<div class="infoMini"><b>${flow.jogador}</b></div><h3>Escolhe a ação</h3><div class='grid'>`+acoes.map(a=>`<button class="actionBtn" onclick="chooseAction('${esc(a.nome)}')">${a.emoji} ${a.nome}</button>`).join("")+"</div>";
+ }
+ if(flow.step==="confirm"){
+  let obj=acaoObj(flow.acao);
+  s.innerHTML=obj.emoji+" "+flow.jogador;
+  c.innerHTML=base+`<div class="infoMini"><b>${flow.jogador}</b><br>${obj.emoji} ${flow.acao}<br>${$("periodo").value} · ${t()}</div><button class="green" onclick="confirmMapFlow()">✓ Confirmar</button><button class="danger" onclick="cancelMapFlow()">× Cancelar</button>`;
+ }
+}
+function esc(str){return String(str).replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/"/g,"&quot;")}
+function renderMap(){
+ let p=$("pitch");p.querySelectorAll(".mapEmoji,.tempPoint").forEach(m=>m.remove());
+ reg.filter(r=>r.x!==""&&r.x!==undefined&&r.y!==""&&r.y!==undefined).forEach((r,i)=>{
+  let m=document.createElement("div");m.className="mapEmoji";m.style.left=r.x+"%";m.style.top=r.y+"%";m.innerText=r.emoji||acaoObj(r.acao).emoji;m.onclick=(ev)=>{ev.stopPropagation();openEvent(i)};p.appendChild(m)
+ });
+ if(flow.x&&flow.y){let tp=document.createElement("div");tp.className="tempPoint";tp.style.left=flow.x+"%";tp.style.top=flow.y+"%";p.appendChild(tp)}
+}
+function openEvent(i){selectedEventIndex=i;let r=reg[i];$("eventTitle").innerText=(r.emoji||acaoObj(r.acao).emoji)+" "+r.acao;$("eventInfo").innerHTML=`<div class="log"><b>${r.jogador}</b><br>${r.periodo} · ${r.tempo}<br>X:${r.x}% · Y:${r.y}%<br>${r.data}</div>`;$("eventModal").classList.add("show")}
+function closeEvent(){$("eventModal").classList.remove("show");selectedEventIndex=null}
+function deleteEvent(){if(selectedEventIndex===null)return;if(confirm("Apagar esta ação?")){reg.splice(selectedEventIndex,1);localStorage.setItem("registos_pasteis",JSON.stringify(reg));closeEvent();renderAll()}}
+
+function renderPlayerCard(){
+ let html=`<button class="editBtn" onclick="event.stopPropagation();openEditStats()">✏️ Editar</button><b>${active} ${details?"▲":"▼"}</b><br><span class="small">⚽ ${goals(active)} | 🎯 ${count(r=>r.jogador===active&&r.acao&&r.acao.startsWith("Remate"))} | 🧤 ${count(r=>r.jogador===active&&r.acao==="Defesa")} | 🎁 ${count(r=>r.jogador===active&&r.acao==="Assistência")}</span>`;
+ if(details){html+="<hr>";acoes.forEach(a=>html+=`${a.emoji} ${a.nome}: <b>${count(r=>r.jogador===active&&r.acao===a.nome)}</b><br>`)}
+ $("playerCard").innerHTML=html;
+}
+function toggleDetails(){details=!details;renderPlayerCard()}
+function undo(){if(!reg.length){alert("Não há ações para desfazer.");return}reg.shift();localStorage.setItem("registos_pasteis",JSON.stringify(reg));renderAll()}
+
+function openSettings(){$("main").classList.add("hidden");$("settingsPage").classList.remove("hidden");$("setCasa").value=$("casa").value;$("setFora").value=$("fora").value;$("setTotal").value=total;$("setCampo").value=inField;$("setDur").value=dur;$("detalhes").value=localStorage.getItem("detalhes_jogo_pasteis")||"";renderEditNames();renderStats();renderHistory()}
 function closeSettings(){$("settingsPage").classList.add("hidden");$("main").classList.remove("hidden")}
-function saveSettings(){total=Math.max(1,+$("setTotal").value||12);inField=Math.max(1,Math.min(+$("setCampo").value||5,total));dur=Math.max(1,+$("setDur").value||12);localStorage.setItem("total_jogadores_pasteis",total);localStorage.setItem("jogadores_campo_pasteis",inField);localStorage.setItem("duracao_periodo_pasteis",dur);localStorage.setItem("equipa_casa_pasteis",$("setCasa").value||"Equipa da Casa");localStorage.setItem("equipa_fora_pasteis",$("setFora").value||"");localStorage.setItem("detalhes_jogo_pasteis",$("detalhes").value||"");while(jogadores.length<total)jogadores.push("Jogador "+(jogadores.length+1));while(jogadores.length>total)jogadores.pop();campo=jogadores.slice(0,inField);banco=jogadores.slice(inField);active=jogadores[0]||"Jogador 1";time=dur*60;pause();saveAll();loadGame();renderEditNames();renderPlayers();renderSubs();renderMapSelects();updateTimer();render();alert("Definições guardadas.")}
+function saveSettings(){total=Math.max(1,+$("setTotal").value||12);inField=Math.max(1,Math.min(+$("setCampo").value||5,total));dur=Math.max(1,+$("setDur").value||12);localStorage.setItem("total_jogadores_pasteis",total);localStorage.setItem("jogadores_campo_pasteis",inField);localStorage.setItem("duracao_periodo_pasteis",dur);localStorage.setItem("equipa_casa_pasteis",$("setCasa").value||"Equipa da Casa");localStorage.setItem("equipa_fora_pasteis",$("setFora").value||"");localStorage.setItem("detalhes_jogo_pasteis",$("detalhes").value||"");while(jogadores.length<total)jogadores.push("Jogador "+(jogadores.length+1));while(jogadores.length>total)jogadores.pop();campo=jogadores.slice(0,inField);banco=jogadores.slice(inField);active=jogadores[0]||"Jogador 1";time=dur*60;pause();saveAll();loadGame();updateTimer();renderAll();alert("Definições guardadas.")}
 function renderEditNames(){let e=$("editNames");e.innerHTML="";jogadores.forEach((j,i)=>e.innerHTML+=`<input id="nome${i}" value="${j}">`);e.innerHTML+=`<button class="green" onclick="saveNames()">Guardar nomes</button><button class="danger" onclick="resetNames()">Repor Jogador 1-${total}</button>`}
-function saveNames(){let old=[...jogadores];jogadores=jogadores.map((j,i)=>$("nome"+i).value||("Jogador "+(i+1)));reg.forEach(r=>{let idx=old.indexOf(r.jogador);if(idx>=0)r.jogador=jogadores[idx]});subs.forEach(s=>{let a=old.indexOf(s.sai),b=old.indexOf(s.entra);if(a>=0)s.sai=jogadores[a];if(b>=0)s.entra=jogadores[b]});campo=campo.map(p=>{let i=old.indexOf(p);return i>=0?jogadores[i]:p});banco=banco.map(p=>{let i=old.indexOf(p);return i>=0?jogadores[i]:p});active=jogadores[0]||"Jogador 1";saveAll();renderEditNames();renderPlayers();renderSubs();renderMapSelects();render()}
-function resetNames(){jogadores=[];for(let i=1;i<=total;i++)jogadores.push("Jogador "+i);campo=jogadores.slice(0,inField);banco=jogadores.slice(inField);active=jogadores[0]||"Jogador 1";saveAll();renderEditNames();renderPlayers();renderSubs();renderMapSelects();render()}
-function openEditStats(){$("editTitle").innerText="Editar estatísticas - "+active;let c=$("editStats");c.innerHTML="";acoes.forEach(a=>c.innerHTML+=`<div class="editRow"><span>${a}: <b>${count(r=>r.jogador===active&&r.acao===a)}</b></span><button class="green" onclick="adjust('${a}',1)">+</button><button class="danger" onclick="adjust('${a}',-1)">-</button></div>`);$("editModal").classList.add("show")}
-function closeEditStats(){$("editModal").classList.remove("show")} function adjust(a,v){if(v>0)reg.unshift({jogador:active,periodo:$("periodo").value,tempo:t(),acao:a,data:"Correção manual",x:"",y:""});else{let i=reg.findIndex(r=>r.jogador===active&&r.acao===a);if(i>=0)reg.splice(i,1)}localStorage.setItem("registos_pasteis",JSON.stringify(reg));render();openEditStats();renderMap()}
-function openSubs(){$("subsModal").classList.add("show");renderSubs()} function closeSubs(){outTemp=null;inTemp=null;$("subsModal").classList.remove("show");renderSubs()}
+function saveNames(){let old=[...jogadores];jogadores=jogadores.map((j,i)=>$("nome"+i).value||("Jogador "+(i+1)));reg.forEach(r=>{let idx=old.indexOf(r.jogador);if(idx>=0)r.jogador=jogadores[idx]});subs.forEach(s=>{let a=old.indexOf(s.sai),b=old.indexOf(s.entra);if(a>=0)s.sai=jogadores[a];if(b>=0)s.entra=jogadores[b]});campo=campo.map(p=>{let i=old.indexOf(p);return i>=0?jogadores[i]:p});banco=banco.map(p=>{let i=old.indexOf(p);return i>=0?jogadores[i]:p});active=jogadores[0]||"Jogador 1";saveAll();renderAll();renderEditNames()}
+function resetNames(){jogadores=[];for(let i=1;i<=total;i++)jogadores.push("Jogador "+i);campo=jogadores.slice(0,inField);banco=jogadores.slice(inField);active=jogadores[0]||"Jogador 1";saveAll();renderAll();renderEditNames()}
+
+function openEditStats(){$("editTitle").innerText="Editar estatísticas - "+active;let c=$("editStats");c.innerHTML="";acoes.forEach(a=>c.innerHTML+=`<div class="editRow"><span>${a.emoji} ${a.nome}: <b>${count(r=>r.jogador===active&&r.acao===a.nome)}</b></span><button class="green" onclick="adjust('${esc(a.nome)}',1)">+</button><button class="danger" onclick="adjust('${esc(a.nome)}',-1)">-</button></div>`);$("editModal").classList.add("show")}
+function closeEditStats(){$("editModal").classList.remove("show")}
+function adjust(a,v){let obj=acaoObj(a);if(v>0)reg.unshift({jogador:active,periodo:$("periodo").value,tempo:t(),acao:a,emoji:obj.emoji,data:"Correção manual",x:"",y:""});else{let i=reg.findIndex(r=>r.jogador===active&&r.acao===a);if(i>=0)reg.splice(i,1)}localStorage.setItem("registos_pasteis",JSON.stringify(reg));renderAll();openEditStats()}
+
+function openSubs(){$("subsModal").classList.add("show");renderSubs()}
+function closeSubs(){outTemp=null;inTemp=null;$("subsModal").classList.remove("show");renderSubs()}
 function renderSubs(){let cg=$("campoGrid"),bg=$("bancoGrid");if(!cg||!bg)return;cg.innerHTML="";bg.innerHTML="";campo.forEach(j=>{let b=document.createElement("button");b.className="pbtn campo"+(outTemp===j?" active":"");b.textContent=j;b.onclick=()=>{outTemp=j;renderSubs();subInfo()};cg.appendChild(b)});banco.forEach(j=>{let b=document.createElement("button");b.className="pbtn banco"+(inTemp===j?" active":"");b.textContent=j;b.onclick=()=>{inTemp=j;renderSubs();subInfo()};bg.appendChild(b)});subInfo()}
 function subInfo(){$("subInfo").innerHTML="Sai: <b>"+(outTemp||"-")+"</b><br>Entra: <b>"+(inTemp||"-")+"</b><br>"+t()}
-function confirmSub(){if(!outTemp||!inTemp){alert("Seleciona quem sai e quem entra.");return}campo=campo.filter(j=>j!==outTemp);banco=banco.filter(j=>j!==inTemp);campo.push(inTemp);banco.push(outTemp);subs.unshift({sai:outTemp,entra:inTemp,periodo:$("periodo").value,tempo:t(),data:new Date().toLocaleString("pt-PT")});outTemp=null;inTemp=null;saveAll();closeSubs();render()}
-function start(){if(timer)return;timer=setInterval(()=>{if(time>0){time--;updateTimer()}else{pause();alert("Fim do período")}},1000)} function pause(){clearInterval(timer);timer=null} function resetTimer(){pause();time=dur*60;updateTimer()} function updateTimer(){$("tempo").innerText=t()}
-function clearGame(){if(confirm("Apagar todos os registos deste jogo?")){reg=[];subs=[];casaGoals=0;foraGoals=0;localStorage.removeItem("registos_pasteis");localStorage.removeItem("subs_pasteis");localStorage.setItem("golos_casa_pasteis",0);localStorage.setItem("golos_fora_pasteis",0);loadGame();render();renderMap()}}
+function confirmSub(){if(!outTemp||!inTemp){alert("Seleciona quem sai e quem entra.");return}campo=campo.filter(j=>j!==outTemp);banco=banco.filter(j=>j!==inTemp);campo.push(inTemp);banco.push(outTemp);subs.unshift({sai:outTemp,entra:inTemp,periodo:$("periodo").value,tempo:t(),data:new Date().toLocaleString("pt-PT")});outTemp=null;inTemp=null;saveAll();closeSubs();renderAll()}
+
+function start(){if(timer)return;timer=setInterval(()=>{if(time>0){time--;updateTimer()}else{pause();alert("Fim do período")}},1000)}
+function pause(){clearInterval(timer);timer=null}
+function resetTimer(){pause();time=dur*60;updateTimer()}
+function updateTimer(){$("tempo").innerText=t()}
+
+function renderStats(){let st=$("stats");if(!st)return;st.innerHTML="";jogadores.forEach(p=>{st.innerHTML+=`<div class="stat"><b>${p}</b><span>⚽ ${goals(p)} | 🎯 ${count(r=>r.jogador===p&&r.acao&&r.acao.startsWith("Remate"))} | 🧤 ${count(r=>r.jogador===p&&r.acao==="Defesa")} | 🎁 ${count(r=>r.jogador===p&&r.acao==="Assistência")}</span></div>`;acoes.forEach(a=>st.innerHTML+=`<div class="stat"><span>${a.emoji} ${a.nome}</span><b>${count(r=>r.jogador===p&&r.acao===a.nome)}</b></div>`)})}
+function renderHistory(){let h=$("history");if(!h)return;h.innerHTML="";reg.slice(0,150).forEach(r=>{let loc=(r.x!==""&&r.x!==undefined)?` · X:${r.x}% Y:${r.y}%`:"";h.innerHTML+=`<div class="log"><b>${r.emoji||acaoObj(r.acao).emoji} ${r.acao}</b><br>${r.jogador} · ${r.periodo} · ${r.tempo}${loc}<br>${r.data}</div>`})}
+function clearGame(){if(confirm("Apagar todos os registos deste jogo?")){reg=[];subs=[];casaGoals=0;foraGoals=0;localStorage.removeItem("registos_pasteis");localStorage.removeItem("subs_pasteis");localStorage.setItem("golos_casa_pasteis",0);localStorage.setItem("golos_fora_pasteis",0);loadGame();renderAll()}}
+function clearMapOnly(){if(confirm("Apagar apenas ações com localização no campo?")){reg=reg.filter(r=>r.x===""||r.x===undefined);localStorage.setItem("registos_pasteis",JSON.stringify(reg));renderAll()}}
 function fullReset(){if(confirm("Apagar tudo e repor a aplicação?")){localStorage.clear();location.reload()}}
-function exportCSV(){let casa=$("casa").value||"Equipa da Casa",fora=$("fora").value||"Equipa Adversária",jogo=casa+" vs "+fora,resultado=casaGoals+"-"+foraGoals,det=localStorage.getItem("detalhes_jogo_pasteis")||"";let csv="Jogo,Resultado,Detalhes,Tipo,Data,Periodo,Tempo,Jogador,Acao,Sai,Entra,X,Y\n";reg.forEach(r=>csv+=`"${jogo}","${resultado}","${det}","Ação","${r.data}","${r.periodo}","${r.tempo}","${r.jogador}","${r.acao}","","","${r.x||""}","${r.y||""}"\n`);subs.forEach(s=>csv+=`"${jogo}","${resultado}","${det}","Substituição","${s.data}","${s.periodo}","${s.tempo}","","","${s.sai}","${s.entra}","",""\n`);let blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="estatisticas_"+casa+"_vs_"+fora+".csv";a.click();URL.revokeObjectURL(url)}
-function openMap(){$("mapModal").classList.add("show");renderMap();renderMapSelects()} function closeMap(){$("mapModal").classList.remove("show")}
-function renderMapSelects(){let sj=$("mapPlayer"),sa=$("mapAction");if(!sj||!sa)return;sj.innerHTML="";jogadores.forEach(j=>{let o=document.createElement("option");o.textContent=j;if(j===active)o.selected=true;sj.appendChild(o)});sa.innerHTML="";acoes.forEach(a=>{let o=document.createElement("option");o.textContent=a;sa.appendChild(o)})}
-function pickMap(e){let r=e.currentTarget.getBoundingClientRect();mapPoint={x:Math.round(((e.clientX-r.left)/r.width)*100),y:Math.round(((e.clientY-r.top)/r.height)*100)};$("mapInfo").innerHTML="Local: X "+mapPoint.x+"% · Y "+mapPoint.y+"% · "+t();$("mapActionModal").classList.add("show");renderMapSelects()}
-function confirmMapAction(){if(!mapPoint){alert("Seleciona primeiro um local no campo.");return}let jogador=$("mapPlayer").value,acao=$("mapAction").value;reg.unshift({jogador,periodo:$("periodo").value,tempo:t(),acao,data:new Date().toLocaleString("pt-PT"),x:mapPoint.x,y:mapPoint.y});localStorage.setItem("registos_pasteis",JSON.stringify(reg));active=jogador;mapPoint=null;$("mapActionModal").classList.remove("show");renderPlayers();render();renderMap()}
-function cancelMapAction(){mapPoint=null;$("mapActionModal").classList.remove("show")}
-function markerClass(a){if(a.startsWith("Golo"))return"golo";if(a.startsWith("Remate"))return"remate";if(a==="Defesa")return"defesa";return"outro"}
-function renderMap(){let p=$("pitch");if(!p)return;p.querySelectorAll(".marker").forEach(m=>m.remove());reg.filter(r=>r.x!==""&&r.x!==undefined&&r.y!==""&&r.y!==undefined).forEach(r=>{let m=document.createElement("div");m.className="marker "+markerClass(r.acao);m.style.left=r.x+"%";m.style.top=r.y+"%";m.title=r.jogador+" - "+r.acao+" - "+r.tempo;p.appendChild(m)})}
-function clearMap(){if(confirm("Apagar apenas as ações com localização no campo?")){reg=reg.filter(r=>r.x===""||r.x===undefined);localStorage.setItem("registos_pasteis",JSON.stringify(reg));render();renderMap()}}
-loadGame();renderPlayers();renderActions();renderEditNames();renderSubs();renderMapSelects();updateTimer();render();
-</script></body></html>
+function exportCSV(){let casa=$("casa").value||"Equipa da Casa",fora=$("fora").value||"Equipa Adversária",jogo=casa+" vs "+fora,resultado=casaGoals+"-"+foraGoals,det=localStorage.getItem("detalhes_jogo_pasteis")||"";let csv="Jogo,Resultado,Detalhes,Tipo,Data,Periodo,Tempo,Jogador,Acao,Emoji,Sai,Entra,X,Y\n";reg.forEach(r=>csv+=`"${jogo}","${resultado}","${det}","Ação","${r.data}","${r.periodo}","${r.tempo}","${r.jogador}","${r.acao}","${r.emoji||acaoObj(r.acao).emoji}","","","${r.x||""}","${r.y||""}"\n`);subs.forEach(s=>csv+=`"${jogo}","${resultado}","${det}","Substituição","${s.data}","${s.periodo}","${s.tempo}","","","","${s.sai}","${s.entra}","",""\n`);let blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="estatisticas_"+casa+"_vs_"+fora+".csv";a.click();URL.revokeObjectURL(url)}
+
+function renderAll(){renderMap();renderFlow();renderPlayerCard();renderStats();renderHistory();renderSubs()}
+loadGame();updateTimer();renderAll();
+</script>
+</body>
+</html>
