@@ -388,9 +388,24 @@ button{border:0;color:white;font-weight:bold}
    <h1>𝕊𝕥𝕒𝕥𝕊</h1>
 <p class="landingSub">Match Analysis Platform</p>
 <p class="landingVersion">Version 1.0</p>
-    <button onclick="document.getElementById('landingPage').style.display='none'" class="enterBtn">
+<button onclick="abrirMenu()" class="enterBtn">
   ENTRAR
 </button>
+  </div>
+</div>
+ <div id="menuPage" class="landingPage hidden">
+  <div class="landingContent">
+    <h1>𝕊𝕥𝕒𝕥𝕊</h1>
+
+    <button class="enterBtn" onclick="entrarJogo()">
+      Jogo
+    </button>
+
+    <br><br>
+
+    <button class="enterBtn" onclick="entrarTreino()">
+      Treino
+    </button>
   </div>
 </div>
 <div class="app" id="main">
