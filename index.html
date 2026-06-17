@@ -106,6 +106,62 @@ button{border:0;color:white;font-weight:bold}
 .actionBtn{background:#101b31}
 .actionBtn.active,.pbtn.choose{background:#d71920;color:white}
 .infoMini{background:rgba(16,27,49,.9);color:white;border-radius:10px;padding:8px;margin-top:6px;text-align:center}
+
+.miniPitch{
+ position:relative;
+ width:100%;
+ aspect-ratio:1.72/1;
+ background:linear-gradient(135deg,#efcf83,#e6bb66 50%,#d6a75a);
+ border:2px solid #123b8d;
+ border-radius:10px;
+ overflow:hidden;
+ margin-top:7px;
+ box-shadow:inset 0 0 0 1px rgba(255,255,255,.25);
+}
+.miniPitch:before{
+ content:"";
+ position:absolute;
+ inset:6%;
+ border:2px solid #173f9f;
+ pointer-events:none;
+}
+.miniPitch:after{
+ content:"";
+ position:absolute;
+ left:50%;
+ top:6%;
+ bottom:6%;
+ border-left:2px solid #173f9f;
+ pointer-events:none;
+}
+.miniArea{
+ position:absolute;
+ top:40%;
+ width:3.2%;
+ height:20%;
+ border:2px solid #ffd21a;
+ background:rgba(255,210,26,.08);
+ z-index:2;
+ pointer-events:none;
+}
+.miniArea.leftMini{left:4%;border-left:0}
+.miniArea.rightMini{right:4%;border-right:0}
+.miniEmoji{
+ position:absolute;
+ transform:translate(-50%,-50%);
+ font-size:16px;
+ line-height:1;
+ z-index:5;
+ text-shadow:0 1px 4px #000;
+}
+.playerStatBlock{
+ background:rgba(241,243,246,.92);
+ padding:9px;
+ border-radius:10px;
+ margin:8px 0;
+ font-size:13px;
+}
+
 @media(max-width:420px){
  .score{grid-template-columns:1fr 72px 1fr 82px;gap:4px}
  .players{grid-template-columns:repeat(3,1fr)}
@@ -140,7 +196,7 @@ button{border:0;color:white;font-weight:bold}
      <button id="attackBtn" class="attackTiny" onclick="toggleAttack(event)">➡️</button>
      <div class="attackLabel">ATAQUE</div>
    </div>
-   <div class="small" style="margin-top:6px">Clica no local → escolhe jogador → vê o que já tem → adiciona ação → confirma.</div>
+   <div class="small" style="margin-top:6px">Clica no local → escolhe jogador → escolhe ação → confirma. Os mapas individuais ficam nas estatísticas. Os mapas individuais ficam nas estatísticas.</div>
  </div>
 
  <div id="flowPanel" class="flowPanel">
@@ -312,7 +368,43 @@ function pause(){clearInterval(timer);timer=null}
 function resetTimer(){pause();time=dur*60;updateTimer()}
 function updateTimer(){$("tempo").innerText=t()}
 
-function renderStats(){let st=$("stats");if(!st)return;st.innerHTML="";jogadores.forEach(p=>{st.innerHTML+=`<div class="stat"><b>${p}</b><span>⚽ ${goals(p)} | 🎯 ${count(r=>r.jogador===p&&r.acao&&r.acao.startsWith("Remate"))} | 🧤 ${count(r=>r.jogador===p&&r.acao==="Defesa")} | 🎁 ${count(r=>r.jogador===p&&r.acao==="Assistência")}</span></div>`;acoes.forEach(a=>st.innerHTML+=`<div class="stat"><span>${a.emoji} ${a.nome}</span><b>${count(r=>r.jogador===p&&r.acao===a.nome)}</b></div>`)})}
+function renderStats(){
+ let st=$("stats");
+ if(!st)return;
+ st.innerHTML="";
+
+ jogadores.forEach(p=>{
+  let totalGolos=goals(p);
+  let totalRemates=count(r=>r.jogador===p&&r.acao&&r.acao.startsWith("Remate"));
+  let totalDefesas=count(r=>r.jogador===p&&r.acao==="Defesa");
+  let totalAssist=count(r=>r.jogador===p&&r.acao==="Assistência");
+
+  let bloco=`<div class="playerStatBlock">
+   <b>${p}</b><br>
+   <span>⚽ ${totalGolos} | 🎯 ${totalRemates} | 🧤 ${totalDefesas} | 🎁 ${totalAssist}</span>
+   <div class="miniPitch">
+    <div class="miniArea leftMini"></div>
+    <div class="miniArea rightMini"></div>`;
+
+  reg
+   .filter(r=>r.jogador===p&&r.x!==""&&r.x!==undefined&&r.y!==""&&r.y!==undefined)
+   .forEach(r=>{
+    bloco+=`<span class="miniEmoji" style="left:${r.x}%;top:${r.y}%">${r.emoji||acaoObj(r.acao).emoji}</span>`;
+   });
+
+  bloco+=`</div>`;
+
+  acoes.forEach(a=>{
+   let n=count(r=>r.jogador===p&&r.acao===a.nome);
+   if(n>0){
+    bloco+=`<div class="stat"><span>${a.emoji} ${a.nome}</span><b>${n}</b></div>`;
+   }
+  });
+
+  bloco+=`</div>`;
+  st.innerHTML+=bloco;
+ });
+}
 function renderHistory(){let h=$("history");if(!h)return;h.innerHTML="";reg.slice(0,150).forEach(r=>{let loc=(r.x!==""&&r.x!==undefined)?` · X:${r.x}% Y:${r.y}%`:"";let atk=r.attackSide==="left"?" · ataque esquerda":" · ataque direita";h.innerHTML+=`<div class="log"><b>${r.emoji||acaoObj(r.acao).emoji} ${r.acao}</b><br>${r.jogador} · ${r.periodo} · ${r.tempo}${loc}${atk}<br>${r.data}</div>`})}
 function clearGame(){if(confirm("Apagar todos os registos deste jogo?")){reg=[];subs=[];casaGoals=0;foraGoals=0;localStorage.removeItem("registos_pasteis");localStorage.removeItem("subs_pasteis");localStorage.setItem("golos_casa_pasteis",0);localStorage.setItem("golos_fora_pasteis",0);loadGame();renderAll()}}
 function clearMapOnly(){if(confirm("Apagar apenas ações com localização no campo?")){reg=reg.filter(r=>r.x===""||r.x===undefined);localStorage.setItem("registos_pasteis",JSON.stringify(reg));renderAll()}}
