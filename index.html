@@ -430,7 +430,13 @@ button{border:0;color:white;font-weight:bold}
  <div class="card"><button class="dark" onclick="toggle('history')">Histórico</button><div id="history" class="hidden"></div></div>
  <div class="card"><button class="yellow" onclick="exportCSV()">Exportar CSV</button><button class="danger" onclick="clearGame()">Limpar jogo</button><button class="danger" onclick="clearMapOnly()">Limpar só mapa</button><button class="danger" onclick="fullReset()">Reset completo</button></div>
 </div>
-
+<div id="quickModal" class="modal">
+  <div class="modalContent">
+    <h2 id="quickTitle">Escolher</h2>
+    <div id="quickContent"></div>
+    <button class="danger" onclick="cancelMapFlow()">Cancelar</button>
+  </div>
+</div>
 <div id="subsModal" class="modal"><div class="modalContent"><h2>Substituição</h2><h4>Em campo</h4><div id="campoGrid" class="players"></div><h4>Banco</h4><div id="bancoGrid" class="players"></div><div id="subInfo" class="playerCard">Seleciona quem sai e quem entra.</div><button class="green" onclick="confirmSub()">Confirmar substituição</button><button class="danger" onclick="closeSubs()">Cancelar</button><div id="subsHist"></div></div></div>
 <div id="editModal" class="modal"><div class="modalContent"><h2 id="editTitle">Editar estatísticas</h2><div id="editStats"></div><button class="danger" onclick="closeEditStats()">Fechar</button></div></div>
 <div id="eventModal" class="modal"><div class="modalContent"><h2 id="eventTitle">Ação</h2><div id="eventInfo"></div><button class="danger" onclick="deleteEvent()">Apagar ação</button><button class="dark" onclick="closeEvent()">Fechar</button></div></div>
