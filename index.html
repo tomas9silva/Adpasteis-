@@ -371,7 +371,7 @@ button{border:0;color:white;font-weight:bold}
  <div class="top">
   <button class="settings" onclick="openSettings()">⚙️</button>
   <div class="score">
-   <div class="teamLogoBox"><img src="logo-pasteis.png" class="teamLogo" alt="AD Pastéis"></div>
+  <input id="casa" class="team" value="AD Pastéis" oninput="saveGame()">
    <div><div class="scoreline"><span id="gc">0</span>-<span id="gf">0</span></div><div class="scoreBtns"><button onclick="goal('c',1)">+</button><button onclick="goal('f',1)">+</button><button onclick="goal('c',-1)">-</button><button onclick="goal('f',-1)">-</button></div></div>
    <input id="fora" class="team" placeholder="Adversário" oninput="saveGame()">
    <div class="timer"><div id="tempo">12:00</div><div class="timerBtns"><button class="green" onclick="start()">▶</button><button class="orange" onclick="pause()">Ⅱ</button><button class="danger" onclick="resetTimer()">↺</button></div></div>
