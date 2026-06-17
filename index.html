@@ -14,13 +14,13 @@ button{border:0;color:white;font-weight:bold}
 .dark{background:#101b31}.red,.danger{background:#d71920}.green{background:#26a626}.orange{background:#f28b12}.yellow{background:#ffd21a;color:#111}.blue{background:#087dcc}
 .card{background:rgba(255,255,255,.58);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#111;border-radius:14px;padding:10px;margin:8px 0;border:1px solid rgba(255,255,255,.25)}
 .top{background:rgba(16,27,49,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.20);border-radius:16px;padding:10px;color:white;position:relative}
-.settings{position:absolute;right:8px;top:8px;width:36px;height:36px;border-radius:50%;padding:0;background:#ffd21a;color:#111;font-size:18px}
+.settings{position:absolute;right:8px;top:8px;width:36px;height:36px;border-radius:50%;padding:0;background:transparent;color:white;font-size:18px;border:1px solid rgba(255,255,255,.25)}
 .score{display:grid;grid-template-columns:1fr 82px 1fr 90px;gap:6px;align-items:center;padding-right:38px}
 .team{background:#182542;color:white;text-align:center;font-weight:bold;font-size:13px}
-.scoreline{font-size:30px;font-weight:bold;color:#ffd21a;text-align:center}
+.scoreline{font-size:30px;font-weight:bold;color:white;text-align:center}
 .scoreBtns{display:grid;grid-template-columns:1fr 1fr;gap:4px}
 .scoreBtns button{background:#d71920;padding:5px}
-.timer{text-align:center;color:#ffd21a}
+.timer{text-align:center;color:white}
 #tempo{font-size:27px;font-weight:bold}
 .timerBtns{display:flex;gap:3px}
 .timerBtns button{height:25px;padding:0;border-radius:50%;font-size:11px}
@@ -163,6 +163,7 @@ button{border:0;color:white;font-weight:bold}
  font-size:13px;
 }
 
+
 .collectiveBox{
  background:rgba(241,243,246,.92);
  padding:10px;
@@ -209,6 +210,7 @@ button{border:0;color:white;font-weight:bold}
  font-size:13px;
  border-radius:8px;
 }
+
 
 .percentReport{
  background:rgba(16,27,49,.94);
@@ -268,10 +270,6 @@ button{border:0;color:white;font-weight:bold}
 
 .landingContent{
  text-align:center;
-}
-
-.landingContent{
- text-align:center;
  position:relative;
  z-index:2;
 }
@@ -317,6 +315,39 @@ button{border:0;color:white;font-weight:bold}
  color:white;
 }
 
+.teamLogoBox{
+ background:transparent;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ min-height:42px;
+}
+.teamLogo{
+ width:42px;
+ height:42px;
+ object-fit:contain;
+}
+.fieldTitleRow{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:8px;
+}
+.fieldTitleRow h3{
+ margin:0;
+}
+.attackTinyOutside{
+ width:44px;
+ height:34px;
+ padding:0;
+ margin:0;
+ border-radius:10px;
+ background:transparent;
+ color:white;
+ border:1px solid rgba(255,255,255,.35);
+ font-size:22px;
+}
+
 @media(max-width:420px){
  .score{grid-template-columns:1fr 72px 1fr 82px;gap:4px}
  .players{grid-template-columns:repeat(3,1fr)}
@@ -340,7 +371,7 @@ button{border:0;color:white;font-weight:bold}
  <div class="top">
   <button class="settings" onclick="openSettings()">⚙️</button>
   <div class="score">
-   <input id="casa" class="team" value="AD Pastéis" oninput="saveGame()">
+   <div class="teamLogoBox"><img src="logo-pasteis.png" class="teamLogo" alt="AD Pastéis"></div>
    <div><div class="scoreline"><span id="gc">0</span>-<span id="gf">0</span></div><div class="scoreBtns"><button onclick="goal('c',1)">+</button><button onclick="goal('f',1)">+</button><button onclick="goal('c',-1)">-</button><button onclick="goal('f',-1)">-</button></div></div>
    <input id="fora" class="team" placeholder="Adversário" oninput="saveGame()">
    <div class="timer"><div id="tempo">12:00</div><div class="timerBtns"><button class="green" onclick="start()">▶</button><button class="orange" onclick="pause()">Ⅱ</button><button class="danger" onclick="resetTimer()">↺</button></div></div>
@@ -350,7 +381,10 @@ button{border:0;color:white;font-weight:bold}
  </div>
 
  <div class="pitchCard">
-   <h3>ARENA</h3>
+   <div class="fieldTitleRow">
+    <h3>ARENA</h3>
+    <button id="attackBtn" class="attackTinyOutside" onclick="toggleAttack(event)">➡️</button>
+   </div>
    <div id="pitch" class="pitch" onclick="pickMap(event)">
      <div class="area left"></div>
      <div class="area right"></div>
@@ -358,10 +392,8 @@ button{border:0;color:white;font-weight:bold}
      <div class="cornerFlag tr"></div>
      <div class="cornerFlag bl"></div>
      <div class="cornerFlag br"></div>
-     <button id="attackBtn" class="attackTiny" onclick="toggleAttack(event)">➡️</button>
-     <div class="attackLabel">ATAQUE</div>
    </div>
-   <div class="small" style="margin-top:6px">Clica no local → escolhe jogador → escolhe ação → confirma. Os mapas individuais ficam nas estatísticas. Os mapas individuais ficam nas estatísticas.</div>
+   <div class="small" style="margin-top:6px">Clica no local → escolhe jogador → escolhe ação → confirma. Os mapas individuais ficam nas estatísticas.</div>
  </div>
 
  <div id="flowPanel" class="flowPanel">
@@ -382,6 +414,7 @@ button{border:0;color:white;font-weight:bold}
  <div class="card"><h2>Definições</h2><label>Equipa da casa</label><input id="setCasa"><label>Equipa adversária</label><input id="setFora"><label>Número total de jogadores</label><input id="setTotal" type="number" min="1"><label>Jogadores em campo</label><input id="setCampo" type="number" min="1"><label>Duração do período</label><input id="setDur" type="number" min="1"><label>Detalhes do jogo</label><textarea id="detalhes"></textarea><button class="green" onclick="saveSettings()">Guardar</button><button class="dark" onclick="closeSettings()">Voltar</button></div>
  <div class="card"><button class="dark" onclick="toggle('editNames')">Editar nomes dos jogadores</button><div id="editNames" class="hidden"></div></div>
  <div class="card"><button class="dark" onclick="toggle('stats')">Estatísticas completas</button><div id="stats" class="hidden"></div></div>
+ <div class="card"><button class="dark" onclick="toggle('report')">Relatório do jogo 📊</button><div id="report" class="hidden"></div></div>
  <div class="card"><button class="dark" onclick="toggle('history')">Histórico</button><div id="history" class="hidden"></div></div>
  <div class="card"><button class="yellow" onclick="exportCSV()">Exportar CSV</button><button class="danger" onclick="clearGame()">Limpar jogo</button><button class="danger" onclick="clearMapOnly()">Limpar só mapa</button><button class="danger" onclick="fullReset()">Reset completo</button></div>
 </div>
@@ -426,8 +459,8 @@ function $(id){return document.getElementById(id)}
 function toggle(id){$(id).classList.toggle("hidden")}
 function t(){let m=Math.floor(time/60),s=time%60;return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")}
 function saveAll(){localStorage.setItem("jogadores_pasteis",JSON.stringify(jogadores));localStorage.setItem("campo_pasteis",JSON.stringify(campo));localStorage.setItem("banco_pasteis",JSON.stringify(banco));localStorage.setItem("registos_pasteis",JSON.stringify(reg));localStorage.setItem("subs_pasteis",JSON.stringify(subs))}
-function loadGame(){ $("casa").value=localStorage.getItem("equipa_casa_pasteis")||"AD Pastéis"; $("fora").value=localStorage.getItem("equipa_fora_pasteis")||""; $("gc").innerText=casaGoals; $("gf").innerText=foraGoals; renderAttack()}
-function saveGame(){localStorage.setItem("equipa_casa_pasteis",$("casa").value);localStorage.setItem("equipa_fora_pasteis",$("fora").value)}
+function loadGame(){ if($("casa"))$("casa").value=localStorage.getItem("equipa_casa_pasteis")||"AD Pastéis"; $("fora").value=localStorage.getItem("equipa_fora_pasteis")||""; $("gc").innerText=casaGoals; $("gf").innerText=foraGoals; renderAttack()}
+function saveGame(){ if($("casa"))localStorage.setItem("equipa_casa_pasteis",$("casa").value); localStorage.setItem("equipa_fora_pasteis",$("fora").value)}
 function goal(team,v){if(team==="c"){casaGoals=Math.max(0,casaGoals+v);localStorage.setItem("golos_casa_pasteis",casaGoals);$("gc").innerText=casaGoals}else{foraGoals=Math.max(0,foraGoals+v);localStorage.setItem("golos_fora_pasteis",foraGoals);$("gf").innerText=foraGoals}}
 function toggleAttack(ev){ev.stopPropagation();attackSide=attackSide==="right"?"left":"right";localStorage.setItem("attack_side_pasteis",attackSide);renderAttack()}
 function renderAttack(){let b=$("attackBtn");if(b)b.innerHTML=attackSide==="right"?"➡️":"⬅️"}
@@ -493,6 +526,7 @@ function renderFlow(){
   s.innerHTML=obj.emoji+" "+flow.jogador;
   c.innerHTML=base+`<div class="infoMini"><b>${flow.jogador}</b><br>${obj.emoji} ${flow.acao}<br>${$("periodo").value} · ${t()}</div><button class="green" onclick="confirmMapFlow()">✓ Confirmar</button><button class="danger" onclick="cancelMapFlow()">× Cancelar</button>`;
  }
+}
 function renderMap(){
  let p=$("pitch");
  p.querySelectorAll(".mapEmoji,.tempPoint").forEach(m=>m.remove());
@@ -507,7 +541,7 @@ function renderMap(){
   tp.style.top=flow.y+"%";
   p.appendChild(tp);
  }
-
+}
 function openEvent(i){selectedEventIndex=i;let r=reg[i];$("eventTitle").innerText=(r.emoji||acaoObj(r.acao).emoji)+" "+r.acao;$("eventInfo").innerHTML=`<div class="log"><b>${r.jogador}</b><br>${r.periodo} · ${r.tempo}<br>X:${r.x}% · Y:${r.y}%<br>${r.attackSide==="left"?"⬅️ atacava esquerda":"➡️ atacava direita"}<br>${r.data}</div>`;$("eventModal").classList.add("show")}
 function closeEvent(){$("eventModal").classList.remove("show");selectedEventIndex=null}
 function deleteEvent(){if(selectedEventIndex===null)return;if(confirm("Apagar esta ação?")){reg.splice(selectedEventIndex,1);localStorage.setItem("registos_pasteis",JSON.stringify(reg));closeEvent();renderAll()}}
@@ -572,6 +606,7 @@ function apagarAcaoPorIndice(idx){
   localStorage.setItem("registos_pasteis",JSON.stringify(reg));
   renderAll();
  }
+}
 
 
 function percentagem(parte,total){
@@ -640,7 +675,7 @@ function renderRelatorioPercentual(){
 
  return `<div class="percentReport">
   <h3>📊 Relatório percentual</h3>
-  <b>Resumo do jogo:</b> ${$("casa").value||"AD Pastéis"} ${casaGoals}-${foraGoals} ${$("fora").value||"Adversário"}<br>
+  <b>Resumo do jogo:</b> ${($("casa")?$("casa").value:"AD Pastéis")||"AD Pastéis"} ${casaGoals}-${foraGoals} ${$("fora").value||"Adversário"}<br>
   <div class="percentGrid">
    ${item("Eficácia de finalização",eficacia+"%","Golos / total de remates",eficacia)}
    ${item("Remates à baliza",acertoBaliza+"%","Remates que não foram fora/bloqueados",acertoBaliza)}
@@ -715,16 +750,20 @@ function renderStats(){
   st.innerHTML+=bloco;
  });
 
- st.innerHTML+=renderRelatorioPercentual();
 }
+function renderReport(){
+ let r=$("report");
+ if(!r)return;
+ r.innerHTML=renderRelatorioPercentual();
+}
+
 function renderHistory(){let h=$("history");if(!h)return;h.innerHTML="";reg.slice(0,150).forEach(r=>{let loc=(r.x!==""&&r.x!==undefined)?` · X:${r.x}% Y:${r.y}%`:"";let atk=r.attackSide==="left"?" · ataque esquerda":" · ataque direita";h.innerHTML+=`<div class="log"><b>${r.emoji||acaoObj(r.acao).emoji} ${r.acao}</b><br>${r.jogador} · ${r.periodo} · ${r.tempo}${loc}${atk}<br>${r.data}</div>`})}
 function clearGame(){if(confirm("Apagar todos os registos deste jogo?")){reg=[];subs=[];casaGoals=0;foraGoals=0;localStorage.removeItem("registos_pasteis");localStorage.removeItem("subs_pasteis");localStorage.setItem("golos_casa_pasteis",0);localStorage.setItem("golos_fora_pasteis",0);loadGame();renderAll()}}
 function clearMapOnly(){if(confirm("Apagar apenas ações com localização no campo?")){reg=reg.filter(r=>r.x===""||r.x===undefined);localStorage.setItem("registos_pasteis",JSON.stringify(reg));renderAll()}}
 function fullReset(){if(confirm("Apagar tudo e repor a aplicação?")){localStorage.clear();location.reload()}}
-function exportCSV(){let casa=$("casa").value||"Equipa da Casa",fora=$("fora").value||"Equipa Adversária",jogo=casa+" vs "+fora,resultado=casaGoals+"-"+foraGoals,det=localStorage.getItem("detalhes_jogo_pasteis")||"";let csv="Jogo,Resultado,Detalhes,Tipo,Data,Periodo,Tempo,Jogador,Acao,Emoji,Sai,Entra,X,Y,LadoAtaque\n";reg.forEach(r=>csv+=`"${jogo}","${resultado}","${det}","Ação","${r.data}","${r.periodo}","${r.tempo}","${r.jogador}","${r.acao}","${r.emoji||acaoObj(r.acao).emoji}","","","${r.x||""}","${r.y||""}","${r.attackSide||attackSide}"\n`);subs.forEach(s=>csv+=`"${jogo}","${resultado}","${det}","Substituição","${s.data}","${s.periodo}","${s.tempo}","","","","${s.sai}","${s.entra}","","",""\n`);let blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="estatisticas_"+casa+"_vs_"+fora+".csv";a.click();URL.revokeObjectURL(url)}
+function exportCSV(){let casa=($("casa")?$("casa").value:"AD Pastéis")||"Equipa da Casa",fora=$("fora").value||"Equipa Adversária",jogo=casa+" vs "+fora,resultado=casaGoals+"-"+foraGoals,det=localStorage.getItem("detalhes_jogo_pasteis")||"";let csv="Jogo,Resultado,Detalhes,Tipo,Data,Periodo,Tempo,Jogador,Acao,Emoji,Sai,Entra,X,Y,LadoAtaque\n";reg.forEach(r=>csv+=`"${jogo}","${resultado}","${det}","Ação","${r.data}","${r.periodo}","${r.tempo}","${r.jogador}","${r.acao}","${r.emoji||acaoObj(r.acao).emoji}","","","${r.x||""}","${r.y||""}","${r.attackSide||attackSide}"\n`);subs.forEach(s=>csv+=`"${jogo}","${resultado}","${det}","Substituição","${s.data}","${s.periodo}","${s.tempo}","","","","${s.sai}","${s.entra}","","",""\n`);let blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="estatisticas_"+casa+"_vs_"+fora+".csv";a.click();URL.revokeObjectURL(url)}
 
-}
-function renderAll(){renderAttack();renderMap();renderFlow();renderPlayerCard();renderStats();renderHistory();renderSubs()}
+function renderAll(){renderAttack();renderMap();renderFlow();renderPlayerCard();renderStats();renderReport();renderHistory();renderSubs()}
 loadGame();updateTimer();renderAll();
 </script>
 </body>
