@@ -148,6 +148,7 @@ button{border:0;color:white;font-weight:bold}
 .miniArea.rightMini{right:4%;border-right:0}
 .miniEmoji{
  position:absolute;
+ cursor:pointer;
  transform:translate(-50%,-50%);
  font-size:16px;
  line-height:1;
@@ -292,7 +293,7 @@ let flow={x:null,y:null,jogador:null,acao:null,step:"idle"};
 
 const acoes=[
  {nome:"Golo dentro da área",emoji:"⚽"},{nome:"Golo fora da área",emoji:"⚽"},{nome:"Golo de livre",emoji:"⚽"},{nome:"Golo de cabeça",emoji:"⚽"},{nome:"Golo de canto",emoji:"⚽"},
- {nome:"Remate jogo corrido",emoji:"🎯"},{nome:"Remate livre",emoji:"🎯"},{nome:"Defesa",emoji:"🧤"},{nome:"Assistência",emoji:"🎁"},{nome:"Remate fora",emoji:"❌"}
+ {nome:"Remate jogo corrido",emoji:"🎯"},{nome:"Remate livre",emoji:"🎯"},{nome:"Defesa",emoji:"🧤"},{nome:"Assistência",emoji:"🎁"},{nome:"Remate fora",emoji:"❌"},{nome:"Remate bloqueado",emoji:"🚫"},{nome:"Cartão amarelo",emoji:"🟨"},{nome:"Cartão vermelho",emoji:"🟥"}
 ];
 
 function $(id){return document.getElementById(id)}
@@ -423,8 +424,11 @@ function eventosComLocal(){
 
 function desenharCampoEventos(eventos){
  let html='<div class="miniPitch"><div class="miniArea leftMini"></div><div class="miniArea rightMini"></div>';
- eventos.forEach(r=>{
-  html+=`<span class="miniEmoji" style="left:${r.x}%;top:${r.y}%">${r.emoji||acaoObj(r.acao).emoji}</span>`;
+ eventos.forEach(obj=>{
+  let r=obj.r || obj;
+  let idx=obj.regIndex;
+  let click = idx!==undefined ? `onclick="apagarAcaoPorIndice(${idx})"` : "";
+  html+=`<span class="miniEmoji" ${click} style="left:${r.x}%;top:${r.y}%" title="${r.jogador} - ${r.acao}">${r.emoji||acaoObj(r.acao).emoji}</span>`;
  });
  html+='</div>';
  return html;
@@ -451,15 +455,23 @@ function renderStats(){
  st.innerHTML="";
 
  // 1) MAPA COLETIVO NO TOPO
+ let eventosColetivos=reg
+  .map((r,regIndex)=>({r,regIndex}))
+  .filter(obj=>obj.r.x!==""&&obj.r.x!==undefined&&obj.r.y!==""&&obj.r.y!==undefined);
+
  st.innerHTML+=`
  <div class="collectiveBox">
   <h3>📍 Mapa coletivo da equipa</h3>
-  ${desenharCampoEventos(eventosComLocal())}
+  <div class="small">Clica num emoji para apagar essa ação.</div>
+  ${desenharCampoEventos(eventosColetivos)}
  </div>`;
 
  // 2) JOGADORES FECHADOS POR DEFEITO
  jogadores.forEach((p,idx)=>{
-  let eventosJogador=reg.filter(r=>r.jogador===p&&r.x!==""&&r.x!==undefined&&r.y!==""&&r.y!==undefined);
+  let eventosJogador=reg
+   .map((r,regIndex)=>({r,regIndex}))
+   .filter(obj=>obj.r.jogador===p&&obj.r.x!==""&&obj.r.x!==undefined&&obj.r.y!==""&&obj.r.y!==undefined);
+
   let totalGolos=goals(p);
   let totalRemates=count(r=>r.jogador===p&&r.acao&&r.acao.startsWith("Remate"));
   let totalDefesas=count(r=>r.jogador===p&&r.acao==="Defesa");
@@ -470,26 +482,15 @@ function renderStats(){
     ▶️ ${p} — ⚽ ${totalGolos} | 🎯 ${totalRemates} | 🧤 ${totalDefesas} | 🎁 ${totalAssist}
    </button>
    <div class="playerAccordionBody">
+    <div class="small">Clica num emoji do mapa para apagar essa ação.</div>
     ${desenharCampoEventos(eventosJogador)}
-    <h4>Ações registadas</h4>`;
+    <h4>Ações</h4>`;
 
-  let tem=false;
-
-  reg.forEach((r,regIndex)=>{
-   if(r.jogador===p){
-    tem=true;
-    let loc=(r.x!==""&&r.x!==undefined)?` · X:${r.x}% Y:${r.y}%`:"";
-    bloco+=`
-    <div class="deleteActionRow">
-     <span>${r.emoji||acaoObj(r.acao).emoji} <b>${r.acao}</b><br>${r.periodo} · ${r.tempo}${loc}</span>
-     <button class="danger" onclick="apagarAcaoPorIndice(${regIndex})">🗑️</button>
-    </div>`;
-   }
+  // Aparecem todas as ações, mesmo as que estão a zero
+  acoes.forEach(a=>{
+   let n=count(r=>r.jogador===p&&r.acao===a.nome);
+   bloco+=`<div class="stat"><span>${a.emoji} ${a.nome}</span><b>${n}</b></div>`;
   });
-
-  if(!tem){
-   bloco+=`<div class="log">Ainda sem ações registadas.</div>`;
-  }
 
   bloco+=`</div></div>`;
   st.innerHTML+=bloco;
