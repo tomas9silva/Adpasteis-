@@ -248,7 +248,42 @@ button{border:0;color:white;font-weight:bold}
  background:#ffd21a;
  border-radius:10px;
 }
+.landingPage{
+ position:fixed;
+ inset:0;
+ background:#071326;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ z-index:99999;
+}
 
+.landingContent{
+ text-align:center;
+}
+
+.landingContent h1{
+ color:white;
+ font-size:60px;
+ margin-bottom:30px;
+ letter-spacing:3px;
+}
+
+.enterBtn{
+ width:180px;
+ padding:15px;
+ font-size:20px;
+ border-radius:15px;
+ border:0;
+ background:#d71920;
+ color:white;
+ font-weight:bold;
+ cursor:pointer;
+}
+
+.enterBtn:hover{
+ opacity:.9;
+}
 @media(max-width:420px){
  .score{grid-template-columns:1fr 72px 1fr 82px;gap:4px}
  .players{grid-template-columns:repeat(3,1fr)}
