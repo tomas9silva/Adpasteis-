@@ -2429,19 +2429,38 @@ function openTrainingTab(tab){
 }
 
 
-function abrirTreinoPage(){
-  localStorage.setItem("modo_pasteis","treino");
-  $("menuPage").classList.add("hidden");
-  $("trainingPage").classList.remove("hidden");
-  carregarDadosTreino();
+function openTrainingTab(tab){
 
-  ["grupo","presencas","exercicios","resumo"].forEach(t=>{
-    let sec=$("trainingSection"+t.charAt(0).toUpperCase()+t.slice(1));
-    let btn=$("tab"+t.charAt(0).toUpperCase()+t.slice(1));
+ const tabs=["grupo","presencas","exercicios","resumo"];
 
-    if(sec) sec.classList.add("hidden");
-    if(btn) btn.classList.remove("active");
-  });
+ const secAtual=$("trainingSection"+tab.charAt(0).toUpperCase()+tab.slice(1));
+ const btnAtual=$("tab"+tab.charAt(0).toUpperCase()+tab.slice(1));
+
+ const jaAberta=btnAtual.classList.contains("active");
+
+ // fecha tudo
+ tabs.forEach(t=>{
+   let sec=$("trainingSection"+t.charAt(0).toUpperCase()+t.slice(1));
+   let btn=$("tab"+t.charAt(0).toUpperCase()+t.slice(1));
+
+   if(sec) sec.classList.add("hidden");
+   if(btn) btn.classList.remove("active");
+ });
+
+ // se já estava aberta, fica tudo fechado
+ if(jaAberta) return;
+
+ // caso contrário abre a selecionada
+ if(secAtual) secAtual.classList.remove("hidden");
+ if(btnAtual) btnAtual.classList.add("active");
+
+ renderTreinoJogadores();
+ renderPresencas();
+ renderMedicalSelect();
+ renderMedicalList();
+ renderExerciciosTreino();
+ atualizarTreinoResumo();
+}
 }
 
 function voltarMenu(){
