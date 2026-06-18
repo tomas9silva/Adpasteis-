@@ -1089,6 +1089,26 @@ button{border:0;color:white;font-weight:bold}
 }
 
 
+
+.gameBrand{
+ text-align:center;
+ flex:1;
+}
+.gameBrandMain{
+ font-size:34px;
+ font-weight:800;
+ line-height:1;
+ letter-spacing:3px;
+ color:white;
+}
+.gameBrandSub{
+ font-size:13px;
+ opacity:.82;
+ margin-top:4px;
+ letter-spacing:1px;
+ color:white;
+}
+
 /* Scoreboard premium - página Jogo */
 .gameHeader{
  display:flex;
@@ -1193,8 +1213,8 @@ button{border:0;color:white;font-weight:bold}
  width:70%;
  height:3px;
  border-radius:99px;
- background:#8dfc3d;
- box-shadow:0 0 10px rgba(141,252,61,.65);
+ background:#d71920;
+ box-shadow:0 0 10px rgba(215,25,32,.65);
 }
 
 .teamUnderline.away{
@@ -1242,8 +1262,8 @@ button{border:0;color:white;font-weight:bold}
  width:74px;
  height:4px;
  border-radius:99px;
- background:#8dfc3d;
- box-shadow:0 0 14px rgba(141,252,61,.85);
+ background:#d71920;
+ box-shadow:0 0 14px rgba(215,25,32,.85);
  margin-top:2px;
 }
 
@@ -1296,10 +1316,17 @@ button{border:0;color:white;font-weight:bold}
 }
 
 .matchControls .startBtn{
- border-color:#8dfc3d;
+ border-color:rgba(255,255,255,.16);
  color:white;
- background:rgba(141,252,61,.08);
- box-shadow:inset 0 0 0 1px rgba(141,252,61,.22);
+ background:rgba(255,255,255,.04);
+ box-shadow:none;
+}
+
+.matchControls .startBtn:active,
+.matchControls .startBtn:focus{
+ border-color:#d71920;
+ background:rgba(215,25,32,.10);
+ box-shadow:inset 0 0 0 1px rgba(215,25,32,.22);
 }
 
 .matchControls .iconBtn{
@@ -1480,14 +1507,15 @@ button{border:0;color:white;font-weight:bold}
 <div class="app hidden" id="main">
  <div class="gameHeader">
   <button class="gameBack" onclick="voltarMenu()">←</button>
-  <div class="mainTitle gameTitle">Jogo</div>
+  <div class="gameBrand">
+    <div class="gameBrandMain">𝕊𝕥𝕒𝕥𝕊</div>
+    <div class="gameBrandSub">Jogo</div>
+  </div>
   <button class="gameBack" onclick="openSettings()">⚙️</button>
  </div>
 
  <div class="matchBoard">
-  <button class="matchSettings" onclick="openSettings()">⚙️</button>
-
-  <div class="matchScore">
+<div class="matchScore">
    <div class="matchTeam">
     <input id="casa" value="AD Pastéis" oninput="saveGame()">
     <div class="teamUnderline"></div>
@@ -1552,7 +1580,20 @@ button{border:0;color:white;font-weight:bold}
 </div>
 
 <div class="app hidden" id="settingsPage">
- <div class="card"><h2>Definições</h2><label>Equipa da casa</label><input id="setCasa"><label>Equipa adversária</label><input id="setFora"><label>Número total de jogadores</label><input id="setTotal" type="number" min="1"><label>Jogadores em campo</label><input id="setCampo" type="number" min="1"><label>Duração do período</label><input id="setDur" type="number" min="1"><label>Detalhes do jogo</label><textarea id="detalhes"></textarea><button class="green" onclick="saveSettings()">Guardar</button><button class="dark" onclick="closeSettings()">Voltar</button></div>
+ <div class="card">
+  <h2>Definições</h2>
+  <button class="dark" onclick="toggle('gameSettingsBox')">Definições do jogo</button>
+  <div id="gameSettingsBox" class="hidden">
+    <label>Equipa da casa</label><input id="setCasa">
+    <label>Equipa adversária</label><input id="setFora">
+    <label>Número total de jogadores</label><input id="setTotal" type="number" min="1">
+    <label>Jogadores em campo</label><input id="setCampo" type="number" min="1">
+    <label>Duração do período</label><input id="setDur" type="number" min="1">
+    <label>Detalhes do jogo</label><textarea id="detalhes"></textarea>
+    <button class="green" onclick="saveSettings()">Guardar</button>
+  </div>
+  <button class="dark" onclick="closeSettings()">Voltar</button>
+ </div>
  <div class="card"><button class="dark" onclick="toggle('editNames')">Editar nomes dos jogadores</button><div id="editNames" class="hidden"></div></div>
  <div class="card"><button class="dark" onclick="toggle('stats')">Estatísticas completas</button><div id="stats" class="hidden"></div></div>
  <div class="card"><button class="dark" onclick="toggle('report')">Relatório do jogo 📊</button><div id="report" class="hidden"></div></div>
