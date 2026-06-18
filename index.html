@@ -12,7 +12,16 @@ body:before{content:"";position:fixed;inset:0;background:url("logo-pasteis.png")
 button,input,select,textarea{width:100%;padding:10px;margin-top:6px;font-size:15px;border-radius:10px;border:1px solid #ccc}
 button{border:0;color:white;font-weight:bold}
 .dark{background:#101b31}.red,.danger{background:#d71920}.green{background:#26a626}.orange{background:#f28b12}.yellow{background:#ffd21a;color:#111}.blue{background:#087dcc}
-.card{background:transparent;color:white;border-radius:14px;padding:10px;margin:8px 0;border:1px solid rgba(255,255,255,.15)}
+.card{
+ background:rgba(255,255,255,.58);
+ backdrop-filter:blur(8px);
+ -webkit-backdrop-filter:blur(8px);
+ color:#111;
+ border-radius:14px;
+ padding:10px;
+ margin:8px 0;
+ border:1px solid rgba(255,255,255,.25);
+}
 .top{background:rgba(16,27,49,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.20);border-radius:16px;padding:10px;color:white;position:relative}
 .settings{position:absolute;right:8px;top:8px;width:36px;height:36px;border-radius:50%;padding:0;background:transparent;color:white;font-size:18px;border:1px solid rgba(255,255,255,.25)}
 .score{display:grid;grid-template-columns:1fr 82px 1fr 90px;gap:6px;align-items:center;padding-right:38px}
