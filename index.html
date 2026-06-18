@@ -24,7 +24,7 @@ button{border:0;color:white;font-weight:bold}
 .top{
  background:transparent;
  border:0;
- padding:10px 0 18px;
+ padding:8px 0 18px;
  color:white;
  position:relative;
 }
@@ -38,8 +38,10 @@ button{border:0;color:white;font-weight:bold}
  background:transparent;
  color:white;
  border:0;
- font-size:13px;
+ font-size:18px;
  padding:0;
+ margin:0;
+ z-index:5;
 }
 
 .score{
@@ -50,38 +52,69 @@ button{border:0;color:white;font-weight:bold}
  padding:40px 0 0;
 }
 
+.teamBlock{
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ gap:12px;
+ min-width:0;
+}
+
+.centerBlock{
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ gap:8px;
+}
+
 .team{
  background:transparent;
  border:0;
  color:white;
  text-align:center;
  font-weight:800;
- font-size:22px;
+ font-size:21px;
  padding:0;
+ margin:0;
+ width:100%;
 }
 
 .scoreline{
- font-size:78px;
+ font-size:82px;
  font-weight:900;
  color:white;
  text-align:center;
  line-height:.9;
+ letter-spacing:-4px;
 }
 
-.scoreBtns{
+.bigTimer,
+#tempo{
+ font-size:39px;
+ font-weight:800;
+ color:white;
+ margin-top:6px;
+}
+
+.goalBtns{
  display:flex;
  justify-content:center;
- gap:14px;
- margin-top:18px;
+ gap:18px;
+ margin-top:10px;
 }
 
-.scoreBtns button{
+.goalBtns button{
  background:transparent;
  color:white;
- font-size:34px;
+ font-size:36px;
  padding:0;
  width:auto;
  height:auto;
+ margin:0;
+ line-height:1;
+ border:0;
 }
 
 .timer{
@@ -89,26 +122,23 @@ button{border:0;color:white;font-weight:bold}
  color:white;
 }
 
-#tempo{
- font-size:38px;
- font-weight:800;
- margin-top:8px;
-}
-
 .timerBtns{
  display:flex;
  justify-content:center;
- gap:14px;
- margin-top:18px;
+ gap:18px;
+ margin-top:10px;
 }
 
 .timerBtns button{
- background:transparent;
- color:white;
+ background:transparent!important;
+ color:white!important;
  height:auto;
+ width:auto;
  padding:0;
+ margin:0;
  border-radius:0;
  font-size:28px;
+ border:0;
 }
 
 .line{
@@ -119,13 +149,23 @@ button{border:0;color:white;font-weight:bold}
  margin-top:22px;
 }
 
+.centerBottom{
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ gap:16px;
+ margin-top:8px;
+}
+
 #periodo{
  background:transparent;
  border:0;
  color:white;
- font-size:32px;
+ font-size:18px;
  font-weight:800;
  padding:0;
+ margin:0;
+ width:auto;
 }
 
 #startMini,
@@ -135,7 +175,7 @@ button{border:0;color:white;font-weight:bold}
  color:white!important;
  width:auto!important;
  height:auto!important;
- font-size:28px!important;
+ font-size:25px!important;
  padding:0!important;
  margin:0!important;
  border-radius:0!important;
@@ -498,11 +538,6 @@ button{border:0;color:white;font-weight:bold}
 .backupGrid button{font-size:13px}
 
 
-.linePeriod{
- grid-template-columns:1fr 52px 52px;
- align-items:center;
-}
-
 .starterPick{
  border:2px solid #d71920!important;
  background:#d71920!important;
@@ -526,37 +561,20 @@ button{border:0;color:white;font-weight:bold}
  margin:8px 0 18px 0;
 }
 
-.linePeriod{
- grid-template-columns:1fr 52px 52px;
- align-items:center;
-}
-
-#startMini{
- width:52px;
- height:42px;
- margin:0;
- padding:0;
- font-size:18px;
- background:#101b31;
- border:1px solid rgba(255,255,255,.25);
- border-radius:12px;
-}
-
-#subMini{
- width:42px;
- height:42px;
- margin:0;
- padding:0;
- font-size:18px;
- background:#d71920;
- border-radius:12px;
-}
-
 @media(max-width:420px){
- .score{grid-template-columns:1fr 72px 1fr 82px;gap:4px}
+ .top{padding-top:4px}
+ .score{grid-template-columns:1fr auto 1fr;gap:10px;padding-top:34px}
+ .team{font-size:14px}
+ .scoreline{font-size:58px;letter-spacing:-3px}
+ .bigTimer,#tempo{font-size:30px}
+ .goalBtns{gap:14px;margin-top:8px}
+ .goalBtns button{font-size:28px}
+ .timerBtns{gap:14px;margin-top:8px}
+ .timerBtns button{font-size:23px}
+ #periodo{font-size:15px}
+ #startMini,#subMini{font-size:21px!important}
+ .centerBottom{gap:12px}
  .players{grid-template-columns:repeat(3,1fr)}
- #tempo{font-size:23px}
- .team{font-size:12px;padding:7px}
 }
 </style>
 </head>
@@ -593,91 +611,47 @@ button{border:0;color:white;font-weight:bold}
   𝕊𝕥𝕒𝕥𝕊
  </div>
 
-<div class="top">
-
+ <div class="top">
   <button class="settings" onclick="openSettings()">⚙️</button>
 
   <div class="teamBlock">
-    <input id="casa" class="team" value="AD Pastéis" oninput="saveGame()">
-
-    <div class="goalBtns">
-      <button onclick="goal('c',1)">+</button>
-      <button onclick="goal('c',-1)">-</button>
-    </div>
-
-    <div id="gc" class="miniScore">0</div>
-
-    <div class="periodBox">
-      <select id="periodo">
-        <option>1.º período</option>
-        <option>2.º período</option>
-        <option>3.º período</option>
-      </select>
-    </div>
+   <input id="casa" class="team" value="AD Pastéis" oninput="saveGame()">
+   <div class="goalBtns">
+    <button onclick="goal('c',1)">+</button>
+    <button onclick="goal('c',-1)">-</button>
+   </div>
   </div>
 
   <div class="centerBlock">
-    <div class="scoreline">
-      <span id="gc2">0</span>-<span id="gf2">0</span>
-    </div>
+   <div class="scoreline">
+    <span id="gc">0</span>-<span id="gf">0</span>
+   </div>
 
-    <div id="tempo" class="bigTimer">
-      12:00
-    </div>
+   <div id="tempo" class="bigTimer">12:00</div>
 
-    <div class="timerBtns">
-      <button class="green" onclick="start()">▶</button>
-      <button class="orange" onclick="pause()">Ⅱ</button>
-      <button class="danger" onclick="resetTimer()">■</button>
-    </div>
+   <div class="timerBtns">
+    <button class="green" onclick="start()">▶</button>
+    <button class="orange" onclick="pause()">Ⅱ</button>
+    <button class="danger" onclick="resetTimer()">↺</button>
+   </div>
+
+   <div class="centerBottom">
+    <select id="periodo">
+     <option>1.º período</option>
+     <option>2.º período</option>
+     <option>3.º período</option>
+    </select>
+    <button id="startMini" onclick="openStarters()">👥</button>
+    <button id="subMini" onclick="openSubs()">🔄</button>
+   </div>
   </div>
 
   <div class="teamBlock">
-    <input id="fora" class="team" placeholder="Adversário" oninput="saveGame()">
-
-    <div class="goalBtns">
-      <button onclick="goal('f',1)">+</button>
-      <button onclick="goal('f',-1)">-</button>
-    </div>
-
-    <div id="gf" class="miniScore">0</div>
-
-    <button id="subMini" onclick="openSubs()">
-      BANCO/SUBS
-    </button>
-  </div>
-
-</div>
-  <div class="score">
-   <input id="casa" class="team" value="AD Pastéis" oninput="saveGame()">
-   <div>
-    <div class="scoreline"><span id="gc">0</span>-<span id="gf">0</span></div>
-    <div class="scoreBtns">
-     <button onclick="goal('c',1)">+</button>
-     <button onclick="goal('f',1)">+</button>
-     <button onclick="goal('c',-1)">-</button>
-     <button onclick="goal('f',-1)">-</button>
-    </div>
-   </div>
    <input id="fora" class="team" placeholder="Adversário" oninput="saveGame()">
-   <div class="timer">
-    <div id="tempo">12:00</div>
-    <div class="timerBtns">
-     <button class="green" onclick="start()">▶</button>
-     <button class="orange" onclick="pause()">Ⅱ</button>
-     <button class="danger" onclick="resetTimer()">↺</button>
-    </div>
+   <div class="goalBtns">
+    <button onclick="goal('f',1)">+</button>
+    <button onclick="goal('f',-1)">-</button>
    </div>
-  </div>
-
-  <div class="line linePeriod">
-   <select id="periodo">
-    <option>1.º período</option>
-    <option>2.º período</option>
-    <option>3.º período</option>
-   </select>
-   <button id="startMini" onclick="openStarters()">👥</button>
-   <button id="subMini" onclick="openSubs()">🔄</button>
   </div>
  </div>
 
@@ -698,7 +672,7 @@ button{border:0;color:white;font-weight:bold}
  </div>
 
  <div class="card">
-   <h3>Jogador selecionado</h3>
+   <h3>🎯 Jogador ativo</h3>
    <div id="playerCard" class="playerCard" onclick="toggleDetails()"></div>
  </div>
 </div>
@@ -786,9 +760,19 @@ function $(id){return document.getElementById(id)}
 function toggle(id){$(id).classList.toggle("hidden")}
 function t(){let m=Math.floor(time/60),s=time%60;return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")}
 function saveAll(){localStorage.setItem("jogadores_pasteis",JSON.stringify(jogadores));localStorage.setItem("campo_pasteis",JSON.stringify(campo));localStorage.setItem("banco_pasteis",JSON.stringify(banco));localStorage.setItem("registos_pasteis",JSON.stringify(reg));localStorage.setItem("subs_pasteis",JSON.stringify(subs))}
-function loadGame(){ if($("casa"))$("casa").value=localStorage.getItem("equipa_casa_pasteis")||"AD Pastéis"; $("fora").value=localStorage.getItem("equipa_fora_pasteis")||""; $("gc").innerText=casaGoals; $("gf").innerText=foraGoals; renderAttack()}
+function loadGame(){ if($("casa"))$("casa").value=localStorage.getItem("equipa_casa_pasteis")||"AD Pastéis"; if($("fora"))$("fora").value=localStorage.getItem("equipa_fora_pasteis")||""; $("gc").innerText=casaGoals; $("gf").innerText=foraGoals; renderAttack()}
 function saveGame(){ if($("casa"))localStorage.setItem("equipa_casa_pasteis",$("casa").value); localStorage.setItem("equipa_fora_pasteis",$("fora").value)}
-function goal(team,v){if(team==="c"){casaGoals=Math.max(0,casaGoals+v);localStorage.setItem("golos_casa_pasteis",casaGoals);$("gc").innerText=casaGoals}else{foraGoals=Math.max(0,foraGoals+v);localStorage.setItem("golos_fora_pasteis",foraGoals);$("gf").innerText=foraGoals}}
+function goal(team,v){
+ if(team==="c"){
+  casaGoals=Math.max(0,casaGoals+v);
+  localStorage.setItem("golos_casa_pasteis",casaGoals);
+  $("gc").innerText=casaGoals;
+ }else{
+  foraGoals=Math.max(0,foraGoals+v);
+  localStorage.setItem("golos_fora_pasteis",foraGoals);
+  $("gf").innerText=foraGoals;
+ }
+}
 function toggleAttack(ev){ev.stopPropagation();attackSide=attackSide==="right"?"left":"right";localStorage.setItem("attack_side_pasteis",attackSide);renderAttack()}
 function renderAttack(){let b=$("attackBtn");if(b)b.innerHTML=attackSide==="right"?"➡️":"⬅️"}
 function count(f){return reg.filter(f).length}
@@ -924,7 +908,7 @@ function undo(){if(!reg.length){alert("Não há ações para desfazer.");return}
 
 function openSettings(){$("main").classList.add("hidden");$("settingsPage").classList.remove("hidden");$("setCasa").value=$("casa").value;$("setFora").value=$("fora").value;$("setTotal").value=total;$("setCampo").value=inField;$("setDur").value=dur;$("detalhes").value=localStorage.getItem("detalhes_jogo_pasteis")||"";renderEditNames();renderStats();renderReport();renderHistory()}
 function closeSettings(){$("settingsPage").classList.add("hidden");$("main").classList.remove("hidden")}
-function saveSettings(){total=Math.max(1,+$("setTotal").value||12);inField=Math.max(1,Math.min(+$("setCampo").value||5,total));dur=Math.max(1,+$("setDur").value||12);localStorage.setItem("total_jogadores_pasteis",total);localStorage.setItem("jogadores_campo_pasteis",inField);localStorage.setItem("duracao_periodo_pasteis",dur);localStorage.setItem("equipa_casa_pasteis",$("setCasa").value||"Equipa da Casa");localStorage.setItem("equipa_fora_pasteis",$("setFora").value||"");localStorage.setItem("detalhes_jogo_pasteis",$("detalhes").value||"");while(jogadores.length<total)jogadores.push("Jogador "+(jogadores.length+1));while(jogadores.length>total)jogadores.pop();campo=jogadores.slice(0,inField);banco=jogadores.slice(inField);active=jogadores[0]||"Jogador 1";time=dur*60;pause();saveAll();loadGame();updateTimer();renderAll();aplicarEntradaInicial();alert("Definições guardadas.")}
+function saveSettings(){total=Math.max(1,+$("setTotal").value||12);inField=Math.max(1,Math.min(+$("setCampo").value||5,total));dur=Math.max(1,+$("setDur").value||12);localStorage.setItem("total_jogadores_pasteis",total);localStorage.setItem("jogadores_campo_pasteis",inField);localStorage.setItem("duracao_periodo_pasteis",dur);localStorage.setItem("equipa_casa_pasteis",$("setCasa").value||"Equipa da Casa");localStorage.setItem("equipa_fora_pasteis",$("setFora").value||"");localStorage.setItem("detalhes_jogo_pasteis",$("detalhes").value||"");while(jogadores.length<total)jogadores.push("Jogador "+(jogadores.length+1));while(jogadores.length>total)jogadores.pop();campo=jogadores.slice(0,inField);banco=jogadores.slice(inField);active=jogadores[0]||"Jogador 1";time=dur*60;pause();saveAll();loadGame();updateTimer();renderAll();alert("Definições guardadas.")}
 function renderEditNames(){let e=$("editNames");e.innerHTML="";jogadores.forEach((j,i)=>e.innerHTML+=`<input id="nome${i}" value="${j}">`);e.innerHTML+=`<button class="green" onclick="saveNames()">Guardar nomes</button><button class="danger" onclick="resetNames()">Repor Jogador 1-${total}</button>`}
 function saveNames(){let old=[...jogadores];jogadores=jogadores.map((j,i)=>$("nome"+i).value||("Jogador "+(i+1)));reg.forEach(r=>{let idx=old.indexOf(r.jogador);if(idx>=0)r.jogador=jogadores[idx]});subs.forEach(s=>{let a=old.indexOf(s.sai),b=old.indexOf(s.entra);if(a>=0)s.sai=jogadores[a];if(b>=0)s.entra=jogadores[b]});campo=campo.map(p=>{let i=old.indexOf(p);return i>=0?jogadores[i]:p});banco=banco.map(p=>{let i=old.indexOf(p);return i>=0?jogadores[i]:p});active=jogadores[0]||"Jogador 1";saveAll();renderAll();renderEditNames()}
 function resetNames(){jogadores=[];for(let i=1;i<=total;i++)jogadores.push("Jogador "+i);campo=jogadores.slice(0,inField);banco=jogadores.slice(inField);active=jogadores[0]||"Jogador 1";saveAll();renderAll();renderEditNames()}
