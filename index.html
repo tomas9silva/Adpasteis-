@@ -739,6 +739,132 @@ button{border:0;color:white;font-weight:bold}
  padding:8px 4px;
 }
 
+
+/* Mini arenas dos exercícios de treino */
+.trainingExercise.open{
+ background:rgba(16,27,49,.55);
+}
+
+.trainingMiniArena{
+ position:relative;
+ width:100%;
+ aspect-ratio:1.72/1;
+ background:linear-gradient(135deg,#efcf83,#e6bb66 50%,#d6a75a);
+ border:2px solid #123b8d;
+ border-radius:12px;
+ overflow:hidden;
+ margin-top:10px;
+ cursor:pointer;
+ box-shadow:inset 0 0 0 1px rgba(255,255,255,.25);
+}
+
+.trainingMiniArena:before{
+ content:"";
+ position:absolute;
+ inset:7%;
+ border:2px solid rgba(23,63,159,.75);
+ pointer-events:none;
+}
+
+.trainingMiniArena:after{
+ content:"";
+ position:absolute;
+ left:50%;
+ top:7%;
+ bottom:7%;
+ border-left:2px solid rgba(23,63,159,.75);
+ pointer-events:none;
+}
+
+.trainingMiniArea{
+ position:absolute;
+ top:39%;
+ width:4%;
+ height:22%;
+ border:2px solid rgba(255,255,255,.35);
+ background:transparent;
+ z-index:2;
+ pointer-events:none;
+}
+
+.trainingMiniArea.leftMini{left:5%;border-left:0}
+.trainingMiniArea.rightMini{right:5%;border-right:0}
+
+.trainingMiniPoint{
+ position:absolute;
+ transform:translate(-50%,-50%);
+ font-size:18px;
+ line-height:1;
+ z-index:5;
+ text-shadow:0 1px 4px #000;
+ cursor:pointer;
+}
+
+.trainingTempPoint{
+ position:absolute;
+ width:14px;
+ height:14px;
+ border-radius:50%;
+ background:#d71920;
+ border:2px solid white;
+ transform:translate(-50%,-50%);
+ z-index:4;
+}
+
+.trainingExerciseStats{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:6px;
+ margin-top:8px;
+}
+
+.trainingExerciseStat{
+ background:rgba(255,255,255,.07);
+ border:1px solid rgba(255,255,255,.10);
+ border-radius:10px;
+ padding:7px;
+ text-align:center;
+ font-size:12px;
+}
+
+.trainingExerciseStat b{
+ display:block;
+ font-size:18px;
+ color:#ffd21a;
+}
+
+.trainingActionGrid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:6px;
+ margin-top:8px;
+}
+
+.trainingActionGrid button{
+ background:#101b31;
+ color:white;
+ border:1px solid rgba(255,255,255,.12);
+ font-size:13px;
+}
+
+.trainingObs{
+ background:rgba(255,255,255,.05);
+ color:white;
+ border:1px solid rgba(255,255,255,.14);
+ min-height:70px;
+}
+
+.trainingExportGrid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:6px;
+ margin-top:8px;
+}
+
+.trainingExportGrid button{
+ font-size:13px;
+}
+
 @media(max-width:420px){
  .top{padding-top:4px}
  .score{grid-template-columns:1fr auto 1fr;gap:10px;padding-top:34px}
@@ -789,7 +915,7 @@ button{border:0;color:white;font-weight:bold}
   <div class="trainingHeader">
     <button class="trainingBack" onclick="voltarMenu()">← Voltar</button>
     <div class="trainingTitle">Treino</div>
-    <button class="trainingBack" onclick="openSettings()">⚙️</button>
+    <button class="trainingBack" onclick="openTrainingTab('medico')">Médico</button>
   </div>
 
   <div class="trainingTabs">
@@ -840,8 +966,11 @@ button{border:0;color:white;font-weight:bold}
       <div class="trainingInfoLine"><span>Presentes</span><b id="treinoPresentes">0</b></div>
       <div class="trainingInfoLine"><span>Exercícios</span><b id="treinoExercicios">0</b></div>
       <div class="trainingInfoLine"><span>Ações registadas</span><b id="treinoAcoes">0</b></div>
-      <button class="trainingStartBtn" onclick="iniciarTreino()">Iniciar recolha geral</button>
-      <button class="trainingSecondaryBtn" onclick="guardarSessaoAtual()">Guardar treino atual</button>
+      <button class="trainingStartBtn" onclick="guardarSessaoAtual()">Guardar treino atual</button>
+      <div class="trainingExportGrid">
+        <button class="trainingSecondaryBtn" onclick="exportCSVTreino()">Exportar CSV treino</button>
+        <button class="trainingSecondaryBtn" onclick="exportPDFTreino()">Exportar relatório treino</button>
+      </div>
     </div>
   </div>
 
@@ -1024,6 +1153,7 @@ let presencasTreino=JSON.parse(localStorage.getItem("presencas_treino_pasteis")|
 let departamentoMedico=JSON.parse(localStorage.getItem("departamento_medico_pasteis")||"[]");
 let filtroMedico="todos";
 let exercicioAtualId=localStorage.getItem("exercicio_atual_pasteis")||"";
+let treinoAcaoTemp={exercicioId:null,x:null,y:null};
 
 const acoes=[
  {nome:"Golo dentro da área",emoji:"⚽"},
@@ -1826,15 +1956,19 @@ function renderExerciciosTreino(){
  box.innerHTML=exerciciosTreino.map(ex=>{
   let arena=ex.arena==="sim"?"Com mini arena":"Sem mini arena";
   let ativo=String(ex.id)===String(exercicioAtualId)?" · ativo":"";
-  return `<div class="trainingExercise">
+  let aberto=ex.aberto?" open":"";
+  let detalhes=ex.aberto?renderExercicioAberto(ex):"";
+
+  return `<div class="trainingExercise${aberto}" id="treinoEx_${ex.id}">
    <b>${ex.nome}${ativo}</b>
    <div class="exerciseMeta">
     <span>${ex.tipo}</span><span>${ex.formato}</span><span>${arena}</span><span>${ex.intensidade}</span><span>${ex.duracao?ex.duracao+" min":"Sem duração"}</span>
    </div>
    <div class="exerciseActions">
-    <button class="exerciseSmallBtn" onclick="abrirExercicio(${ex.id})">Abrir</button>
+    <button class="exerciseSmallBtn" onclick="abrirExercicio(${ex.id})">${ex.aberto?"Fechar":"Abrir"}</button>
     <button class="exerciseDeleteBtn" onclick="apagarExercicio(${ex.id})">Apagar</button>
    </div>
+   ${detalhes}
   </div>`;
  }).join("");
 }
@@ -1845,20 +1979,12 @@ function abrirExercicio(id){
 
  exercicioAtualId=String(id);
  localStorage.setItem("exercicio_atual_pasteis",exercicioAtualId);
- localStorage.setItem("modo_pasteis","treino");
- localStorage.setItem("nome_treino_pasteis",$("treinoNome")?.value || "");
- localStorage.setItem("data_treino_pasteis",$("treinoData")?.value || "");
- localStorage.setItem("duracao_treino_pasteis",$("treinoDuracao")?.value || "");
- localStorage.setItem("objetivo_treino_pasteis",$("treinoObjetivo")?.value || "");
 
- if(ex.arena==="sim"){
-  $("trainingPage").classList.add("hidden");
-  $("main").classList.remove("hidden");
-  aplicarModoVisual();
- }else{
-  alert("Este exercício está marcado como sem mini arena.");
- }
+ // Fica sempre dentro da página Treino.
+ // Se tiver mini arena, o cartão abre ali mesmo.
+ ex.aberto=!ex.aberto;
 
+ localStorage.setItem("exercicios_treino_pasteis",JSON.stringify(exerciciosTreino));
  renderExerciciosTreino();
 }
 
@@ -1951,10 +2077,202 @@ function editarRegistoMedico(id){
  apagarRegistoMedico(id);
 }
 
+
+function treinoEventosDoExercicio(exId){
+ return reg.filter(r=>String(r.exercicioId)===String(exId));
+}
+
+function renderExercicioAberto(ex){
+ let eventos=treinoEventosDoExercicio(ex.id);
+
+ let stats=[
+  {nome:"Golos",valor:eventos.filter(r=>r.acao&&r.acao.startsWith("Golo")).length},
+  {nome:"Remates",valor:eventos.filter(r=>r.acao&&r.acao.startsWith("Remate")).length},
+  {nome:"Defesas",valor:eventos.filter(r=>r.acao==="Defesa").length},
+  {nome:"Assistências",valor:eventos.filter(r=>r.acao==="Assistência").length},
+  {nome:"Falhados",valor:eventos.filter(r=>r.acao==="Remate fora"||r.acao==="Passe falhado").length},
+  {nome:"Total",valor:eventos.length}
+ ];
+
+ let html=`<div class="trainingExerciseStats">`+
+  stats.map(s=>`<div class="trainingExerciseStat"><b>${s.valor}</b>${s.nome}</div>`).join("")+
+ `</div>`;
+
+ if(ex.arena==="sim"){
+  html+=renderMiniArenaTreino(ex,eventos);
+  html+=`<div class="trainingActionGrid">`+
+   acoes.map(a=>`<button onclick="addTreinoActionSemPonto(${ex.id},'${esc(a.nome)}')">${a.emoji} ${a.nome}</button>`).join("")+
+  `</div>`;
+ }else{
+  html+=`<div class="log">Exercício sem mini arena. Podes registar ações rápidas em baixo.</div>`;
+  html+=`<div class="trainingActionGrid">`+
+   acoes.map(a=>`<button onclick="addTreinoActionSemPonto(${ex.id},'${esc(a.nome)}')">${a.emoji} ${a.nome}</button>`).join("")+
+  `</div>`;
+ }
+
+ html+=`<label>Observações do exercício</label>
+ <textarea class="trainingObs" onchange="saveObsExercicio(${ex.id},this.value)">${ex.observacoes||""}</textarea>`;
+
+ return html;
+}
+
+function renderMiniArenaTreino(ex,eventos){
+ let html=`<div class="trainingMiniArena" onclick="pickMiniArena(event,${ex.id})">
+  <div class="trainingMiniArea leftMini"></div>
+  <div class="trainingMiniArea rightMini"></div>`;
+
+ eventos.filter(r=>r.x!==""&&r.x!==undefined&&r.y!==""&&r.y!==undefined).forEach(r=>{
+  let idx=reg.indexOf(r);
+  html+=`<span class="trainingMiniPoint" onclick="event.stopPropagation();apagarAcaoPorIndice(${idx})" style="left:${r.x}%;top:${r.y}%">${r.emoji||acaoObj(r.acao).emoji}</span>`;
+ });
+
+ if(String(treinoAcaoTemp.exercicioId)===String(ex.id)&&treinoAcaoTemp.x&&treinoAcaoTemp.y){
+  html+=`<span class="trainingTempPoint" style="left:${treinoAcaoTemp.x}%;top:${treinoAcaoTemp.y}%"></span>`;
+ }
+
+ html+=`</div>`;
+ return html;
+}
+
+function pickMiniArena(event,exId){
+ let rect=event.currentTarget.getBoundingClientRect();
+ treinoAcaoTemp={
+  exercicioId:exId,
+  x:Math.round(((event.clientX-rect.left)/rect.width)*100),
+  y:Math.round(((event.clientY-rect.top)/rect.height)*100)
+ };
+ escolherAcaoMiniArena(exId);
+}
+
+function escolherAcaoMiniArena(exId){
+ let ex=exerciciosTreino.find(e=>e.id===exId);
+ if(!ex)return;
+ let modal=$("quickModal");
+ let title=$("quickTitle");
+ let content=$("quickContent");
+
+ title.innerHTML=ex.nome;
+
+ content.innerHTML="<div class='grid'>"+
+  acoes.map(a=>`<button class="actionBtn dark" onclick="addTreinoActionComPonto(${exId},'${esc(a.nome)}')">${a.emoji} ${a.nome}</button>`).join("")+
+ "</div>";
+
+ modal.classList.add("show");
+}
+
+function addTreinoActionComPonto(exId,acao){
+ let obj=acaoObj(acao);
+
+ reg.unshift({
+  jogador:"Treino",
+  periodo:"Treino",
+  tempo:t(),
+  acao:acao,
+  emoji:obj.emoji,
+  data:new Date().toLocaleString("pt-PT"),
+  x:treinoAcaoTemp.x,
+  y:treinoAcaoTemp.y,
+  attackSide:"",
+  exercicioId:String(exId),
+  tipoRegisto:"treino"
+ });
+
+ localStorage.setItem("registos_pasteis",JSON.stringify(reg));
+ treinoAcaoTemp={exercicioId:null,x:null,y:null};
+ $("quickModal").classList.remove("show");
+ renderExerciciosTreino();
+ atualizarTreinoResumo();
+}
+
+function addTreinoActionSemPonto(exId,acao){
+ let obj=acaoObj(acao);
+
+ reg.unshift({
+  jogador:"Treino",
+  periodo:"Treino",
+  tempo:t(),
+  acao:acao,
+  emoji:obj.emoji,
+  data:new Date().toLocaleString("pt-PT"),
+  x:"",
+  y:"",
+  attackSide:"",
+  exercicioId:String(exId),
+  tipoRegisto:"treino"
+ });
+
+ localStorage.setItem("registos_pasteis",JSON.stringify(reg));
+ renderExerciciosTreino();
+ atualizarTreinoResumo();
+}
+
+function saveObsExercicio(exId,valor){
+ let ex=exerciciosTreino.find(e=>String(e.id)===String(exId));
+ if(!ex)return;
+ ex.observacoes=valor;
+ localStorage.setItem("exercicios_treino_pasteis",JSON.stringify(exerciciosTreino));
+}
+
+function exportCSVTreino(){
+ let nome=localStorage.getItem("nome_treino_pasteis")||($("treinoNome")?.value)||"Treino";
+ let data=localStorage.getItem("data_treino_pasteis")||($("treinoData")?.value)||"";
+ let csv="Treino,Data,Exercicio,Tipo,Formato,Intensidade,Duracao,Acao,Emoji,X,Y,DataRegisto,Observacoes\n";
+
+ exerciciosTreino.forEach(ex=>{
+  let eventos=treinoEventosDoExercicio(ex.id);
+  if(!eventos.length){
+   csv+=`"${nome}","${data}","${ex.nome}","${ex.tipo}","${ex.formato}","${ex.intensidade}","${ex.duracao||""}","","","","","","${ex.observacoes||""}"\n`;
+  }else{
+   eventos.forEach(r=>{
+    csv+=`"${nome}","${data}","${ex.nome}","${ex.tipo}","${ex.formato}","${ex.intensidade}","${ex.duracao||""}","${r.acao}","${r.emoji||acaoObj(r.acao).emoji}","${r.x||""}","${r.y||""}","${r.data}","${ex.observacoes||""}"\n`;
+   });
+  }
+ });
+
+ let blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+ let url=URL.createObjectURL(blob);
+ let a=document.createElement("a");
+ a.href=url;
+ a.download="treino_stats.csv";
+ a.click();
+ URL.revokeObjectURL(url);
+}
+
+function exportPDFTreino(){
+ let nome=localStorage.getItem("nome_treino_pasteis")||($("treinoNome")?.value)||"Treino";
+ let data=localStorage.getItem("data_treino_pasteis")||($("treinoData")?.value)||"";
+ let objetivo=localStorage.getItem("objetivo_treino_pasteis")||($("treinoObjetivo")?.value)||"";
+ let win=window.open("","_blank");
+
+ let body=`<h1>Relatório de Treino</h1>
+ <h2>${nome}</h2>
+ <p><b>Data:</b> ${data}</p>
+ <p><b>Objetivo:</b> ${objetivo}</p>
+ <p><b>Presentes:</b> ${presencasTreino.length}</p>
+ <hr>`;
+
+ exerciciosTreino.forEach((ex,i)=>{
+  let eventos=treinoEventosDoExercicio(ex.id);
+  body+=`<h3>Exercício ${i+1}: ${ex.nome}</h3>
+  <p>${ex.tipo} · ${ex.formato} · ${ex.intensidade} · ${ex.duracao||"-"} min</p>
+  <p><b>Ações:</b> ${eventos.length}</p>
+  <ul>`;
+  acoes.forEach(a=>{
+   let n=eventos.filter(r=>r.acao===a.nome).length;
+   if(n>0)body+=`<li>${a.emoji} ${a.nome}: ${n}</li>`;
+  });
+  body+=`</ul><p><b>Observações:</b> ${ex.observacoes||"-"}</p><hr>`;
+ });
+
+ win.document.write(`<html><head><title>Relatório Treino</title><style>body{font-family:Arial;padding:24px;color:#111}h1,h2{margin-bottom:4px}hr{margin:18px 0}</style></head><body>${body}<script>window.print()<\/script></body></html>`);
+ win.document.close();
+}
+
+
 function atualizarTreinoResumo(){
  if($("treinoPresentes"))$("treinoPresentes").innerText=presencasTreino.length;
  if($("treinoExercicios"))$("treinoExercicios").innerText=exerciciosTreino.length;
- if($("treinoAcoes"))$("treinoAcoes").innerText=reg.filter(r=>r.exercicioId).length;
+ if($("treinoAcoes"))$("treinoAcoes").innerText=reg.filter(r=>r.tipoRegisto==="treino"||r.exercicioId).length;
 }
 
 function iniciarTreino(){
