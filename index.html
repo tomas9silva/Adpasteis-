@@ -353,13 +353,13 @@ button{border:0;color:white;font-weight:bold}
 }
 
 #subMini{
- width:52px;
- height:40px;
+ width:42px;
+ height:42px;
  margin:0;
  padding:0;
  font-size:18px;
  background:#d71920;
- border-radius:10px;
+ border-radius:12px;
 }
 
 .sessionItem{
@@ -388,6 +388,38 @@ button{border:0;color:white;font-weight:bold}
  gap:6px;
 }
 .backupGrid button{font-size:13px}
+
+
+.linePeriod{
+ grid-template-columns:1fr 52px 52px;
+ align-items:center;
+}
+
+#startMini{
+ width:52px;
+ height:42px;
+ margin:0;
+ padding:0;
+ font-size:18px;
+ background:#101b31;
+ border:1px solid rgba(255,255,255,.25);
+ border-radius:12px;
+}
+
+.starterPick{
+ border:2px solid #d71920!important;
+ background:#d71920!important;
+ color:white!important;
+}
+
+.startersInfo{
+ background:rgba(16,27,49,.90);
+ color:white;
+ border-radius:12px;
+ padding:9px;
+ margin:8px 0;
+ font-size:13px;
+}
 
 @media(max-width:420px){
  .score{grid-template-columns:1fr 72px 1fr 82px;gap:4px}
@@ -424,6 +456,7 @@ button{border:0;color:white;font-weight:bold}
     <option>3.º período</option>
   </select>
 
+  <button id="startMini" onclick="openStarters()">👥</button>
   <button id="subMini" onclick="openSubs()">🔄</button>
 </div>
  
@@ -476,6 +509,15 @@ button{border:0;color:white;font-weight:bold}
     <h2>Jogos e treinos guardados</h2>
     <div id="sessoesContent"></div>
     <button class="danger" onclick="closeSessoes()">Fechar</button>
+  </div>
+</div>
+<div id="startersModal" class="modal">
+  <div class="modalContent">
+    <h2>Quem começa?</h2>
+    <div class="startersInfo" id="startersInfo">Seleciona os jogadores iniciais.</div>
+    <div id="startersGrid" class="players"></div>
+    <button class="green" onclick="confirmStarters()">Guardar titulares</button>
+    <button class="danger" onclick="closeStarters()">Cancelar</button>
   </div>
 </div>
 <div id="quickModal" class="modal">
@@ -671,6 +713,69 @@ function resetNames(){jogadores=[];for(let i=1;i<=total;i++)jogadores.push("Joga
 function openEditStats(){$("editTitle").innerText="Editar estatísticas - "+active;let c=$("editStats");c.innerHTML="";acoes.forEach(a=>c.innerHTML+=`<div class="editRow"><span>${a.emoji} ${a.nome}: <b>${count(r=>r.jogador===active&&r.acao===a.nome)}</b></span><button class="green" onclick="adjust('${esc(a.nome)}',1)">+</button><button class="danger" onclick="adjust('${esc(a.nome)}',-1)">-</button></div>`);$("editModal").classList.add("show")}
 function closeEditStats(){$("editModal").classList.remove("show")}
 function adjust(a,v){let obj=acaoObj(a);if(v>0)reg.unshift({jogador:active,periodo:$("periodo").value,tempo:t(),acao:a,emoji:obj.emoji,data:"Correção manual",x:"",y:"",attackSide:attackSide});else{let i=reg.findIndex(r=>r.jogador===active&&r.acao===a);if(i>=0)reg.splice(i,1)}localStorage.setItem("registos_pasteis",JSON.stringify(reg));renderAll();openEditStats()}
+
+
+let startersTemp=[];
+
+function openStarters(){
+ startersTemp=[...campo];
+ let modal=$("startersModal");
+ if(modal)modal.classList.add("show");
+ renderStarters();
+}
+
+function closeStarters(){
+ let modal=$("startersModal");
+ if(modal)modal.classList.remove("show");
+ startersTemp=[];
+}
+
+function toggleStarter(j){
+ if(startersTemp.includes(j)){
+  startersTemp=startersTemp.filter(x=>x!==j);
+ }else{
+  if(startersTemp.length>=inField){
+   alert("Só podes escolher "+inField+" jogadores para começar.");
+   return;
+  }
+  startersTemp.push(j);
+ }
+ renderStarters();
+}
+
+function renderStarters(){
+ let grid=$("startersGrid");
+ let info=$("startersInfo");
+ if(!grid||!info)return;
+
+ info.innerHTML="Selecionados: <b>"+startersTemp.length+"/"+inField+"</b><br>Esta escolha não conta como substituição.";
+
+ grid.innerHTML="";
+ jogadores.forEach(j=>{
+  let b=document.createElement("button");
+  b.className="pbtn"+(startersTemp.includes(j)?" starterPick":"");
+  b.textContent=j;
+  b.onclick=()=>toggleStarter(j);
+  grid.appendChild(b);
+ });
+}
+
+function confirmStarters(){
+ if(startersTemp.length!==inField){
+  alert("Tens de escolher exatamente "+inField+" jogadores.");
+  return;
+ }
+
+ campo=[...startersTemp];
+ banco=jogadores.filter(j=>!campo.includes(j));
+
+ saveAll();
+ closeStarters();
+ renderAll();
+
+ alert("Titulares guardados. Não foi registada substituição.");
+}
+
 
 function openSubs(){$("subsModal").classList.add("show");renderSubs()}
 function closeSubs(){outTemp=null;inTemp=null;$("subsModal").classList.remove("show");renderSubs()}
