@@ -1804,7 +1804,7 @@ function goal(team,v){
   localStorage.setItem("golos_fora_pasteis",foraGoals);
   $("gf").innerText=foraGoals;
  }
-}
+
 function toggleAttack(ev){ev.stopPropagation();attackSide=attackSide==="right"?"left":"right";localStorage.setItem("attack_side_pasteis",attackSide);renderAttack()}
 function renderAttack(){let b=$("attackBtn");if(b)b.innerHTML=attackSide==="right"?"➡️":"⬅️"}
 function count(f){return reg.filter(f).length}
@@ -1926,7 +1926,7 @@ function renderMap(){
   tp.style.top=flow.y+"%";
   p.appendChild(tp);
  }
-}
+
 function openEvent(i){selectedEventIndex=i;let r=reg[i];$("eventTitle").innerText=(r.emoji||acaoObj(r.acao).emoji)+" "+r.acao;$("eventInfo").innerHTML=`<div class="log"><b>${r.jogador}</b><br>${r.periodo} · ${r.tempo}<br>X:${r.x}% · Y:${r.y}%<br>${r.attackSide==="left"?"⬅️ atacava esquerda":"➡️ atacava direita"}<br>${r.data}</div>`;$("eventModal").classList.add("show")}
 function closeEvent(){$("eventModal").classList.remove("show");selectedEventIndex=null}
 function deleteEvent(){if(selectedEventIndex===null)return;if(confirm("Apagar esta ação?")){reg.splice(selectedEventIndex,1);localStorage.setItem("registos_pasteis",JSON.stringify(reg));closeEvent();renderAll()}}
@@ -2061,7 +2061,7 @@ function apagarAcaoPorIndice(idx){
   localStorage.setItem("registos_pasteis",JSON.stringify(reg));
   renderAll();
  }
-}
+
 
 
 function percentagem(parte,total){
@@ -2410,10 +2410,6 @@ function aplicarEntradaInicial(){
   if($("trainingPage"))$("trainingPage").classList.add("hidden");
   $("main").classList.remove("hidden");
  }
-}
-
-
-
 
 let tipoTreinoAtual=localStorage.getItem("tipo_treino_pasteis") || "Técnico";
 
@@ -2477,7 +2473,7 @@ function openTrainingTab(tab){
  renderExerciciosTreino();
  atualizarTreinoResumo();
 }
-}
+
 
 function voltarMenu(){
  if($("trainingPage"))$("trainingPage").classList.add("hidden");
@@ -2561,7 +2557,7 @@ function renderMedicalSelect(){
  if(atual && lista.includes(atual)){
   sel.value=atual;
  }
-}
+
 
 function renderTreinoJogadores(){
  let box=$("treinoJogadoresLista");
