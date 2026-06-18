@@ -239,10 +239,23 @@ button{border:0;color:white;font-weight:bold}
  left:50%;
  top:6%;
  bottom:6%;
- border-left:3px solid #173f9f;
+ border-left:3px solid rgba(23,63,159,.35);
  pointer-events:none;
  z-index:1
 }
+
+.pitchQuarter{
+ position:absolute;
+ top:6%;
+ bottom:6%;
+ width:0;
+ border-left:2px solid rgba(23,63,159,.28);
+ pointer-events:none;
+ z-index:1;
+}
+.pitchQuarter.q1{left:25%}
+.pitchQuarter.q3{left:75%}
+
 .area{
  position:absolute;
  top:38%;
@@ -294,9 +307,22 @@ button{border:0;color:white;font-weight:bold}
  left:50%;
  top:6%;
  bottom:6%;
- border-left:2px solid #173f9f;
+ border-left:2px solid rgba(23,63,159,.35);
  pointer-events:none;
 }
+
+.miniPitch .miniQuarter{
+ position:absolute;
+ top:6%;
+ bottom:6%;
+ width:0;
+ border-left:1.5px solid rgba(23,63,159,.28);
+ pointer-events:none;
+ z-index:1;
+}
+.miniPitch .miniQuarter.q1{left:25%}
+.miniPitch .miniQuarter.q3{left:75%}
+
 .miniArea{
  position:absolute;
  top:40%;
@@ -1633,6 +1659,8 @@ button{border:0;color:white;font-weight:bold}
     </div>
    </div>
    <div id="pitch" class="pitch" onclick="pickMap(event)">
+     <div class="pitchQuarter q1"></div>
+     <div class="pitchQuarter q3"></div>
      <div class="area left"></div>
      <div class="area right"></div>
      <div class="cornerFlag tl"></div>
@@ -1999,7 +2027,7 @@ function eventosComLocal(){
 }
 
 function desenharCampoEventos(eventos){
- let html='<div class="miniPitch"><div class="miniArea leftMini"></div><div class="miniArea rightMini"></div>';
+ let html='<div class="miniPitch"><div class="miniQuarter q1"></div><div class="miniQuarter q3"></div><div class="miniArea leftMini"></div><div class="miniArea rightMini"></div>';
  eventos.forEach(obj=>{
   let r=obj.r || obj;
   let idx=obj.regIndex;
@@ -2061,24 +2089,25 @@ function zonaMaisUsada(){
 }
 
 
+
 function renderRelatorioPercentual(){
  let golosTotal=contarComecaCom("Golo");
  let golosLivre=contarAcaoPorTexto("Golo de livre");
- let golosJogo=contarAcaoPorTexto("Golo dentro da área")+contarAcaoPorTexto("Golo fora da área")+contarAcaoPorTexto("Golo de cabeça")+contarAcaoPorTexto("Golo de canto");
- let rematesJogo=contarAcaoPorTexto("Remate jogo corrido");
  let rematesLivre=contarAcaoPorTexto("Remate livre");
  let rematesFora=contarAcaoPorTexto("Remate fora");
  let defesas=contarAcaoPorTexto("Defesa");
- let passesFalhados=contarAcaoPorTexto("Passe falhado");
+ let golosSofridos=contarAcaoPorTexto("Golo sofrido");
 
+ let rematesJogo=contarAcaoPorTexto("Remate jogo corrido");
  let totalRemates=golosTotal+rematesJogo+rematesLivre+rematesFora;
  let rematesBaliza=Math.max(0,totalRemates-rematesFora);
  let eficacia=percentagem(golosTotal,totalRemates);
  let acertoBaliza=percentagem(rematesBaliza,totalRemates);
  let eficaciaLivre=percentagem(golosLivre,golosLivre+rematesLivre);
- let eficaciaJogo=percentagem(golosJogo,golosJogo+rematesJogo);
- let pesoDefesas=percentagem(defesas,reg.length);
- let pesoPassesFalhados=percentagem(passesFalhados,reg.length);
+
+ let rematesEnquadradosContra=defesas+golosSofridos;
+ let eficaciaDefensiva=percentagem(defesas,rematesEnquadradosContra);
+ let golosSofridosPct=percentagem(golosSofridos,rematesEnquadradosContra);
 
  function item(titulo,valor,sub,pct){
   return `<div class="percentItem">
@@ -2096,9 +2125,9 @@ function renderRelatorioPercentual(){
    ${item("Eficácia de finalização",eficacia+"%","Golos / total de remates",eficacia)}
    ${item("Remates à baliza",acertoBaliza+"%","Remates que não foram fora",acertoBaliza)}
    ${item("Golos de livre / Remates de livre",eficaciaLivre+"%",`${golosLivre} golos / ${golosLivre+rematesLivre} ações`,eficaciaLivre)}
-   ${item("Golos de jogo corrido / Remates de jogo corrido",eficaciaJogo+"%",`${golosJogo} golos / ${golosJogo+rematesJogo} ações`,eficaciaJogo)}
-   ${item("Defesas",defesas,"Peso nas ações: "+pesoDefesas+"%",pesoDefesas)}
-   ${item("Passes falhados",passesFalhados,"Peso nas ações: "+pesoPassesFalhados+"%",pesoPassesFalhados)}
+   ${item("Defesas / Golos sofridos",eficaciaDefensiva+"%",`${defesas} defesas / ${golosSofridos} golos sofridos`,eficaciaDefensiva)}
+   ${item("Golos sofridos",golosSofridosPct+"%",`${golosSofridos} golos sofridos / ${rematesEnquadradosContra} remates enquadrados`,golosSofridosPct)}
+   ${item("Remates enquadrados contra",rematesEnquadradosContra,`${defesas} defesas + ${golosSofridos} golos sofridos`,100)}
   </div>
   <br>
   <b>Destaques:</b><br>
@@ -2109,6 +2138,7 @@ function renderRelatorioPercentual(){
   Zona mais usada: ${zonaMaisUsada()}
  </div>`;
 }
+
 
 
 function renderStats(){
