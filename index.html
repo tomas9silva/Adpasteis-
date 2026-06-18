@@ -2430,11 +2430,19 @@ function openTrainingTab(tab){
 
 
 function abrirTreinoPage(){
- localStorage.setItem("modo_pasteis","treino");
- $("menuPage").classList.add("hidden");
- $("trainingPage").classList.remove("hidden");
- carregarDadosTreino();
- openTrainingTab("grupo");
+  localStorage.setItem("modo_pasteis","treino");
+  $("menuPage").classList.add("hidden");
+  $("trainingPage").classList.remove("hidden");
+  carregarDadosTreino();
+
+  ["grupo","presencas","exercicios","resumo"].forEach(t=>{
+    let sec=$("trainingSection"+t.charAt(0).toUpperCase()+t.slice(1));
+    let btn=$("tab"+t.charAt(0).toUpperCase()+t.slice(1));
+
+    if(sec) sec.classList.add("hidden");
+    if(btn) btn.classList.remove("active");
+  });
+}
 }
 
 function voltarMenu(){
