@@ -662,6 +662,83 @@ button{border:0;color:white;font-weight:bold}
 .exerciseDeleteBtn{background:#d71920;color:white}
 .trainingSelectRow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 
+
+.trainingTabs{
+ display:grid;
+ grid-template-columns:1fr 1fr 1fr;
+ gap:6px;
+ margin:10px 0;
+}
+
+.trainingTabs button{
+ background:#101b31;
+ border:1px solid rgba(255,255,255,.16);
+ color:white;
+ font-size:13px;
+ padding:10px 6px;
+}
+
+.trainingTabs button.active{
+ background:#d71920;
+}
+
+.trainingSection.hidden{
+ display:none!important;
+}
+
+.trainingPlayerRow,
+.medicalRow{
+ background:rgba(255,255,255,.05);
+ border:1px solid rgba(255,255,255,.12);
+ border-radius:12px;
+ padding:8px;
+ margin:7px 0;
+ color:white;
+}
+
+.trainingPlayerActions,
+.medicalActions{
+ display:grid;
+ grid-template-columns:1fr 44px;
+ gap:6px;
+ margin-top:6px;
+}
+
+.trainingPlayerActions button,
+.medicalActions button{
+ margin:0;
+ padding:7px;
+ font-size:12px;
+}
+
+.medicalStatus{
+ display:inline-block;
+ padding:4px 8px;
+ border-radius:999px;
+ margin-top:5px;
+ font-size:12px;
+ font-weight:700;
+}
+
+.medRed{background:#d71920;color:white}
+.medYellow{background:#f28b12;color:#111}
+.medBlue{background:#087dcc;color:white}
+
+.medicalFilter{
+ display:grid;
+ grid-template-columns:1fr 1fr 1fr;
+ gap:6px;
+ margin:8px 0;
+}
+
+.medicalFilter button{
+ background:#101b31;
+ color:white;
+ border:1px solid rgba(255,255,255,.15);
+ font-size:12px;
+ padding:8px 4px;
+}
+
 @media(max-width:420px){
  .top{padding-top:4px}
  .score{grid-template-columns:1fr auto 1fr;gap:10px;padding-top:34px}
@@ -715,49 +792,94 @@ button{border:0;color:white;font-weight:bold}
     <button class="trainingBack" onclick="openSettings()">⚙️</button>
   </div>
 
-  <div class="trainingCard">
-    <h3>Criar treino</h3>
-    <div class="trainingGrid">
-      <button class="trainingModeBtn active" onclick="setTipoTreino('Técnico', this)">Técnico</button>
-      <button class="trainingModeBtn" onclick="setTipoTreino('Tático', this)">Tático</button>
-      <button class="trainingModeBtn" onclick="setTipoTreino('Físico', this)">Físico</button>
-      <button class="trainingModeBtn" onclick="setTipoTreino('Jogo reduzido', this)">Jogo reduzido</button>
-    </div>
-    <label>Nome do treino</label><input id="treinoNome" placeholder="Ex: Treino finalização">
-    <label>Data</label><input id="treinoData" type="date">
-    <label>Duração prevista</label><input id="treinoDuracao" type="number" min="1" placeholder="Ex: 90">
-    <label>Objetivo principal</label><textarea id="treinoObjetivo" placeholder="Ex: melhorar finalização, reação defensiva, transições..."></textarea>
+  <div class="trainingTabs">
+    <button id="tabTreino" class="active" onclick="openTrainingTab('treino')">Treino</button>
+    <button id="tabGrupo" onclick="openTrainingTab('grupo')">Grupo</button>
+    <button id="tabMedico" onclick="openTrainingTab('medico')">Médico</button>
   </div>
 
-  <div class="trainingCard">
-    <h3>Presenças</h3>
-    <div class="small">Seleciona quem está presente no treino.</div>
-    <div id="presenceGrid" class="presenceGrid"></div>
+  <div id="trainingSectionTreino" class="trainingSection">
+    <div class="trainingCard">
+      <h3>Criar treino</h3>
+      <div class="trainingGrid">
+        <button class="trainingModeBtn active" onclick="setTipoTreino('Técnico', this)">Técnico</button>
+        <button class="trainingModeBtn" onclick="setTipoTreino('Tático', this)">Tático</button>
+        <button class="trainingModeBtn" onclick="setTipoTreino('Físico', this)">Físico</button>
+        <button class="trainingModeBtn" onclick="setTipoTreino('Jogo reduzido', this)">Jogo reduzido</button>
+      </div>
+      <label>Nome do treino</label><input id="treinoNome" placeholder="Ex: Treino finalização">
+      <label>Data</label><input id="treinoData" type="date">
+      <label>Duração prevista</label><input id="treinoDuracao" type="number" min="1" placeholder="Ex: 90">
+      <label>Objetivo principal</label><textarea id="treinoObjetivo" placeholder="Ex: melhorar finalização, reação defensiva, transições..."></textarea>
+    </div>
+
+    <div class="trainingCard">
+      <h3>Presenças</h3>
+      <div class="small">Seleciona quem está presente neste treino.</div>
+      <div id="presenceGrid" class="presenceGrid"></div>
+    </div>
+
+    <div class="trainingCard">
+      <h3>Exercícios</h3>
+      <label>Nome do exercício</label><input id="exNome" placeholder="Ex: Finalização após passe">
+      <div class="trainingSelectRow">
+        <div><label>Formato</label><select id="exFormato"><option>Individual</option><option>Coletivo</option><option>Grupos</option><option>Guarda-redes</option></select></div>
+        <div><label>Arena</label><select id="exArena"><option value="sim">Com mini arena</option><option value="nao">Sem mini arena</option></select></div>
+      </div>
+      <div class="trainingSelectRow">
+        <div><label>Tipo</label><select id="exTipo"><option>Técnico</option><option>Tático</option><option>Físico</option><option>Finalização</option><option>Guarda-redes</option><option>Jogo reduzido</option></select></div>
+        <div><label>Intensidade</label><select id="exIntensidade"><option>Baixa</option><option>Média</option><option>Alta</option></select></div>
+      </div>
+      <label>Duração</label><input id="exDuracao" type="number" min="1" placeholder="Minutos">
+      <button class="trainingStartBtn" onclick="addExercicioTreino()">Adicionar exercício</button>
+      <div id="exerciciosLista"></div>
+    </div>
+
+    <div class="trainingCard">
+      <h3>Resumo</h3>
+      <div class="trainingInfoLine"><span>Presentes</span><b id="treinoPresentes">0</b></div>
+      <div class="trainingInfoLine"><span>Exercícios</span><b id="treinoExercicios">0</b></div>
+      <div class="trainingInfoLine"><span>Ações registadas</span><b id="treinoAcoes">0</b></div>
+      <button class="trainingStartBtn" onclick="iniciarTreino()">Iniciar recolha geral</button>
+      <button class="trainingSecondaryBtn" onclick="guardarSessaoAtual()">Guardar treino atual</button>
+    </div>
   </div>
 
-  <div class="trainingCard">
-    <h3>Exercícios</h3>
-    <label>Nome do exercício</label><input id="exNome" placeholder="Ex: Finalização após passe">
-    <div class="trainingSelectRow">
-      <div><label>Formato</label><select id="exFormato"><option>Individual</option><option>Coletivo</option><option>Grupos</option><option>Guarda-redes</option></select></div>
-      <div><label>Arena</label><select id="exArena"><option value="sim">Com campo</option><option value="nao">Sem campo</option></select></div>
+  <div id="trainingSectionGrupo" class="trainingSection hidden">
+    <div class="trainingCard">
+      <h3>Grupo de treino</h3>
+      <label>Nome do jogador</label>
+      <input id="novoTreinoJogador" placeholder="Ex: Jogador 1">
+      <button class="trainingStartBtn" onclick="addTreinoJogador()">Adicionar jogador ao treino</button>
+      <div id="treinoJogadoresLista"></div>
     </div>
-    <div class="trainingSelectRow">
-      <div><label>Tipo</label><select id="exTipo"><option>Técnico</option><option>Tático</option><option>Físico</option><option>Finalização</option><option>Guarda-redes</option><option>Jogo reduzido</option></select></div>
-      <div><label>Intensidade</label><select id="exIntensidade"><option>Baixa</option><option>Média</option><option>Alta</option></select></div>
-    </div>
-    <label>Duração</label><input id="exDuracao" type="number" min="1" placeholder="Minutos">
-    <button class="trainingStartBtn" onclick="addExercicioTreino()">Adicionar exercício</button>
-    <div id="exerciciosLista"></div>
   </div>
 
-  <div class="trainingCard">
-    <h3>Resumo</h3>
-    <div class="trainingInfoLine"><span>Presentes</span><b id="treinoPresentes">0</b></div>
-    <div class="trainingInfoLine"><span>Exercícios</span><b id="treinoExercicios">0</b></div>
-    <div class="trainingInfoLine"><span>Ações registadas</span><b id="treinoAcoes">0</b></div>
-    <button class="trainingStartBtn" onclick="iniciarTreino()">Iniciar recolha geral</button>
-    <button class="trainingSecondaryBtn" onclick="guardarSessaoAtual()">Guardar treino atual</button>
+  <div id="trainingSectionMedico" class="trainingSection hidden">
+    <div class="trainingCard">
+      <h3>Departamento médico</h3>
+      <label>Nome do jogador</label>
+      <input id="medJogador" placeholder="Ex: Jogador 1">
+      <label>Causa</label>
+      <textarea id="medCausa" placeholder="Ex: dor no tornozelo, sobrecarga, entorse..."></textarea>
+      <label>Estado</label>
+      <select id="medEstado">
+        <option>Não treina</option>
+        <option>Treina condicionado</option>
+        <option>Em tratamento</option>
+      </select>
+      <button class="trainingStartBtn" onclick="addRegistoMedico()">Guardar registo médico</button>
+    </div>
+
+    <div class="trainingCard">
+      <h3>Lista clínica</h3>
+      <div class="medicalFilter">
+        <button onclick="setFiltroMedico('todos')">Todos</button>
+        <button onclick="setFiltroMedico('Não treina')">Não treina</button>
+        <button onclick="setFiltroMedico('Treina condicionado')">Condicionado</button>
+      </div>
+      <div id="medicalList"></div>
+    </div>
   </div>
 </div>
 
@@ -895,8 +1017,12 @@ let casaGoals=+localStorage.getItem("golos_casa_pasteis")||0;
 let foraGoals=+localStorage.getItem("golos_fora_pasteis")||0;
 let attackSide=localStorage.getItem("attack_side_pasteis")||"right";
 let flow={x:null,y:null,jogador:null,acao:null,step:"idle"};
+let treinoJogadores=JSON.parse(localStorage.getItem("treino_jogadores_pasteis")||"[]");
+if(!treinoJogadores.length){for(let i=1;i<=10;i++)treinoJogadores.push("Jogador Treino "+i)}
 let exerciciosTreino=JSON.parse(localStorage.getItem("exercicios_treino_pasteis")||"[]");
 let presencasTreino=JSON.parse(localStorage.getItem("presencas_treino_pasteis")||"[]");
+let departamentoMedico=JSON.parse(localStorage.getItem("departamento_medico_pasteis")||"[]");
+let filtroMedico="todos";
 let exercicioAtualId=localStorage.getItem("exercicio_atual_pasteis")||"";
 
 const acoes=[
@@ -1371,7 +1497,7 @@ function guardarSessaoAtual(){
   reg:JSON.parse(JSON.stringify(reg)),
   subs:JSON.parse(JSON.stringify(subs)),
   attackSide:attackSide,
-  treino:{tipo:tipoTreinoAtual,nome:localStorage.getItem("nome_treino_pasteis")||"",data:localStorage.getItem("data_treino_pasteis")||"",objetivo:localStorage.getItem("objetivo_treino_pasteis")||""}
+  treino:{tipo:tipoTreinoAtual,nome:localStorage.getItem("nome_treino_pasteis")||"",data:localStorage.getItem("data_treino_pasteis")||"",duracao:localStorage.getItem("duracao_treino_pasteis")||"",objetivo:localStorage.getItem("objetivo_treino_pasteis")||"",jogadores:treinoJogadores,exercicios:exerciciosTreino,presencas:presencasTreino,medico:departamentoMedico}
  };
  let lista=getSessoes();
  lista.unshift(sessao);
@@ -1457,7 +1583,7 @@ function exportBackupJSON(){
    reg:JSON.parse(JSON.stringify(reg)),
    subs:JSON.parse(JSON.stringify(subs)),
    attackSide:attackSide,
-   treino:{tipo:tipoTreinoAtual,nome:localStorage.getItem("nome_treino_pasteis")||"",data:localStorage.getItem("data_treino_pasteis")||"",objetivo:localStorage.getItem("objetivo_treino_pasteis")||""}
+   treino:{tipo:tipoTreinoAtual,nome:localStorage.getItem("nome_treino_pasteis")||"",data:localStorage.getItem("data_treino_pasteis")||"",duracao:localStorage.getItem("duracao_treino_pasteis")||"",objetivo:localStorage.getItem("objetivo_treino_pasteis")||"",jogadores:treinoJogadores,exercicios:exerciciosTreino,presencas:presencasTreino,medico:departamentoMedico}
   }
  };
  let blob=new Blob([JSON.stringify(backup,null,2)],{type:"application/json;charset=utf-8"});
@@ -1541,14 +1667,28 @@ function aplicarEntradaInicial(){
 
 
 
+
 let tipoTreinoAtual=localStorage.getItem("tipo_treino_pasteis") || "Técnico";
+
+function openTrainingTab(tab){
+ ["treino","grupo","medico"].forEach(t=>{
+  $("trainingSection"+t.charAt(0).toUpperCase()+t.slice(1)).classList.add("hidden");
+  $("tab"+t.charAt(0).toUpperCase()+t.slice(1)).classList.remove("active");
+ });
+ $("trainingSection"+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.remove("hidden");
+ $("tab"+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add("active");
+ renderTreinoJogadores();
+ renderPresencas();
+ renderMedicalList();
+ atualizarTreinoResumo();
+}
 
 function abrirTreinoPage(){
  localStorage.setItem("modo_pasteis","treino");
  $("menuPage").classList.add("hidden");
  $("trainingPage").classList.remove("hidden");
  carregarDadosTreino();
- atualizarTreinoResumo();
+ openTrainingTab("treino");
 }
 
 function voltarMenu(){
@@ -1570,19 +1710,74 @@ function carregarDadosTreino(){
  if($("treinoNome") && !$("treinoNome").value)$("treinoNome").value=localStorage.getItem("nome_treino_pasteis") || ("Treino - "+new Date().toLocaleDateString("pt-PT"));
  if($("treinoDuracao") && !$("treinoDuracao").value)$("treinoDuracao").value=localStorage.getItem("duracao_treino_pasteis") || "";
  if($("treinoObjetivo") && !$("treinoObjetivo").value)$("treinoObjetivo").value=localStorage.getItem("objetivo_treino_pasteis") || "";
+
  if(!presencasTreino.length){
-  presencasTreino=[...jogadores];
+  presencasTreino=[...treinoJogadores];
   localStorage.setItem("presencas_treino_pasteis",JSON.stringify(presencasTreino));
  }
+
+ renderTreinoJogadores();
  renderPresencas();
  renderExerciciosTreino();
+ renderMedicalList();
+}
+
+function addTreinoJogador(){
+ let nome=($("novoTreinoJogador")?.value||"").trim();
+ if(!nome){alert("Escreve o nome do jogador.");return;}
+ if(treinoJogadores.includes(nome)){alert("Esse jogador já existe no grupo de treino.");return;}
+
+ treinoJogadores.push(nome);
+ presencasTreino.push(nome);
+
+ localStorage.setItem("treino_jogadores_pasteis",JSON.stringify(treinoJogadores));
+ localStorage.setItem("presencas_treino_pasteis",JSON.stringify(presencasTreino));
+
+ $("novoTreinoJogador").value="";
+ renderTreinoJogadores();
+ renderPresencas();
+ atualizarTreinoResumo();
+}
+
+function removeTreinoJogador(nome){
+ if(!confirm("Remover este jogador do grupo de treino?"))return;
+ treinoJogadores=treinoJogadores.filter(j=>j!==nome);
+ presencasTreino=presencasTreino.filter(j=>j!==nome);
+
+ localStorage.setItem("treino_jogadores_pasteis",JSON.stringify(treinoJogadores));
+ localStorage.setItem("presencas_treino_pasteis",JSON.stringify(presencasTreino));
+
+ renderTreinoJogadores();
+ renderPresencas();
+ atualizarTreinoResumo();
+}
+
+function renderTreinoJogadores(){
+ let box=$("treinoJogadoresLista");
+ if(!box)return;
+
+ if(!treinoJogadores.length){
+  box.innerHTML="<div class='log'>Ainda não tens jogadores no treino.</div>";
+  return;
+ }
+
+ box.innerHTML=treinoJogadores.map(j=>`
+  <div class="trainingPlayerRow">
+   <b>${j}</b>
+   <div class="trainingPlayerActions">
+    <button class="exerciseSmallBtn" onclick="document.getElementById('medJogador').value='${esc(j)}';openTrainingTab('medico')">Médico</button>
+    <button class="exerciseDeleteBtn" onclick="removeTreinoJogador('${esc(j)}')">🗑️</button>
+   </div>
+  </div>
+ `).join("");
 }
 
 function renderPresencas(){
  let grid=$("presenceGrid");
  if(!grid)return;
+
  grid.innerHTML="";
- jogadores.forEach(j=>{
+ treinoJogadores.forEach(j=>{
   let b=document.createElement("button");
   b.className="presenceBtn"+(presencasTreino.includes(j)?" active":"");
   b.textContent=j;
@@ -1599,27 +1794,55 @@ function renderPresencas(){
 function addExercicioTreino(){
  let nome=($("exNome")?.value||"").trim();
  if(!nome){alert("Escreve o nome do exercício.");return;}
- let ex={id:Date.now(),nome,formato:$("exFormato")?.value||"Individual",arena:$("exArena")?.value||"sim",tipo:$("exTipo")?.value||"Técnico",intensidade:$("exIntensidade")?.value||"Média",duracao:$("exDuracao")?.value||"",criado:new Date().toLocaleString("pt-PT")};
+
+ let ex={
+  id:Date.now(),
+  nome,
+  formato:$("exFormato")?.value||"Individual",
+  arena:$("exArena")?.value||"sim",
+  tipo:$("exTipo")?.value||"Técnico",
+  intensidade:$("exIntensidade")?.value||"Média",
+  duracao:$("exDuracao")?.value||"",
+  criado:new Date().toLocaleString("pt-PT")
+ };
+
  exerciciosTreino.push(ex);
  localStorage.setItem("exercicios_treino_pasteis",JSON.stringify(exerciciosTreino));
- $("exNome").value=""; $("exDuracao").value="";
- renderExerciciosTreino(); atualizarTreinoResumo();
+ $("exNome").value="";
+ $("exDuracao").value="";
+ renderExerciciosTreino();
+ atualizarTreinoResumo();
 }
 
 function renderExerciciosTreino(){
  let box=$("exerciciosLista");
  if(!box)return;
- if(!exerciciosTreino.length){box.innerHTML="<div class='log'>Ainda não criaste exercícios.</div>";return;}
+
+ if(!exerciciosTreino.length){
+  box.innerHTML="<div class='log'>Ainda não criaste exercícios.</div>";
+  return;
+ }
+
  box.innerHTML=exerciciosTreino.map(ex=>{
-  let arena=ex.arena==="sim"?"Com campo":"Sem campo";
+  let arena=ex.arena==="sim"?"Com mini arena":"Sem mini arena";
   let ativo=String(ex.id)===String(exercicioAtualId)?" · ativo":"";
-  return `<div class="trainingExercise"><b>${ex.nome}${ativo}</b><div class="exerciseMeta"><span>${ex.tipo}</span><span>${ex.formato}</span><span>${arena}</span><span>${ex.intensidade}</span><span>${ex.duracao?ex.duracao+" min":"Sem duração"}</span></div><div class="exerciseActions"><button class="exerciseSmallBtn" onclick="abrirExercicio(${ex.id})">Abrir</button><button class="exerciseDeleteBtn" onclick="apagarExercicio(${ex.id})">Apagar</button></div></div>`;
+  return `<div class="trainingExercise">
+   <b>${ex.nome}${ativo}</b>
+   <div class="exerciseMeta">
+    <span>${ex.tipo}</span><span>${ex.formato}</span><span>${arena}</span><span>${ex.intensidade}</span><span>${ex.duracao?ex.duracao+" min":"Sem duração"}</span>
+   </div>
+   <div class="exerciseActions">
+    <button class="exerciseSmallBtn" onclick="abrirExercicio(${ex.id})">Abrir</button>
+    <button class="exerciseDeleteBtn" onclick="apagarExercicio(${ex.id})">Apagar</button>
+   </div>
+  </div>`;
  }).join("");
 }
 
 function abrirExercicio(id){
  let ex=exerciciosTreino.find(e=>e.id===id);
  if(!ex)return;
+
  exercicioAtualId=String(id);
  localStorage.setItem("exercicio_atual_pasteis",exercicioAtualId);
  localStorage.setItem("modo_pasteis","treino");
@@ -1627,11 +1850,15 @@ function abrirExercicio(id){
  localStorage.setItem("data_treino_pasteis",$("treinoData")?.value || "");
  localStorage.setItem("duracao_treino_pasteis",$("treinoDuracao")?.value || "");
  localStorage.setItem("objetivo_treino_pasteis",$("treinoObjetivo")?.value || "");
+
  if(ex.arena==="sim"){
   $("trainingPage").classList.add("hidden");
   $("main").classList.remove("hidden");
   aplicarModoVisual();
- }else alert("Este exercício está marcado como sem campo. Não abre a ARENA.");
+ }else{
+  alert("Este exercício está marcado como sem mini arena.");
+ }
+
  renderExerciciosTreino();
 }
 
@@ -1639,14 +1866,95 @@ function apagarExercicio(id){
  if(!confirm("Apagar este exercício?"))return;
  exerciciosTreino=exerciciosTreino.filter(e=>e.id!==id);
  localStorage.setItem("exercicios_treino_pasteis",JSON.stringify(exerciciosTreino));
- if(String(exercicioAtualId)===String(id)){exercicioAtualId="";localStorage.removeItem("exercicio_atual_pasteis");}
- renderExerciciosTreino(); atualizarTreinoResumo();
+ if(String(exercicioAtualId)===String(id)){
+  exercicioAtualId="";
+  localStorage.removeItem("exercicio_atual_pasteis");
+ }
+ renderExerciciosTreino();
+ atualizarTreinoResumo();
+}
+
+function addRegistoMedico(){
+ let jogador=($("medJogador")?.value||"").trim();
+ let causa=($("medCausa")?.value||"").trim();
+ let estado=$("medEstado")?.value||"Não treina";
+
+ if(!jogador){alert("Escreve o nome do jogador.");return;}
+ if(!causa){alert("Escreve a causa.");return;}
+
+ departamentoMedico.unshift({
+  id:Date.now(),
+  jogador,
+  causa,
+  estado,
+  data:new Date().toLocaleString("pt-PT")
+ });
+
+ localStorage.setItem("departamento_medico_pasteis",JSON.stringify(departamentoMedico));
+
+ $("medJogador").value="";
+ $("medCausa").value="";
+ $("medEstado").value="Não treina";
+
+ renderMedicalList();
+}
+
+function setFiltroMedico(filtro){
+ filtroMedico=filtro;
+ renderMedicalList();
+}
+
+function classeEstadoMedico(estado){
+ if(estado==="Não treina")return "medRed";
+ if(estado==="Treina condicionado")return "medYellow";
+ return "medBlue";
+}
+
+function renderMedicalList(){
+ let box=$("medicalList");
+ if(!box)return;
+
+ let lista=departamentoMedico.filter(r=>filtroMedico==="todos"||r.estado===filtroMedico);
+
+ if(!lista.length){
+  box.innerHTML="<div class='log'>Sem registos médicos.</div>";
+  return;
+ }
+
+ box.innerHTML=lista.map(r=>`
+  <div class="medicalRow">
+   <b>${r.jogador}</b><br>
+   <span class="medicalStatus ${classeEstadoMedico(r.estado)}">${r.estado}</span><br>
+   <div class="small">${r.data}</div>
+   <div>${r.causa}</div>
+   <div class="medicalActions">
+    <button class="exerciseSmallBtn" onclick="editarRegistoMedico(${r.id})">Editar</button>
+    <button class="exerciseDeleteBtn" onclick="apagarRegistoMedico(${r.id})">🗑️</button>
+   </div>
+  </div>
+ `).join("");
+}
+
+function apagarRegistoMedico(id){
+ if(!confirm("Apagar este registo médico?"))return;
+ departamentoMedico=departamentoMedico.filter(r=>r.id!==id);
+ localStorage.setItem("departamento_medico_pasteis",JSON.stringify(departamentoMedico));
+ renderMedicalList();
+}
+
+function editarRegistoMedico(id){
+ let r=departamentoMedico.find(x=>x.id===id);
+ if(!r)return;
+ $("medJogador").value=r.jogador;
+ $("medCausa").value=r.causa;
+ $("medEstado").value=r.estado;
+ apagarRegistoMedico(id);
 }
 
 function atualizarTreinoResumo(){
  if($("treinoPresentes"))$("treinoPresentes").innerText=presencasTreino.length;
  if($("treinoExercicios"))$("treinoExercicios").innerText=exerciciosTreino.length;
- if($("treinoAcoes"))$("treinoAcoes").innerText=reg.length;
+ if($("treinoAcoes"))$("treinoAcoes").innerText=reg.filter(r=>r.exercicioId).length;
 }
 
 function iniciarTreino(){
@@ -1656,6 +1964,7 @@ function iniciarTreino(){
  localStorage.setItem("data_treino_pasteis",$("treinoData")?.value || "");
  localStorage.setItem("duracao_treino_pasteis",$("treinoDuracao")?.value || "");
  localStorage.setItem("objetivo_treino_pasteis",$("treinoObjetivo")?.value || "");
+
  if($("trainingPage"))$("trainingPage").classList.add("hidden");
  $("main").classList.remove("hidden");
  aplicarModoVisual();
