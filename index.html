@@ -486,8 +486,61 @@ button{border:0;color:white;font-weight:bold}
   𝕊𝕥𝕒𝕥𝕊
  </div>
 
- <div class="top">
+<div class="top">
+
   <button class="settings" onclick="openSettings()">⚙️</button>
+
+  <div class="teamBlock">
+    <input id="casa" class="team" value="AD Pastéis" oninput="saveGame()">
+
+    <div class="goalBtns">
+      <button onclick="goal('c',1)">+</button>
+      <button onclick="goal('c',-1)">-</button>
+    </div>
+
+    <div id="gc" class="miniScore">0</div>
+
+    <div class="periodBox">
+      <select id="periodo">
+        <option>1.º período</option>
+        <option>2.º período</option>
+        <option>3.º período</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="centerBlock">
+    <div class="scoreline">
+      <span id="gc2">0</span>-<span id="gf2">0</span>
+    </div>
+
+    <div id="tempo" class="bigTimer">
+      12:00
+    </div>
+
+    <div class="timerBtns">
+      <button class="green" onclick="start()">▶</button>
+      <button class="orange" onclick="pause()">Ⅱ</button>
+      <button class="danger" onclick="resetTimer()">■</button>
+    </div>
+  </div>
+
+  <div class="teamBlock">
+    <input id="fora" class="team" placeholder="Adversário" oninput="saveGame()">
+
+    <div class="goalBtns">
+      <button onclick="goal('f',1)">+</button>
+      <button onclick="goal('f',-1)">-</button>
+    </div>
+
+    <div id="gf" class="miniScore">0</div>
+
+    <button id="subMini" onclick="openSubs()">
+      BANCO/SUBS
+    </button>
+  </div>
+
+</div>
   <div class="score">
    <input id="casa" class="team" value="AD Pastéis" oninput="saveGame()">
    <div>
