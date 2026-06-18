@@ -362,14 +362,32 @@ button{border:0;color:white;font-weight:bold}
  border-radius:10px;
 }
 
-.mainTitle{
- text-align:center;
+.sessionItem{
+ background:rgba(255,255,255,.06);
+ border:1px solid rgba(255,255,255,.14);
  color:white;
- font-size:58px;
- font-weight:700;
- letter-spacing:4px;
- margin:8px 0 18px 0;
+ border-radius:12px;
+ padding:9px;
+ margin:7px 0;
 }
+.sessionItem b{color:#ffd21a}
+.sessionActions{
+ display:grid;
+ grid-template-columns:1fr 44px;
+ gap:6px;
+ margin-top:6px;
+}
+.sessionActions button{
+ margin:0;
+ padding:8px;
+ font-size:13px;
+}
+.backupGrid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:6px;
+}
+.backupGrid button{font-size:13px}
 
 @media(max-width:420px){
  .score{grid-template-columns:1fr 72px 1fr 82px;gap:4px}
@@ -385,30 +403,12 @@ button{border:0;color:white;font-weight:bold}
    <h1>𝕊𝕥𝕒𝕥𝕊</h1>
 <p class="landingSub">Match Analysis Platform</p>
 <p class="landingVersion">Version 1.0</p>
-    <button onclick="abrirMenu()" class="enterBtn">
+    <button onclick="document.getElementById('landingPage').style.display='none'" class="enterBtn">
   ENTRAR
 </button>
   </div>
 </div>
-
-<div id="menuPage" class="landingPage hidden">
-  <div class="landingContent">
-    <h1>𝕊𝕥𝕒𝕥𝕊</h1>
-
-    <button class="enterBtn" onclick="entrarJogo()">
-      Jogo
-    </button>
-
-    <br><br>
-
-    <button class="enterBtn" onclick="entrarTreino()">
-      Treino
-    </button>
-  </div>
-</div>
-
-<div class="app hidden" id="main">
- <div class="mainTitle">𝕊𝕥𝕒𝕥𝕊</div>
+<div class="app" id="main">
  <div class="top">
   <button class="settings" onclick="openSettings()">⚙️</button>
   <div class="score">
@@ -457,7 +457,26 @@ button{border:0;color:white;font-weight:bold}
  <div class="card"><button class="dark" onclick="toggle('stats')">Estatísticas completas</button><div id="stats" class="hidden"></div></div>
  <div class="card"><button class="dark" onclick="toggle('report')">Relatório do jogo 📊</button><div id="report" class="hidden"></div></div>
  <div class="card"><button class="dark" onclick="toggle('history')">Histórico</button><div id="history" class="hidden"></div></div>
- <div class="card"><button class="yellow" onclick="exportCSV()">Exportar CSV</button><button class="danger" onclick="clearGame()">Limpar jogo</button><button class="danger" onclick="clearMapOnly()">Limpar só mapa</button><button class="danger" onclick="fullReset()">Reset completo</button></div>
+ <div class="card">
+  <button class="green" onclick="guardarSessaoAtual()">Guardar jogo/treino atual</button>
+  <button class="dark" onclick="openSessoes()">Jogos e treinos guardados</button>
+  <div class="backupGrid">
+    <button class="yellow" onclick="exportBackupJSON()">Exportar backup</button>
+    <button class="dark" onclick="document.getElementById('backupInput').click()">Importar backup</button>
+  </div>
+  <input id="backupInput" type="file" accept=".json,application/json" style="display:none" onchange="importBackupJSON(event)">
+  <button class="yellow" onclick="exportCSV()">Exportar CSV</button>
+  <button class="danger" onclick="clearGame()">Limpar jogo/treino atual</button>
+  <button class="danger" onclick="clearMapOnly()">Limpar só mapa</button>
+  <button class="danger" onclick="fullReset()">Reset completo</button>
+ </div>
+</div>
+<div id="sessoesModal" class="modal">
+  <div class="modalContent">
+    <h2>Jogos e treinos guardados</h2>
+    <div id="sessoesContent"></div>
+    <button class="danger" onclick="closeSessoes()">Fechar</button>
+  </div>
 </div>
 <div id="quickModal" class="modal">
   <div class="modalContent">
@@ -846,28 +865,180 @@ function renderReport(){
 }
 
 function renderHistory(){let h=$("history");if(!h)return;h.innerHTML="";reg.slice(0,150).forEach(r=>{let loc=(r.x!==""&&r.x!==undefined)?` · X:${r.x}% Y:${r.y}%`:"";let atk=r.attackSide==="left"?" · ataque esquerda":" · ataque direita";h.innerHTML+=`<div class="log"><b>${r.emoji||acaoObj(r.acao).emoji} ${r.acao}</b><br>${r.jogador} · ${r.periodo} · ${r.tempo}${loc}${atk}<br>${r.data}</div>`})}
-function clearGame(){if(confirm("Apagar todos os registos deste jogo?")){reg=[];subs=[];casaGoals=0;foraGoals=0;localStorage.removeItem("registos_pasteis");localStorage.removeItem("subs_pasteis");localStorage.setItem("golos_casa_pasteis",0);localStorage.setItem("golos_fora_pasteis",0);loadGame();renderAll()}}
+
+function getSessoes(){
+ return JSON.parse(localStorage.getItem("sessoes_pasteis")||"[]");
+}
+function setSessoes(lista){
+ localStorage.setItem("sessoes_pasteis",JSON.stringify(lista));
+}
+function modoAtual(){
+ return localStorage.getItem("modo_pasteis") || "jogo";
+}
+function nomeSessaoAutomatica(){
+ let tipo=modoAtual()==="treino"?"Treino":"Jogo";
+ let casa=($("casa")?$("casa").value:"AD Pastéis")||"AD Pastéis";
+ let fora=($("fora")?$("fora").value:"Adversário")||"Adversário";
+ let data=new Date().toLocaleDateString("pt-PT");
+ if(tipo==="Treino")return `${tipo} - ${data}`;
+ return `${casa} ${casaGoals}-${foraGoals} ${fora} - ${data}`;
+}
+function guardarSessaoAtual(){
+ let nome=prompt("Nome para guardar:",nomeSessaoAutomatica());
+ if(!nome)return;
+ let sessao={
+  id:Date.now(),
+  nome:nome,
+  tipo:modoAtual(),
+  data:new Date().toLocaleString("pt-PT"),
+  equipaCasa:($("casa")?$("casa").value:"AD Pastéis")||"AD Pastéis",
+  equipaFora:($("fora")?$("fora").value:"")||"",
+  resultado:{casa:casaGoals,fora:foraGoals},
+  detalhes:localStorage.getItem("detalhes_jogo_pasteis")||"",
+  total:total,
+  inField:inField,
+  dur:dur,
+  jogadores:jogadores,
+  campo:campo,
+  banco:banco,
+  reg:reg,
+  subs:subs,
+  attackSide:attackSide
+ };
+ let lista=getSessoes();
+ lista.unshift(sessao);
+ setSessoes(lista);
+ alert("Guardado com sucesso.");
+ openSessoes();
+}
+function openSessoes(){
+ let modal=$("sessoesModal");
+ let content=$("sessoesContent");
+ if(!modal||!content)return;
+ let lista=getSessoes();
+ if(!lista.length){
+  content.innerHTML="<div class='log'>Ainda não tens jogos ou treinos guardados.</div>";
+ }else{
+  content.innerHTML=lista.map(s=>{
+   let tipo=s.tipo==="treino"?"🏖️ Treino":"⚽ Jogo";
+   let resultado=s.tipo==="treino"?"":`<br>Resultado: <b>${s.resultado?.casa??0}-${s.resultado?.fora??0}</b>`;
+   return `<div class="sessionItem">
+    <b>${tipo}</b><br>
+    ${s.nome}<br>
+    <span class="small">${s.data}</span>
+    ${resultado}
+    <div class="sessionActions">
+      <button class="green" onclick="carregarSessao(${s.id})">Abrir</button>
+      <button class="danger" onclick="apagarSessao(${s.id})">🗑️</button>
+    </div>
+   </div>`;
+  }).join("");
+ }
+ modal.classList.add("show");
+}
+function closeSessoes(){
+ let modal=$("sessoesModal");
+ if(modal)modal.classList.remove("show");
+}
+function carregarSessao(id){
+ let lista=getSessoes();
+ let s=lista.find(x=>x.id===id);
+ if(!s)return;
+ if(!confirm("Abrir esta sessão? Os dados atuais não guardados serão substituídos."))return;
+ localStorage.setItem("modo_pasteis",s.tipo||"jogo");
+ localStorage.setItem("equipa_casa_pasteis",s.equipaCasa||"AD Pastéis");
+ localStorage.setItem("equipa_fora_pasteis",s.equipaFora||"");
+ localStorage.setItem("golos_casa_pasteis",s.resultado?.casa||0);
+ localStorage.setItem("golos_fora_pasteis",s.resultado?.fora||0);
+ localStorage.setItem("detalhes_jogo_pasteis",s.detalhes||"");
+ localStorage.setItem("total_jogadores_pasteis",s.total||12);
+ localStorage.setItem("jogadores_campo_pasteis",s.inField||5);
+ localStorage.setItem("duracao_periodo_pasteis",s.dur||12);
+ localStorage.setItem("jogadores_pasteis",JSON.stringify(s.jogadores||[]));
+ localStorage.setItem("campo_pasteis",JSON.stringify(s.campo||[]));
+ localStorage.setItem("banco_pasteis",JSON.stringify(s.banco||[]));
+ localStorage.setItem("registos_pasteis",JSON.stringify(s.reg||[]));
+ localStorage.setItem("subs_pasteis",JSON.stringify(s.subs||[]));
+ localStorage.setItem("attack_side_pasteis",s.attackSide||"right");
+ location.reload();
+}
+function apagarSessao(id){
+ if(!confirm("Apagar esta sessão guardada?"))return;
+ let lista=getSessoes().filter(s=>s.id!==id);
+ setSessoes(lista);
+ openSessoes();
+}
+function exportBackupJSON(){
+ let backup={
+  versao:"1.0",
+  exportadoEm:new Date().toLocaleString("pt-PT"),
+  sessoes:getSessoes(),
+  atual:{
+   modo:modoAtual(),
+   equipaCasa:($("casa")?$("casa").value:"AD Pastéis")||"AD Pastéis",
+   equipaFora:($("fora")?$("fora").value:"")||"",
+   resultado:{casa:casaGoals,fora:foraGoals},
+   detalhes:localStorage.getItem("detalhes_jogo_pasteis")||"",
+   total:total,
+   inField:inField,
+   dur:dur,
+   jogadores:jogadores,
+   campo:campo,
+   banco:banco,
+   reg:reg,
+   subs:subs,
+   attackSide:attackSide
+  }
+ };
+ let blob=new Blob([JSON.stringify(backup,null,2)],{type:"application/json;charset=utf-8"});
+ let url=URL.createObjectURL(blob);
+ let a=document.createElement("a");
+ a.href=url;
+ a.download="backup_stats_adpasteis.json";
+ a.click();
+ URL.revokeObjectURL(url);
+}
+function importBackupJSON(event){
+ let file=event.target.files[0];
+ if(!file)return;
+ let reader=new FileReader();
+ reader.onload=function(e){
+  try{
+   let backup=JSON.parse(e.target.result);
+   if(!backup.sessoes && !backup.atual){alert("Ficheiro inválido.");return;}
+   if(!confirm("Importar este backup?"))return;
+   if(Array.isArray(backup.sessoes))setSessoes(backup.sessoes);
+   if(backup.atual){
+    let s=backup.atual;
+    localStorage.setItem("modo_pasteis",s.modo||"jogo");
+    localStorage.setItem("equipa_casa_pasteis",s.equipaCasa||"AD Pastéis");
+    localStorage.setItem("equipa_fora_pasteis",s.equipaFora||"");
+    localStorage.setItem("golos_casa_pasteis",s.resultado?.casa||0);
+    localStorage.setItem("golos_fora_pasteis",s.resultado?.fora||0);
+    localStorage.setItem("detalhes_jogo_pasteis",s.detalhes||"");
+    localStorage.setItem("total_jogadores_pasteis",s.total||12);
+    localStorage.setItem("jogadores_campo_pasteis",s.inField||5);
+    localStorage.setItem("duracao_periodo_pasteis",s.dur||12);
+    localStorage.setItem("jogadores_pasteis",JSON.stringify(s.jogadores||[]));
+    localStorage.setItem("campo_pasteis",JSON.stringify(s.campo||[]));
+    localStorage.setItem("banco_pasteis",JSON.stringify(s.banco||[]));
+    localStorage.setItem("registos_pasteis",JSON.stringify(s.reg||[]));
+    localStorage.setItem("subs_pasteis",JSON.stringify(s.subs||[]));
+    localStorage.setItem("attack_side_pasteis",s.attackSide||"right");
+   }
+   alert("Backup importado.");
+   location.reload();
+  }catch(err){
+   alert("Erro ao importar backup.");
+  }
+ };
+ reader.readAsText(file);
+}
+
+function clearGame(){if(confirm("Apagar todos os registos deste jogo/treino?")){reg=[];subs=[];casaGoals=0;foraGoals=0;localStorage.removeItem("registos_pasteis");localStorage.removeItem("subs_pasteis");localStorage.setItem("golos_casa_pasteis",0);localStorage.setItem("golos_fora_pasteis",0);loadGame();renderAll()}}
 function clearMapOnly(){if(confirm("Apagar apenas ações com localização no campo?")){reg=reg.filter(r=>r.x===""||r.x===undefined);localStorage.setItem("registos_pasteis",JSON.stringify(reg));renderAll()}}
 function fullReset(){if(confirm("Apagar tudo e repor a aplicação?")){localStorage.clear();location.reload()}}
 function exportCSV(){let casa=($("casa")?$("casa").value:"AD Pastéis")||"Equipa da Casa",fora=$("fora").value||"Equipa Adversária",jogo=casa+" vs "+fora,resultado=casaGoals+"-"+foraGoals,det=localStorage.getItem("detalhes_jogo_pasteis")||"";let csv="Jogo,Resultado,Detalhes,Tipo,Data,Periodo,Tempo,Jogador,Acao,Emoji,Sai,Entra,X,Y,LadoAtaque\n";reg.forEach(r=>csv+=`"${jogo}","${resultado}","${det}","Ação","${r.data}","${r.periodo}","${r.tempo}","${r.jogador}","${r.acao}","${r.emoji||acaoObj(r.acao).emoji}","","","${r.x||""}","${r.y||""}","${r.attackSide||attackSide}"\n`);subs.forEach(s=>csv+=`"${jogo}","${resultado}","${det}","Substituição","${s.data}","${s.periodo}","${s.tempo}","","","","${s.sai}","${s.entra}","","",""\n`);let blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="estatisticas_"+casa+"_vs_"+fora+".csv";a.click();URL.revokeObjectURL(url)}
-
-
-function abrirMenu(){
- $("landingPage").classList.add("hidden");
- $("menuPage").classList.remove("hidden");
-}
-
-function entrarJogo(){
- localStorage.setItem("modo_pasteis","jogo");
- $("menuPage").classList.add("hidden");
- $("main").classList.remove("hidden");
-}
-
-function entrarTreino(){
- localStorage.setItem("modo_pasteis","treino");
- $("menuPage").classList.add("hidden");
- $("main").classList.remove("hidden");
-}
 
 function renderAll(){renderAttack();renderMap();renderFlow();renderPlayerCard();renderStats();renderReport();renderHistory();renderSubs()}
 loadGame();updateTimer();renderAll();
