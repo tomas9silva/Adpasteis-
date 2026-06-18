@@ -946,6 +946,55 @@ button{border:0;color:white;font-weight:bold}
  border-radius:999px;
 }
 
+
+.individualBox{
+ background:rgba(255,255,255,.05);
+ border:1px solid rgba(255,255,255,.12);
+ border-radius:14px;
+ padding:10px;
+ margin-top:10px;
+}
+.individualButtons{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+ margin-top:8px;
+}
+.individualButtons button{
+ background:#101b31;
+ color:white;
+ border:1px solid rgba(255,255,255,.12);
+ min-height:48px;
+}
+.exerciseReportTabs{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:6px;
+ margin-top:10px;
+}
+.exerciseReportTabs button{
+ background:#101b31;
+ color:white;
+ border:1px solid rgba(255,255,255,.12);
+ font-size:12px;
+ padding:8px 4px;
+}
+.exerciseReportBox{
+ background:rgba(255,255,255,.05);
+ border:1px solid rgba(255,255,255,.12);
+ border-radius:12px;
+ padding:9px;
+ margin-top:8px;
+ font-size:13px;
+}
+.exercisePlayerReport{
+ background:rgba(255,255,255,.06);
+ border:1px solid rgba(255,255,255,.10);
+ border-radius:10px;
+ padding:8px;
+ margin:6px 0;
+}
+
 @media(max-width:420px){
  .top{padding-top:4px}
  .score{grid-template-columns:1fr auto 1fr;gap:10px;padding-top:34px}
@@ -2167,6 +2216,9 @@ function renderExercicioAberto(ex){
  if(ex.formato==="Coletivo"){
   return renderExercicioColetivo(ex);
  }
+ if(ex.formato==="Individual"){
+  return renderExercicioIndividual(ex);
+ }
 
  let eventos=treinoEventosDoExercicio(ex.id);
 
@@ -2238,6 +2290,8 @@ function renderExercicioColetivo(ex){
    <button class="collectiveMiss" onclick="openFalhaColetivo(${ex.id})">🔴 Falha</button>
   </div>
 
+  ${renderRelatoriosExercicio(ex)}
+
   <label>Observações do exercício</label>
   <textarea class="trainingObs" onchange="saveObsExercicio(${ex.id},this.value)">${ex.observacoes||""}</textarea>
  </div>`;
@@ -2294,6 +2348,160 @@ function addColetivoEvento(exId,resultado,guardaRedes){
 
  renderExerciciosTreino();
  atualizarTreinoResumo();
+}
+
+
+
+function eventosIndividuaisDoExercicio(exId){
+ return treinoEventosDoExercicio(exId).filter(r=>r.tipoIndividual==="individual");
+}
+
+function renderExercicioIndividual(ex){
+ let eventos=eventosIndividuaisDoExercicio(ex.id);
+ let total=eventos.length;
+ let golos=eventos.filter(r=>r.resultadoIndividual==="golo").length;
+ let fora=eventos.filter(r=>r.resultadoIndividual==="fora").length;
+ let jamila=eventos.filter(r=>r.guardaRedes==="Jamila").length;
+ let crespo=eventos.filter(r=>r.guardaRedes==="Crespo").length;
+ let outro=eventos.filter(r=>r.guardaRedes==="Outro").length;
+ let eficiencia=total?Math.round((golos/total)*100):0;
+
+ return `<div class="individualBox">
+  <div class="collectiveTotal">
+   Tentativas individuais
+   <b>${total}</b>
+  </div>
+
+  <div class="collectiveBreakdown">
+   <div class="collectiveStat"><b>${golos}</b>⚽ Golos</div>
+   <div class="collectiveStat"><b>${fora}</b>❌ Fora</div>
+   <div class="collectiveStat"><b>${jamila}</b>🧤 Jamila</div>
+   <div class="collectiveStat"><b>${crespo}</b>🧤 Crespo</div>
+   <div class="collectiveStat"><b>${outro}</b>🧤 Outro</div>
+   <div class="collectiveStat"><b>${eficiencia}%</b>Eficiência</div>
+  </div>
+
+  <div class="collectiveEfficiency">
+   Eficiência: <b>${eficiencia}%</b>
+   <div class="collectiveBar"><div class="collectiveFill" style="width:${eficiencia}%"></div></div>
+  </div>
+
+  <div class="individualButtons">
+   <button onclick="openIndividualJogador(${ex.id},'golo','')">⚽ Golo</button>
+   <button onclick="openIndividualJogador(${ex.id},'fora','')">❌ Remate fora</button>
+   <button onclick="openIndividualJogador(${ex.id},'defendido','Jamila')">🧤 Defendido por Jamila</button>
+   <button onclick="openIndividualJogador(${ex.id},'defendido','Crespo')">🧤 Defendido por Crespo</button>
+   <button onclick="openIndividualJogador(${ex.id},'defendido','Outro')">🧤 Defendido por outro</button>
+  </div>
+
+  ${renderRelatoriosExercicio(ex)}
+
+  <label>Observações do exercício</label>
+  <textarea class="trainingObs" onchange="saveObsExercicio(${ex.id},this.value)">${ex.observacoes||""}</textarea>
+ </div>`;
+}
+
+function openIndividualJogador(exId,resultado,guardaRedes){
+ let modal=$("quickModal");
+ let title=$("quickTitle");
+ let content=$("quickContent");
+
+ title.innerHTML="Quem fez o remate?";
+
+ let jogadoresBase=treinoJogadores&&treinoJogadores.length?treinoJogadores:jogadores;
+
+ content.innerHTML="<div class='players'>"+
+  jogadoresBase.map(j=>`<button class="pbtn" onclick="addIndividualEvento(${exId},'${resultado}','${guardaRedes}','${esc(j)}')">${j}</button>`).join("")+
+ "</div>";
+
+ modal.classList.add("show");
+}
+
+function addIndividualEvento(exId,resultado,guardaRedes,jogador){
+ let emoji=resultado==="golo"?"⚽":(resultado==="fora"?"❌":"🧤");
+ let acao=resultado==="golo"?"Golo":(resultado==="fora"?"Remate fora":"Defendido por "+guardaRedes);
+
+ reg.unshift({
+  jogador:jogador,
+  periodo:"Treino",
+  tempo:t(),
+  acao:acao,
+  emoji:emoji,
+  data:new Date().toLocaleString("pt-PT"),
+  x:"",
+  y:"",
+  attackSide:"",
+  exercicioId:String(exId),
+  tipoRegisto:"treino",
+  tipoIndividual:"individual",
+  resultadoIndividual:resultado,
+  guardaRedes:guardaRedes||""
+ });
+
+ localStorage.setItem("registos_pasteis",JSON.stringify(reg));
+
+ let modal=$("quickModal");
+ if(modal)modal.classList.remove("show");
+
+ renderExerciciosTreino();
+ atualizarTreinoResumo();
+}
+
+function renderRelatoriosExercicio(ex){
+ return `<div class="exerciseReportTabs">
+  <button onclick="toggleExerciseReport('coletivo_${ex.id}')">Relatório coletivo</button>
+  <button onclick="toggleExerciseReport('individual_${ex.id}')">Relatório individual</button>
+ </div>
+ <div id="coletivo_${ex.id}" class="exerciseReportBox hidden">${renderRelatorioColetivoExercicio(ex)}</div>
+ <div id="individual_${ex.id}" class="exerciseReportBox hidden">${renderRelatorioIndividualExercicio(ex)}</div>`;
+}
+
+function toggleExerciseReport(id){
+ let el=$(id);
+ if(el)el.classList.toggle("hidden");
+}
+
+function renderRelatorioColetivoExercicio(ex){
+ let eventos=treinoEventosDoExercicio(ex.id);
+ let total=eventos.length;
+ let golos=eventos.filter(r=>r.resultadoIndividual==="golo"||r.resultadoColetivo==="acerto").length;
+ let falhas=eventos.filter(r=>r.resultadoIndividual==="fora"||r.resultadoColetivo==="falhou").length;
+ let defendidos=eventos.filter(r=>r.resultadoIndividual==="defendido"||r.resultadoColetivo==="defendido").length;
+ let eficiencia=total?Math.round((golos/total)*100):0;
+
+ return `<b>${ex.nome}</b><br>
+ Tentativas: <b>${total}</b><br>
+ Acertos/Golos: <b>${golos}</b><br>
+ Falhas: <b>${falhas}</b><br>
+ Defendidos: <b>${defendidos}</b><br>
+ Eficiência: <b>${eficiencia}%</b>`;
+}
+
+function renderRelatorioIndividualExercicio(ex){
+ let eventos=eventosIndividuaisDoExercicio(ex.id);
+ if(!eventos.length)return "Ainda não há dados individuais neste exercício.";
+
+ let jogadoresBase=[...new Set(eventos.map(r=>r.jogador))];
+
+ return jogadoresBase.map(j=>{
+  let ev=eventos.filter(r=>r.jogador===j);
+  let total=ev.length;
+  let golos=ev.filter(r=>r.resultadoIndividual==="golo").length;
+  let fora=ev.filter(r=>r.resultadoIndividual==="fora").length;
+  let jamila=ev.filter(r=>r.guardaRedes==="Jamila").length;
+  let crespo=ev.filter(r=>r.guardaRedes==="Crespo").length;
+  let outro=ev.filter(r=>r.guardaRedes==="Outro").length;
+  let eficiencia=total?Math.round((golos/total)*100):0;
+
+  return `<div class="exercisePlayerReport">
+   <b>${j}</b><br>
+   Tentativas: ${total}<br>
+   ⚽ Golos: ${golos}<br>
+   ❌ Fora: ${fora}<br>
+   🧤 Jamila: ${jamila} · Crespo: ${crespo} · Outro: ${outro}<br>
+   Eficiência: <b>${eficiencia}%</b>
+  </div>`;
+ }).join("");
 }
 
 
@@ -2397,7 +2605,7 @@ function saveObsExercicio(exId,valor){
 function exportCSVTreino(){
  let nome=localStorage.getItem("nome_treino_pasteis")||($("treinoNome")?.value)||"Treino";
  let data=localStorage.getItem("data_treino_pasteis")||($("treinoData")?.value)||"";
- let csv="Treino,Data,Exercicio,Tipo,Formato,Intensidade,Duracao,Acao,Emoji,ResultadoColetivo,GuardaRedes,X,Y,DataRegisto,Observacoes\n";
+ let csv="Treino,Data,Exercicio,Tipo,Formato,Intensidade,Duracao,Acao,Emoji,ResultadoColetivo,ResultadoIndividual,GuardaRedes,X,Y,DataRegisto,Observacoes\n";
 
  exerciciosTreino.forEach(ex=>{
   let eventos=treinoEventosDoExercicio(ex.id);
@@ -2405,7 +2613,7 @@ function exportCSVTreino(){
    csv+=`"${nome}","${data}","${ex.nome}","${ex.tipo}","${ex.formato}","${ex.intensidade}","${ex.duracao||""}","","","","","","","","${ex.observacoes||""}"\n`;
   }else{
    eventos.forEach(r=>{
-    csv+=`"${nome}","${data}","${ex.nome}","${ex.tipo}","${ex.formato}","${ex.intensidade}","${ex.duracao||""}","${r.acao}","${r.emoji||acaoObj(r.acao).emoji}","${r.resultadoColetivo||""}","${r.guardaRedes||""}","${r.x||""}","${r.y||""}","${r.data}","${ex.observacoes||""}"\n`;
+    csv+=`"${nome}","${data}","${ex.nome}","${ex.tipo}","${ex.formato}","${ex.intensidade}","${ex.duracao||""}","${r.acao}","${r.emoji||acaoObj(r.acao).emoji}","${r.resultadoColetivo||""}","${r.resultadoIndividual||""}","${r.guardaRedes||""}","${r.x||""}","${r.y||""}","${r.data}","${ex.observacoes||""}"\n`;
    });
   }
  });
