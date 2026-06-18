@@ -561,6 +561,94 @@ button{border:0;color:white;font-weight:bold}
  margin:8px 0 18px 0;
 }
 
+
+/* Página base de treino */
+.trainingPage{
+ max-width:520px;
+ margin:auto;
+ padding:8px 10px 85px;
+ color:white;
+}
+
+.trainingHeader{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:10px;
+ margin-bottom:14px;
+}
+
+.trainingTitle{
+ font-size:42px;
+ font-weight:900;
+ letter-spacing:2px;
+ margin:0;
+}
+
+.trainingBack{
+ width:auto;
+ padding:8px 12px;
+ background:transparent;
+ border:1px solid rgba(255,255,255,.18);
+ color:white;
+ border-radius:12px;
+ margin:0;
+}
+
+.trainingCard{
+ background:transparent;
+ border:1px solid rgba(255,255,255,.12);
+ border-radius:16px;
+ padding:12px;
+ margin:10px 0;
+}
+
+.trainingCard h3{
+ margin:0 0 10px 0;
+}
+
+.trainingGrid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+}
+
+.trainingModeBtn{
+ background:#101b31;
+ border:1px solid rgba(255,255,255,.15);
+ color:white;
+ min-height:52px;
+}
+
+.trainingModeBtn.active{
+ background:#d71920;
+}
+
+.trainingInfoLine{
+ display:flex;
+ justify-content:space-between;
+ gap:8px;
+ padding:8px 0;
+ border-bottom:1px solid rgba(255,255,255,.10);
+ font-size:14px;
+}
+
+.trainingInfoLine:last-child{
+ border-bottom:0;
+}
+
+.trainingStartBtn{
+ background:#d71920;
+ color:white;
+ margin-top:12px;
+}
+
+.trainingSecondaryBtn{
+ background:transparent;
+ border:1px solid rgba(255,255,255,.18);
+ color:white;
+}
+
 @media(max-width:420px){
  .top{padding-top:4px}
  .score{grid-template-columns:1fr auto 1fr;gap:10px;padding-top:34px}
@@ -600,9 +688,48 @@ button{border:0;color:white;font-weight:bold}
 
     <br><br>
 
-    <button class="enterBtn" onclick="entrarTreino()">
+    <button class="enterBtn" onclick="abrirTreinoPage()">
       Treino
     </button>
+  </div>
+</div>
+
+
+<div id="trainingPage" class="trainingPage hidden">
+  <div class="trainingHeader">
+    <button class="trainingBack" onclick="voltarMenu()">← Voltar</button>
+    <div class="trainingTitle">Treino</div>
+    <button class="trainingBack" onclick="openSettings()">⚙️</button>
+  </div>
+
+  <div class="trainingCard">
+    <h3>Tipo de treino</h3>
+    <div class="trainingGrid">
+      <button class="trainingModeBtn active" onclick="setTipoTreino('Técnico', this)">Técnico</button>
+      <button class="trainingModeBtn" onclick="setTipoTreino('Tático', this)">Tático</button>
+      <button class="trainingModeBtn" onclick="setTipoTreino('Físico', this)">Físico</button>
+      <button class="trainingModeBtn" onclick="setTipoTreino('Jogo reduzido', this)">Jogo reduzido</button>
+    </div>
+  </div>
+
+  <div class="trainingCard">
+    <h3>Dados do treino</h3>
+    <label>Nome do treino</label>
+    <input id="treinoNome" placeholder="Ex: Treino finalização">
+    <label>Data</label>
+    <input id="treinoData" type="date">
+    <label>Objetivo principal</label>
+    <textarea id="treinoObjetivo" placeholder="Ex: melhorar remates de livre, reação defensiva, transições..."></textarea>
+  </div>
+
+  <div class="trainingCard">
+    <h3>Resumo</h3>
+    <div class="trainingInfoLine"><span>Jogadores no plantel</span><b id="treinoTotalJogadores">0</b></div>
+    <div class="trainingInfoLine"><span>Jogadores ativos</span><b id="treinoCampoJogadores">0</b></div>
+    <div class="trainingInfoLine"><span>Ações registadas</span><b id="treinoAcoes">0</b></div>
+
+    <button class="trainingStartBtn" onclick="iniciarTreino()">Iniciar recolha de treino</button>
+    <button class="trainingSecondaryBtn" onclick="guardarSessaoAtual()">Guardar treino atual</button>
   </div>
 </div>
 
@@ -1188,7 +1315,7 @@ function nomeSessaoAutomatica(){
  let casa=($("casa")?$("casa").value:"AD Pastéis")||"AD Pastéis";
  let fora=($("fora")?$("fora").value:"Adversário")||"Adversário";
  let data=new Date().toLocaleDateString("pt-PT");
- if(tipo==="Treino")return `${tipo} - ${data}`;
+ if(tipo==="Treino"){let tn=localStorage.getItem("nome_treino_pasteis")||"Treino"; return `${tn} - ${data}`;}
  return `${casa} ${casaGoals}-${foraGoals} ${fora} - ${data}`;
 }
 function guardarSessaoAtual(){
@@ -1211,7 +1338,8 @@ function guardarSessaoAtual(){
   banco:[...banco],
   reg:JSON.parse(JSON.stringify(reg)),
   subs:JSON.parse(JSON.stringify(subs)),
-  attackSide:attackSide
+  attackSide:attackSide,
+  treino:{tipo:tipoTreinoAtual,nome:localStorage.getItem("nome_treino_pasteis")||"",data:localStorage.getItem("data_treino_pasteis")||"",objetivo:localStorage.getItem("objetivo_treino_pasteis")||""}
  };
  let lista=getSessoes();
  lista.unshift(sessao);
@@ -1296,7 +1424,8 @@ function exportBackupJSON(){
    banco:[...banco],
    reg:JSON.parse(JSON.stringify(reg)),
    subs:JSON.parse(JSON.stringify(subs)),
-   attackSide:attackSide
+   attackSide:attackSide,
+   treino:{tipo:tipoTreinoAtual,nome:localStorage.getItem("nome_treino_pasteis")||"",data:localStorage.getItem("data_treino_pasteis")||"",objetivo:localStorage.getItem("objetivo_treino_pasteis")||""}
   }
  };
  let blob=new Blob([JSON.stringify(backup,null,2)],{type:"application/json;charset=utf-8"});
@@ -1359,13 +1488,13 @@ function abrirMenu(){
 function entrarJogo(){
  localStorage.setItem("modo_pasteis","jogo");
  $("menuPage").classList.add("hidden");
+ if($("trainingPage"))$("trainingPage").classList.add("hidden");
  $("main").classList.remove("hidden");
+ aplicarModoVisual();
 }
 
 function entrarTreino(){
- localStorage.setItem("modo_pasteis","treino");
- $("menuPage").classList.add("hidden");
- $("main").classList.remove("hidden");
+ abrirTreinoPage();
 }
 
 function aplicarEntradaInicial(){
@@ -1373,11 +1502,73 @@ function aplicarEntradaInicial(){
   localStorage.removeItem("abrir_direto_pasteis");
   $("landingPage").classList.add("hidden");
   if($("menuPage"))$("menuPage").classList.add("hidden");
+  if($("trainingPage"))$("trainingPage").classList.add("hidden");
   $("main").classList.remove("hidden");
  }
 }
 
-function renderAll(){renderAttack();renderMap();renderFlow();renderPlayerCard();renderStats();renderReport();renderHistory();renderSubs()}
+
+let tipoTreinoAtual=localStorage.getItem("tipo_treino_pasteis") || "Técnico";
+
+function abrirTreinoPage(){
+ localStorage.setItem("modo_pasteis","treino");
+ $("menuPage").classList.add("hidden");
+ $("trainingPage").classList.remove("hidden");
+ atualizarTreinoResumo();
+}
+
+function voltarMenu(){
+ if($("trainingPage"))$("trainingPage").classList.add("hidden");
+ if($("main"))$("main").classList.add("hidden");
+ $("menuPage").classList.remove("hidden");
+}
+
+function setTipoTreino(tipo,btn){
+ tipoTreinoAtual=tipo;
+ localStorage.setItem("tipo_treino_pasteis",tipo);
+
+ document.querySelectorAll(".trainingModeBtn").forEach(b=>b.classList.remove("active"));
+ if(btn)btn.classList.add("active");
+}
+
+function atualizarTreinoResumo(){
+ if(!$("treinoTotalJogadores"))return;
+
+ $("treinoTotalJogadores").innerText=jogadores.length;
+ $("treinoCampoJogadores").innerText=campo.length;
+ $("treinoAcoes").innerText=reg.length;
+
+ if($("treinoData") && !$("treinoData").value){
+  $("treinoData").value=new Date().toISOString().slice(0,10);
+ }
+
+ if($("treinoNome") && !$("treinoNome").value){
+  $("treinoNome").value="Treino - "+new Date().toLocaleDateString("pt-PT");
+ }
+}
+
+function iniciarTreino(){
+ localStorage.setItem("modo_pasteis","treino");
+ localStorage.setItem("tipo_treino_pasteis",tipoTreinoAtual);
+ localStorage.setItem("nome_treino_pasteis",$("treinoNome")?.value || "");
+ localStorage.setItem("data_treino_pasteis",$("treinoData")?.value || "");
+ localStorage.setItem("objetivo_treino_pasteis",$("treinoObjetivo")?.value || "");
+
+ if($("trainingPage"))$("trainingPage").classList.add("hidden");
+ $("main").classList.remove("hidden");
+
+ aplicarModoVisual();
+}
+
+function aplicarModoVisual(){
+ let modo=localStorage.getItem("modo_pasteis") || "jogo";
+
+ if(modo==="treino"){
+  if($("fora"))$("fora").placeholder="Sem adversário";
+ }
+}
+
+function renderAll(){renderAttack();renderMap();renderFlow();renderPlayerCard();renderStats();renderReport();renderHistory();renderSubs();atualizarTreinoResumo();aplicarModoVisual()}
 loadGame();updateTimer();renderAll();aplicarEntradaInicial();
 </script>
 </body>
