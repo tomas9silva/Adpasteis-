@@ -865,6 +865,87 @@ button{border:0;color:white;font-weight:bold}
  font-size:13px;
 }
 
+
+.collectiveCounterBox{
+ background:rgba(255,255,255,.05);
+ border:1px solid rgba(255,255,255,.12);
+ border-radius:14px;
+ padding:10px;
+ margin-top:10px;
+}
+
+.collectiveTotal{
+ text-align:center;
+ font-size:14px;
+ margin-bottom:10px;
+}
+
+.collectiveTotal b{
+ display:block;
+ font-size:42px;
+ color:white;
+ line-height:1;
+}
+
+.collectiveButtons{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+ margin-top:8px;
+}
+
+.collectiveHit{
+ background:#26a626!important;
+ color:white!important;
+ min-height:54px;
+}
+
+.collectiveMiss{
+ background:#d71920!important;
+ color:white!important;
+ min-height:54px;
+}
+
+.collectiveBreakdown{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:6px;
+ margin-top:8px;
+}
+
+.collectiveStat{
+ background:rgba(255,255,255,.07);
+ border:1px solid rgba(255,255,255,.10);
+ border-radius:10px;
+ padding:8px;
+ text-align:center;
+ font-size:12px;
+}
+
+.collectiveStat b{
+ display:block;
+ font-size:20px;
+ color:#ffd21a;
+}
+
+.collectiveEfficiency{
+ margin-top:10px;
+}
+
+.collectiveBar{
+ height:9px;
+ background:rgba(255,255,255,.18);
+ border-radius:999px;
+ overflow:hidden;
+ margin-top:5px;
+}
+
+.collectiveFill{
+ height:100%;
+ background:#26a626;
+ border-radius:999px;
+}
+
 @media(max-width:420px){
  .top{padding-top:4px}
  .score{grid-template-columns:1fr auto 1fr;gap:10px;padding-top:34px}
@@ -949,7 +1030,7 @@ button{border:0;color:white;font-weight:bold}
       <h3>Exercícios</h3>
       <label>Nome do exercício</label><input id="exNome" placeholder="Ex: Finalização após passe">
       <div class="trainingSelectRow">
-        <div><label>Formato</label><select id="exFormato"><option>Individual</option><option>Coletivo</option><option>Grupos</option><option>Guarda-redes</option></select></div>
+        <div><label>Formato</label><select id="exFormato"><option>Coletivo</option><option>Individual</option><option>Grupos</option><option>Guarda-redes</option></select></div>
         <div><label>Arena</label><select id="exArena"><option value="sim">Com mini arena</option><option value="nao">Sem mini arena</option></select></div>
       </div>
       <div class="trainingSelectRow">
@@ -2083,6 +2164,10 @@ function treinoEventosDoExercicio(exId){
 }
 
 function renderExercicioAberto(ex){
+ if(ex.formato==="Coletivo"){
+  return renderExercicioColetivo(ex);
+ }
+
  let eventos=treinoEventosDoExercicio(ex.id);
 
  let stats=[
@@ -2115,6 +2200,102 @@ function renderExercicioAberto(ex){
 
  return html;
 }
+
+
+function renderExercicioColetivo(ex){
+ let eventos=treinoEventosDoExercicio(ex.id).filter(r=>r.tipoColetivo==="coletivo");
+ let total=eventos.length;
+ let acertos=eventos.filter(r=>r.resultadoColetivo==="acerto").length;
+ let falhou=eventos.filter(r=>r.resultadoColetivo==="falhou").length;
+ let jamila=eventos.filter(r=>r.resultadoColetivo==="defendido"&&r.guardaRedes==="Jamila").length;
+ let crespo=eventos.filter(r=>r.resultadoColetivo==="defendido"&&r.guardaRedes==="Crespo").length;
+ let outro=eventos.filter(r=>r.resultadoColetivo==="defendido"&&r.guardaRedes==="Outro").length;
+ let defendidos=jamila+crespo+outro;
+ let eficiencia=total?Math.round((acertos/total)*100):0;
+
+ return `<div class="collectiveCounterBox">
+  <div class="collectiveTotal">
+   Tentativas totais
+   <b>${total}</b>
+  </div>
+
+  <div class="collectiveBreakdown">
+   <div class="collectiveStat"><b>${acertos}</b>🟢 Acertos</div>
+   <div class="collectiveStat"><b>${falhou}</b>🔴 Falhou</div>
+   <div class="collectiveStat"><b>${jamila}</b>🧤 Jamila</div>
+   <div class="collectiveStat"><b>${crespo}</b>🧤 Crespo</div>
+   <div class="collectiveStat"><b>${outro}</b>🧤 Outro GR</div>
+   <div class="collectiveStat"><b>${defendidos}</b>Defendidos</div>
+  </div>
+
+  <div class="collectiveEfficiency">
+   Eficiência: <b>${eficiencia}%</b>
+   <div class="collectiveBar"><div class="collectiveFill" style="width:${eficiencia}%"></div></div>
+  </div>
+
+  <div class="collectiveButtons">
+   <button class="collectiveHit" onclick="addColetivoAcerto(${ex.id})">🟢 Acerto</button>
+   <button class="collectiveMiss" onclick="openFalhaColetivo(${ex.id})">🔴 Falha</button>
+  </div>
+
+  <label>Observações do exercício</label>
+  <textarea class="trainingObs" onchange="saveObsExercicio(${ex.id},this.value)">${ex.observacoes||""}</textarea>
+ </div>`;
+}
+
+function addColetivoAcerto(exId){
+ addColetivoEvento(exId,"acerto","");
+}
+
+function openFalhaColetivo(exId){
+ let modal=$("quickModal");
+ let title=$("quickTitle");
+ let content=$("quickContent");
+
+ title.innerHTML="Como terminou a tentativa?";
+
+ content.innerHTML=`
+  <div class="grid">
+   <button class="actionBtn dark" onclick="addColetivoEvento(${exId},'falhou','')">🔴 Falhou</button>
+   <button class="actionBtn dark" onclick="addColetivoEvento(${exId},'defendido','Jamila')">🧤 Jamila defendeu</button>
+   <button class="actionBtn dark" onclick="addColetivoEvento(${exId},'defendido','Crespo')">🧤 Crespo defendeu</button>
+   <button class="actionBtn dark" onclick="addColetivoEvento(${exId},'defendido','Outro')">🧤 Outro defendeu</button>
+  </div>
+ `;
+
+ modal.classList.add("show");
+}
+
+function addColetivoEvento(exId,resultado,guardaRedes){
+ let emoji=resultado==="acerto"?"🟢":(resultado==="falhou"?"🔴":"🧤");
+ let acao=resultado==="acerto"?"Tentativa acertada":(resultado==="falhou"?"Tentativa falhada":guardaRedes+" defendeu");
+
+ reg.unshift({
+  jogador:"Coletivo",
+  periodo:"Treino",
+  tempo:t(),
+  acao:acao,
+  emoji:emoji,
+  data:new Date().toLocaleString("pt-PT"),
+  x:"",
+  y:"",
+  attackSide:"",
+  exercicioId:String(exId),
+  tipoRegisto:"treino",
+  tipoColetivo:"coletivo",
+  resultadoColetivo:resultado,
+  guardaRedes:guardaRedes||""
+ });
+
+ localStorage.setItem("registos_pasteis",JSON.stringify(reg));
+
+ let modal=$("quickModal");
+ if(modal)modal.classList.remove("show");
+
+ renderExerciciosTreino();
+ atualizarTreinoResumo();
+}
+
 
 function renderMiniArenaTreino(ex,eventos){
  let html=`<div class="trainingMiniArena" onclick="pickMiniArena(event,${ex.id})">
@@ -2216,15 +2397,15 @@ function saveObsExercicio(exId,valor){
 function exportCSVTreino(){
  let nome=localStorage.getItem("nome_treino_pasteis")||($("treinoNome")?.value)||"Treino";
  let data=localStorage.getItem("data_treino_pasteis")||($("treinoData")?.value)||"";
- let csv="Treino,Data,Exercicio,Tipo,Formato,Intensidade,Duracao,Acao,Emoji,X,Y,DataRegisto,Observacoes\n";
+ let csv="Treino,Data,Exercicio,Tipo,Formato,Intensidade,Duracao,Acao,Emoji,ResultadoColetivo,GuardaRedes,X,Y,DataRegisto,Observacoes\n";
 
  exerciciosTreino.forEach(ex=>{
   let eventos=treinoEventosDoExercicio(ex.id);
   if(!eventos.length){
-   csv+=`"${nome}","${data}","${ex.nome}","${ex.tipo}","${ex.formato}","${ex.intensidade}","${ex.duracao||""}","","","","","","${ex.observacoes||""}"\n`;
+   csv+=`"${nome}","${data}","${ex.nome}","${ex.tipo}","${ex.formato}","${ex.intensidade}","${ex.duracao||""}","","","","","","","","${ex.observacoes||""}"\n`;
   }else{
    eventos.forEach(r=>{
-    csv+=`"${nome}","${data}","${ex.nome}","${ex.tipo}","${ex.formato}","${ex.intensidade}","${ex.duracao||""}","${r.acao}","${r.emoji||acaoObj(r.acao).emoji}","${r.x||""}","${r.y||""}","${r.data}","${ex.observacoes||""}"\n`;
+    csv+=`"${nome}","${data}","${ex.nome}","${ex.tipo}","${ex.formato}","${ex.intensidade}","${ex.duracao||""}","${r.acao}","${r.emoji||acaoObj(r.acao).emoji}","${r.resultadoColetivo||""}","${r.guardaRedes||""}","${r.x||""}","${r.y||""}","${r.data}","${ex.observacoes||""}"\n`;
    });
   }
  });
@@ -2257,10 +2438,19 @@ function exportPDFTreino(){
   <p>${ex.tipo} · ${ex.formato} · ${ex.intensidade} · ${ex.duracao||"-"} min</p>
   <p><b>Ações:</b> ${eventos.length}</p>
   <ul>`;
-  acoes.forEach(a=>{
-   let n=eventos.filter(r=>r.acao===a.nome).length;
-   if(n>0)body+=`<li>${a.emoji} ${a.nome}: ${n}</li>`;
-  });
+  if(ex.formato==="Coletivo"){
+   let acertos=eventos.filter(r=>r.resultadoColetivo==="acerto").length;
+   let falhou=eventos.filter(r=>r.resultadoColetivo==="falhou").length;
+   let jamila=eventos.filter(r=>r.guardaRedes==="Jamila").length;
+   let crespo=eventos.filter(r=>r.guardaRedes==="Crespo").length;
+   let outro=eventos.filter(r=>r.guardaRedes==="Outro").length;
+   body+=`<li>Acertos: ${acertos}</li><li>Falhou: ${falhou}</li><li>Jamila defendeu: ${jamila}</li><li>Crespo defendeu: ${crespo}</li><li>Outro defendeu: ${outro}</li>`;
+  }else{
+   acoes.forEach(a=>{
+    let n=eventos.filter(r=>r.acao===a.nome).length;
+    if(n>0)body+=`<li>${a.emoji} ${a.nome}: ${n}</li>`;
+   });
+  }
   body+=`</ul><p><b>Observações:</b> ${ex.observacoes||"-"}</p><hr>`;
  });
 
