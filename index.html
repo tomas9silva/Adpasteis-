@@ -2413,6 +2413,32 @@ function entrarJogo(){
  aplicarModoVisual();
 }
 
+
+function abrirTreinoPage(){
+ localStorage.setItem("modo_pasteis","treino");
+
+ const landing=$("landingPage");
+ const menu=$("menuPage");
+ const training=$("trainingPage");
+ const main=$("main");
+ const settings=$("settingsPage");
+
+ if(landing) landing.classList.add("hidden");
+ if(menu) menu.classList.add("hidden");
+ if(main) main.classList.add("hidden");
+ if(settings) settings.classList.add("hidden");
+ if(training) training.classList.remove("hidden");
+
+ carregarDadosTreino();
+
+ ["grupo","presencas","exercicios","resumo"].forEach(t=>{
+  const sec=$("trainingSection"+t.charAt(0).toUpperCase()+t.slice(1));
+  const btn=$("tab"+t.charAt(0).toUpperCase()+t.slice(1));
+  if(sec) sec.classList.add("hidden");
+  if(btn) btn.classList.remove("active");
+ });
+}
+
 function entrarTreino(){
  abrirTreinoPage();
 }
