@@ -1487,9 +1487,7 @@ input[type="date"]{
    <h1>𝕊𝕥𝕒𝕥𝕊</h1>
 <p class="landingSub">Match Analysis Platform</p>
 <p class="landingVersion">Version 1.0</p>
-    <button onclick="abrirMenu()" class="enterBtn">
-  ENTRAR
-</button>
+    <button id="enterMainBtn" onclick="abrirMenu()" class="enterBtn">ENTRAR</button>
   </div>
 </div>
 
@@ -1794,6 +1792,21 @@ const acoes=[
 ];
 
 function $(id){return document.getElementById(id)}
+
+function abrirMenu(){
+ const landing=document.getElementById("landingPage");
+ const menu=document.getElementById("menuPage");
+ const main=document.getElementById("main");
+ const training=document.getElementById("trainingPage");
+ const settings=document.getElementById("settingsPage");
+
+ if(landing) landing.classList.add("hidden");
+ if(menu) menu.classList.remove("hidden");
+ if(main) main.classList.add("hidden");
+ if(training) training.classList.add("hidden");
+ if(settings) settings.classList.add("hidden");
+}
+
 function toggle(id){$(id).classList.toggle("hidden")}
 function t(){let m=Math.floor(time/60),s=time%60;return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")}
 function saveAll(){localStorage.setItem("jogadores_pasteis",JSON.stringify(jogadores));localStorage.setItem("campo_pasteis",JSON.stringify(campo));localStorage.setItem("banco_pasteis",JSON.stringify(banco));localStorage.setItem("registos_pasteis",JSON.stringify(reg));localStorage.setItem("subs_pasteis",JSON.stringify(subs))}
@@ -2390,19 +2403,7 @@ function fullReset(){if(confirm("Apagar tudo e repor a aplicação?")){localStor
 function exportCSV(){let casa=($("casa")?$("casa").value:"AD Pastéis")||"Equipa da Casa",fora=$("fora").value||"Equipa Adversária",jogo=casa+" vs "+fora,resultado=casaGoals+"-"+foraGoals,det=localStorage.getItem("detalhes_jogo_pasteis")||"";let csv="Jogo,Resultado,Detalhes,Tipo,Data,Periodo,Tempo,Jogador,Acao,Emoji,Sai,Entra,X,Y,LadoAtaque\n";reg.forEach(r=>csv+=`"${jogo}","${resultado}","${det}","Ação","${r.data}","${r.periodo}","${r.tempo}","${r.jogador}","${r.acao}","${r.emoji||acaoObj(r.acao).emoji}","","","${r.x||""}","${r.y||""}","${r.attackSide||attackSide}"\n`);subs.forEach(s=>csv+=`"${jogo}","${resultado}","${det}","Substituição","${s.data}","${s.periodo}","${s.tempo}","","","","${s.sai}","${s.entra}","","",""\n`);let blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="estatisticas_"+casa+"_vs_"+fora+".csv";a.click();URL.revokeObjectURL(url)}
 
 
-function abrirMenu(){
- let landing=$("landingPage");
- let menu=$("menuPage");
- let main=$("main");
- let treino=$("trainingPage");
- let settings=$("settingsPage");
 
- if(landing)landing.classList.add("hidden");
- if(menu)menu.classList.remove("hidden");
- if(main)main.classList.add("hidden");
- if(treino)treino.classList.add("hidden");
- if(settings)settings.classList.add("hidden");
-}
 
 function entrarJogo(){
  localStorage.setItem("modo_pasteis","jogo");
@@ -2433,7 +2434,6 @@ let tipoTreinoAtual=localStorage.getItem("tipo_treino_pasteis") || "Técnico";
 
 function openTrainingTab(tab){
  const tabs=["grupo","presencas","exercicios","resumo"];
-
  const secAtual=$("trainingSection"+tab.charAt(0).toUpperCase()+tab.slice(1));
  const btnAtual=$("tab"+tab.charAt(0).toUpperCase()+tab.slice(1));
  const jaAberta=btnAtual && btnAtual.classList.contains("active");
@@ -3354,6 +3354,17 @@ function aplicarModoVisual(){
 
 function renderAll(){renderAttack();renderMap();renderFlow();renderPlayerCard();renderStats();renderReport();renderHistory();renderSubs();atualizarTreinoResumo();aplicarModoVisual()}
 loadGame();updateTimer();renderAll();aplicarEntradaInicial();
+
+document.addEventListener("DOMContentLoaded",function(){
+ const btn=document.getElementById("enterMainBtn");
+ if(btn){
+  btn.addEventListener("click",function(e){
+   e.preventDefault();
+   abrirMenu();
+  });
+ }
+});
+
 </script>
 </body>
 </html>
