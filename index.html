@@ -649,6 +649,19 @@ button{border:0;color:white;font-weight:bold}
  color:white;
 }
 
+
+.gameHeader{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.gameBack{width:auto;padding:8px 12px;background:transparent;border:1px solid rgba(255,255,255,.18);color:white;border-radius:12px;margin:0}
+.trainingExercise{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:10px;margin:8px 0}
+.exerciseMeta{display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;margin-top:6px;opacity:.9}
+.exerciseActions{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.presenceGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.presenceBtn{background:#101b31;border:1px solid rgba(255,255,255,.14);color:white;font-size:12px;padding:8px}
+.presenceBtn.active{background:#26a626;color:white}
+.exerciseSmallBtn{background:transparent;border:1px solid rgba(255,255,255,.18);color:white}
+.exerciseDeleteBtn{background:#d71920;color:white}
+.trainingSelectRow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
 @media(max-width:420px){
  .top{padding-top:4px}
  .score{grid-template-columns:1fr auto 1fr;gap:10px;padding-top:34px}
@@ -703,44 +716,59 @@ button{border:0;color:white;font-weight:bold}
   </div>
 
   <div class="trainingCard">
-    <h3>Tipo de treino</h3>
+    <h3>Criar treino</h3>
     <div class="trainingGrid">
       <button class="trainingModeBtn active" onclick="setTipoTreino('Técnico', this)">Técnico</button>
       <button class="trainingModeBtn" onclick="setTipoTreino('Tático', this)">Tático</button>
       <button class="trainingModeBtn" onclick="setTipoTreino('Físico', this)">Físico</button>
       <button class="trainingModeBtn" onclick="setTipoTreino('Jogo reduzido', this)">Jogo reduzido</button>
     </div>
+    <label>Nome do treino</label><input id="treinoNome" placeholder="Ex: Treino finalização">
+    <label>Data</label><input id="treinoData" type="date">
+    <label>Duração prevista</label><input id="treinoDuracao" type="number" min="1" placeholder="Ex: 90">
+    <label>Objetivo principal</label><textarea id="treinoObjetivo" placeholder="Ex: melhorar finalização, reação defensiva, transições..."></textarea>
   </div>
 
   <div class="trainingCard">
-    <h3>Dados do treino</h3>
-    <label>Nome do treino</label>
-    <input id="treinoNome" placeholder="Ex: Treino finalização">
-    <label>Data</label>
-    <input id="treinoData" type="date">
-    <label>Objetivo principal</label>
-    <textarea id="treinoObjetivo" placeholder="Ex: melhorar remates de livre, reação defensiva, transições..."></textarea>
+    <h3>Presenças</h3>
+    <div class="small">Seleciona quem está presente no treino.</div>
+    <div id="presenceGrid" class="presenceGrid"></div>
+  </div>
+
+  <div class="trainingCard">
+    <h3>Exercícios</h3>
+    <label>Nome do exercício</label><input id="exNome" placeholder="Ex: Finalização após passe">
+    <div class="trainingSelectRow">
+      <div><label>Formato</label><select id="exFormato"><option>Individual</option><option>Coletivo</option><option>Grupos</option><option>Guarda-redes</option></select></div>
+      <div><label>Arena</label><select id="exArena"><option value="sim">Com campo</option><option value="nao">Sem campo</option></select></div>
+    </div>
+    <div class="trainingSelectRow">
+      <div><label>Tipo</label><select id="exTipo"><option>Técnico</option><option>Tático</option><option>Físico</option><option>Finalização</option><option>Guarda-redes</option><option>Jogo reduzido</option></select></div>
+      <div><label>Intensidade</label><select id="exIntensidade"><option>Baixa</option><option>Média</option><option>Alta</option></select></div>
+    </div>
+    <label>Duração</label><input id="exDuracao" type="number" min="1" placeholder="Minutos">
+    <button class="trainingStartBtn" onclick="addExercicioTreino()">Adicionar exercício</button>
+    <div id="exerciciosLista"></div>
   </div>
 
   <div class="trainingCard">
     <h3>Resumo</h3>
-    <div class="trainingInfoLine"><span>Jogadores no plantel</span><b id="treinoTotalJogadores">0</b></div>
-    <div class="trainingInfoLine"><span>Jogadores ativos</span><b id="treinoCampoJogadores">0</b></div>
+    <div class="trainingInfoLine"><span>Presentes</span><b id="treinoPresentes">0</b></div>
+    <div class="trainingInfoLine"><span>Exercícios</span><b id="treinoExercicios">0</b></div>
     <div class="trainingInfoLine"><span>Ações registadas</span><b id="treinoAcoes">0</b></div>
-
-    <button class="trainingStartBtn" onclick="iniciarTreino()">Iniciar recolha de treino</button>
+    <button class="trainingStartBtn" onclick="iniciarTreino()">Iniciar recolha geral</button>
     <button class="trainingSecondaryBtn" onclick="guardarSessaoAtual()">Guardar treino atual</button>
   </div>
 </div>
 
 <div class="app hidden" id="main">
- <div class="mainTitle">
-  𝕊𝕥𝕒𝕥𝕊
+ <div class="gameHeader">
+  <button class="gameBack" onclick="voltarMenu()">← Voltar</button>
+  <div class="mainTitle">𝕊𝕥𝕒𝕥𝕊</div>
+  <button class="gameBack" onclick="openSettings()">⚙️</button>
  </div>
 
  <div class="top">
-  <button class="settings" onclick="openSettings()">⚙️</button>
-
   <div class="teamBlock">
    <input id="casa" class="team" value="AD Pastéis" oninput="saveGame()">
    <div class="goalBtns">
@@ -867,6 +895,9 @@ let casaGoals=+localStorage.getItem("golos_casa_pasteis")||0;
 let foraGoals=+localStorage.getItem("golos_fora_pasteis")||0;
 let attackSide=localStorage.getItem("attack_side_pasteis")||"right";
 let flow={x:null,y:null,jogador:null,acao:null,step:"idle"};
+let exerciciosTreino=JSON.parse(localStorage.getItem("exercicios_treino_pasteis")||"[]");
+let presencasTreino=JSON.parse(localStorage.getItem("presencas_treino_pasteis")||"[]");
+let exercicioAtualId=localStorage.getItem("exercicio_atual_pasteis")||"";
 
 const acoes=[
  {nome:"Golo dentro da área",emoji:"⚽"},
@@ -976,7 +1007,8 @@ function confirmarAcaoRapida(){
   data:new Date().toLocaleString("pt-PT"),
   x:flow.x,
   y:flow.y,
-  attackSide:attackSide
+  attackSide:attackSide,
+  exercicioId:exercicioAtualId
  });
 
  localStorage.setItem("registos_pasteis",JSON.stringify(reg));
@@ -1508,43 +1540,113 @@ function aplicarEntradaInicial(){
 }
 
 
+
 let tipoTreinoAtual=localStorage.getItem("tipo_treino_pasteis") || "Técnico";
 
 function abrirTreinoPage(){
  localStorage.setItem("modo_pasteis","treino");
  $("menuPage").classList.add("hidden");
  $("trainingPage").classList.remove("hidden");
+ carregarDadosTreino();
  atualizarTreinoResumo();
 }
 
 function voltarMenu(){
  if($("trainingPage"))$("trainingPage").classList.add("hidden");
  if($("main"))$("main").classList.add("hidden");
+ if($("settingsPage"))$("settingsPage").classList.add("hidden");
  $("menuPage").classList.remove("hidden");
 }
 
 function setTipoTreino(tipo,btn){
  tipoTreinoAtual=tipo;
  localStorage.setItem("tipo_treino_pasteis",tipo);
-
  document.querySelectorAll(".trainingModeBtn").forEach(b=>b.classList.remove("active"));
  if(btn)btn.classList.add("active");
 }
 
+function carregarDadosTreino(){
+ if($("treinoData") && !$("treinoData").value)$("treinoData").value=localStorage.getItem("data_treino_pasteis") || new Date().toISOString().slice(0,10);
+ if($("treinoNome") && !$("treinoNome").value)$("treinoNome").value=localStorage.getItem("nome_treino_pasteis") || ("Treino - "+new Date().toLocaleDateString("pt-PT"));
+ if($("treinoDuracao") && !$("treinoDuracao").value)$("treinoDuracao").value=localStorage.getItem("duracao_treino_pasteis") || "";
+ if($("treinoObjetivo") && !$("treinoObjetivo").value)$("treinoObjetivo").value=localStorage.getItem("objetivo_treino_pasteis") || "";
+ if(!presencasTreino.length){
+  presencasTreino=[...jogadores];
+  localStorage.setItem("presencas_treino_pasteis",JSON.stringify(presencasTreino));
+ }
+ renderPresencas();
+ renderExerciciosTreino();
+}
+
+function renderPresencas(){
+ let grid=$("presenceGrid");
+ if(!grid)return;
+ grid.innerHTML="";
+ jogadores.forEach(j=>{
+  let b=document.createElement("button");
+  b.className="presenceBtn"+(presencasTreino.includes(j)?" active":"");
+  b.textContent=j;
+  b.onclick=()=>{
+   presencasTreino=presencasTreino.includes(j)?presencasTreino.filter(x=>x!==j):[...presencasTreino,j];
+   localStorage.setItem("presencas_treino_pasteis",JSON.stringify(presencasTreino));
+   renderPresencas();
+   atualizarTreinoResumo();
+  };
+  grid.appendChild(b);
+ });
+}
+
+function addExercicioTreino(){
+ let nome=($("exNome")?.value||"").trim();
+ if(!nome){alert("Escreve o nome do exercício.");return;}
+ let ex={id:Date.now(),nome,formato:$("exFormato")?.value||"Individual",arena:$("exArena")?.value||"sim",tipo:$("exTipo")?.value||"Técnico",intensidade:$("exIntensidade")?.value||"Média",duracao:$("exDuracao")?.value||"",criado:new Date().toLocaleString("pt-PT")};
+ exerciciosTreino.push(ex);
+ localStorage.setItem("exercicios_treino_pasteis",JSON.stringify(exerciciosTreino));
+ $("exNome").value=""; $("exDuracao").value="";
+ renderExerciciosTreino(); atualizarTreinoResumo();
+}
+
+function renderExerciciosTreino(){
+ let box=$("exerciciosLista");
+ if(!box)return;
+ if(!exerciciosTreino.length){box.innerHTML="<div class='log'>Ainda não criaste exercícios.</div>";return;}
+ box.innerHTML=exerciciosTreino.map(ex=>{
+  let arena=ex.arena==="sim"?"Com campo":"Sem campo";
+  let ativo=String(ex.id)===String(exercicioAtualId)?" · ativo":"";
+  return `<div class="trainingExercise"><b>${ex.nome}${ativo}</b><div class="exerciseMeta"><span>${ex.tipo}</span><span>${ex.formato}</span><span>${arena}</span><span>${ex.intensidade}</span><span>${ex.duracao?ex.duracao+" min":"Sem duração"}</span></div><div class="exerciseActions"><button class="exerciseSmallBtn" onclick="abrirExercicio(${ex.id})">Abrir</button><button class="exerciseDeleteBtn" onclick="apagarExercicio(${ex.id})">Apagar</button></div></div>`;
+ }).join("");
+}
+
+function abrirExercicio(id){
+ let ex=exerciciosTreino.find(e=>e.id===id);
+ if(!ex)return;
+ exercicioAtualId=String(id);
+ localStorage.setItem("exercicio_atual_pasteis",exercicioAtualId);
+ localStorage.setItem("modo_pasteis","treino");
+ localStorage.setItem("nome_treino_pasteis",$("treinoNome")?.value || "");
+ localStorage.setItem("data_treino_pasteis",$("treinoData")?.value || "");
+ localStorage.setItem("duracao_treino_pasteis",$("treinoDuracao")?.value || "");
+ localStorage.setItem("objetivo_treino_pasteis",$("treinoObjetivo")?.value || "");
+ if(ex.arena==="sim"){
+  $("trainingPage").classList.add("hidden");
+  $("main").classList.remove("hidden");
+  aplicarModoVisual();
+ }else alert("Este exercício está marcado como sem campo. Não abre a ARENA.");
+ renderExerciciosTreino();
+}
+
+function apagarExercicio(id){
+ if(!confirm("Apagar este exercício?"))return;
+ exerciciosTreino=exerciciosTreino.filter(e=>e.id!==id);
+ localStorage.setItem("exercicios_treino_pasteis",JSON.stringify(exerciciosTreino));
+ if(String(exercicioAtualId)===String(id)){exercicioAtualId="";localStorage.removeItem("exercicio_atual_pasteis");}
+ renderExerciciosTreino(); atualizarTreinoResumo();
+}
+
 function atualizarTreinoResumo(){
- if(!$("treinoTotalJogadores"))return;
-
- $("treinoTotalJogadores").innerText=jogadores.length;
- $("treinoCampoJogadores").innerText=campo.length;
- $("treinoAcoes").innerText=reg.length;
-
- if($("treinoData") && !$("treinoData").value){
-  $("treinoData").value=new Date().toISOString().slice(0,10);
- }
-
- if($("treinoNome") && !$("treinoNome").value){
-  $("treinoNome").value="Treino - "+new Date().toLocaleDateString("pt-PT");
- }
+ if($("treinoPresentes"))$("treinoPresentes").innerText=presencasTreino.length;
+ if($("treinoExercicios"))$("treinoExercicios").innerText=exerciciosTreino.length;
+ if($("treinoAcoes"))$("treinoAcoes").innerText=reg.length;
 }
 
 function iniciarTreino(){
@@ -1552,20 +1654,16 @@ function iniciarTreino(){
  localStorage.setItem("tipo_treino_pasteis",tipoTreinoAtual);
  localStorage.setItem("nome_treino_pasteis",$("treinoNome")?.value || "");
  localStorage.setItem("data_treino_pasteis",$("treinoData")?.value || "");
+ localStorage.setItem("duracao_treino_pasteis",$("treinoDuracao")?.value || "");
  localStorage.setItem("objetivo_treino_pasteis",$("treinoObjetivo")?.value || "");
-
  if($("trainingPage"))$("trainingPage").classList.add("hidden");
  $("main").classList.remove("hidden");
-
  aplicarModoVisual();
 }
 
 function aplicarModoVisual(){
  let modo=localStorage.getItem("modo_pasteis") || "jogo";
-
- if(modo==="treino"){
-  if($("fora"))$("fora").placeholder="Sem adversário";
- }
+ if(modo==="treino" && $("fora"))$("fora").placeholder="Treino";
 }
 
 function renderAll(){renderAttack();renderMap();renderFlow();renderPlayerCard();renderStats();renderReport();renderHistory();renderSubs();atualizarTreinoResumo();aplicarModoVisual()}
