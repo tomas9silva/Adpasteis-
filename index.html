@@ -200,7 +200,7 @@ button{border:0;color:white;font-weight:bold}
  font-size:13px;
  border:1px solid rgba(255,255,255,.12);
 }
-.stat,.log{background:#f1f3f6;padding:8px;border-radius:8px;margin:5px 0;font-size:13px}
+.stat,.log{background:transparent;color:white;border:1px solid rgba(255,255,255,.12);padding:8px;border-radius:8px;margin:5px 0;font-size:13px}
 .stat{display:flex;justify-content:space-between;gap:8px}
 .small{font-size:12px;opacity:.9}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:2000;display:none;align-items:center;justify-content:center;padding:12px}
@@ -319,7 +319,9 @@ button{border:0;color:white;font-weight:bold}
  text-shadow:0 1px 4px #000;
 }
 .playerStatBlock{
- background:rgba(241,243,246,.92);
+ background:transparent;
+ color:white;
+ border:1px solid rgba(255,255,255,.12);
  padding:9px;
  border-radius:10px;
  margin:8px 0;
@@ -328,13 +330,17 @@ button{border:0;color:white;font-weight:bold}
 
 
 .collectiveBox{
- background:rgba(241,243,246,.92);
+ background:transparent;
+ color:white;
+ border:1px solid rgba(255,255,255,.12);
  padding:10px;
  border-radius:12px;
  margin:8px 0;
 }
 .playerAccordion{
- background:rgba(241,243,246,.92);
+ background:transparent;
+ color:white;
+ border:1px solid rgba(255,255,255,.12);
  border-radius:10px;
  margin:8px 0;
  overflow:hidden;
@@ -352,6 +358,8 @@ button{border:0;color:white;font-weight:bold}
 .playerAccordionBody{
  display:none;
  padding:9px;
+ background:transparent;
+ color:white;
 }
 .playerAccordion.open .playerAccordionBody{
  display:block;
@@ -361,7 +369,9 @@ button{border:0;color:white;font-weight:bold}
  grid-template-columns:1fr 44px;
  gap:6px;
  align-items:center;
- background:white;
+ background:transparent;
+ color:white;
+ border:1px solid rgba(255,255,255,.12);
  border-radius:8px;
  padding:7px;
  margin:5px 0;
@@ -499,6 +509,19 @@ button{border:0;color:white;font-weight:bold}
 .fieldTitleRow h3{
  margin:0;
 }
+
+.attackOutsideWrap{
+ display:flex;
+ align-items:center;
+ gap:7px;
+}
+.attackOutsideWrap span{
+ color:rgba(255,255,255,.72);
+ font-size:10px;
+ text-transform:uppercase;
+ letter-spacing:.7px;
+}
+
 .attackTinyOutside{
  width:44px;
  height:34px;
@@ -1344,6 +1367,50 @@ button{border:0;color:white;font-weight:bold}
  border-color:rgba(35,134,255,.35);
 }
 
+
+.matchControls button.controlActive{
+ border-color:#d71920!important;
+ background:rgba(215,25,32,.10)!important;
+ box-shadow:inset 0 0 0 1px rgba(215,25,32,.22)!important;
+}
+
+
+.settingsHeader{
+ max-width:520px;
+ margin:auto;
+ padding:8px 10px 0;
+ display:flex;
+ align-items:center;
+ gap:10px;
+}
+.settingsBack{
+ width:auto;
+ padding:7px 11px;
+ margin:0;
+ background:transparent;
+ border:1px solid rgba(255,255,255,.18);
+ color:white;
+ border-radius:12px;
+ font-size:18px;
+}
+.settingsTitle{
+ color:white;
+ font-size:18px;
+ font-weight:800;
+}
+
+
+#history .log{
+ background:transparent!important;
+ color:white!important;
+ border:1px solid rgba(255,255,255,.12)!important;
+}
+#stats .stat{
+ background:transparent!important;
+ color:white!important;
+ border:1px solid rgba(255,255,255,.12)!important;
+}
+
 @media(max-width:420px){
  .matchBoard{padding:16px 10px 14px;border-radius:20px}
  .matchScore{gap:6px;padding-top:22px}
@@ -1549,9 +1616,9 @@ button{border:0;color:white;font-weight:bold}
   </div>
 
   <div class="matchControls">
-   <button class="startBtn" onclick="start()">▶ Iniciar</button>
-   <button onclick="pause()">Ⅱ Pausa</button>
-   <button onclick="resetTimer()">↻ Resetar</button>
+   <button id="ctrl_start" class="startBtn" onclick="setActiveControl('start');start()">▶ Iniciar</button>
+   <button id="ctrl_pause" onclick="setActiveControl('pause');pause()">Ⅱ Pausa</button>
+   <button id="ctrl_reset" onclick="setActiveControl('reset');resetTimer()">↻ Resetar</button>
    <button class="iconBtn purpleBtn" id="startMini" onclick="openStarters()">👥</button>
    <button class="iconBtn blueBtn" id="subMini" onclick="openSubs()">🔄</button>
   </div>
@@ -1560,7 +1627,10 @@ button{border:0;color:white;font-weight:bold}
  <div class="pitchCard">
    <div class="fieldTitleRow">
     <h3>ARENA</h3>
-    <button id="attackBtn" class="attackTinyOutside" onclick="toggleAttack(event)">➡️</button>
+    <div class="attackOutsideWrap">
+      <span>Lado do ataque</span>
+      <button id="attackBtn" class="attackTinyOutside" onclick="toggleAttack(event)">➡️</button>
+    </div>
    </div>
    <div id="pitch" class="pitch" onclick="pickMap(event)">
      <div class="area left"></div>
@@ -1580,6 +1650,7 @@ button{border:0;color:white;font-weight:bold}
 </div>
 
 <div class="app hidden" id="settingsPage">
+ <div class="settingsHeader"><button class="settingsBack" onclick="closeSettings()">←</button><div class="settingsTitle">Definições</div></div>
  <div class="card">
   <h2>Definições</h2>
   <button class="dark" onclick="toggle('gameSettingsBox')">Definições do jogo</button>
@@ -1592,7 +1663,6 @@ button{border:0;color:white;font-weight:bold}
     <label>Detalhes do jogo</label><textarea id="detalhes"></textarea>
     <button class="green" onclick="saveSettings()">Guardar</button>
   </div>
-  <button class="dark" onclick="closeSettings()">Voltar</button>
  </div>
  <div class="card"><button class="dark" onclick="toggle('editNames')">Editar nomes dos jogadores</button><div id="editNames" class="hidden"></div></div>
  <div class="card"><button class="dark" onclick="toggle('stats')">Estatísticas completas</button><div id="stats" class="hidden"></div></div>
@@ -1911,6 +1981,13 @@ function renderSubs(){let cg=$("campoGrid"),bg=$("bancoGrid");if(!cg||!bg)return
 function subInfo(){$("subInfo").innerHTML="Sai: <b>"+(outTemp||"-")+"</b><br>Entra: <b>"+(inTemp||"-")+"</b><br>"+t()}
 function confirmSub(){if(!outTemp||!inTemp){alert("Seleciona quem sai e quem entra.");return}campo=campo.filter(j=>j!==outTemp);banco=banco.filter(j=>j!==inTemp);campo.push(inTemp);banco.push(outTemp);subs.unshift({sai:outTemp,entra:inTemp,periodo:$("periodo").value,tempo:t(),data:new Date().toLocaleString("pt-PT")});outTemp=null;inTemp=null;saveAll();closeSubs();renderAll()}
 
+
+function setActiveControl(tipo){
+ document.querySelectorAll(".matchControls button").forEach(b=>b.classList.remove("controlActive"));
+ let btn=$("ctrl_"+tipo);
+ if(btn)btn.classList.add("controlActive");
+}
+
 function start(){if(timer)return;timer=setInterval(()=>{if(time>0){time--;updateTimer()}else{pause();alert("Fim do período")}},1000)}
 function pause(){clearInterval(timer);timer=null}
 function resetTimer(){pause();time=dur*60;updateTimer()}
@@ -1983,26 +2060,25 @@ function zonaMaisUsada(){
  return top&&top[1]>0?`${top[0]} (${top[1]})`:"-";
 }
 
+
 function renderRelatorioPercentual(){
- let golos=contarComecaCom("Golo");
+ let golosTotal=contarComecaCom("Golo");
+ let golosLivre=contarAcaoPorTexto("Golo de livre");
+ let golosJogo=contarAcaoPorTexto("Golo dentro da área")+contarAcaoPorTexto("Golo fora da área")+contarAcaoPorTexto("Golo de cabeça")+contarAcaoPorTexto("Golo de canto");
  let rematesJogo=contarAcaoPorTexto("Remate jogo corrido");
  let rematesLivre=contarAcaoPorTexto("Remate livre");
  let rematesFora=contarAcaoPorTexto("Remate fora");
- let rematesBloq=0;
  let defesas=contarAcaoPorTexto("Defesa");
- let assist=contarAcaoPorTexto("Assistência");
  let passesFalhados=contarAcaoPorTexto("Passe falhado");
- let golosSofridos=contarAcaoPorTexto("Golo sofrido");
 
- let totalRemates=rematesJogo+rematesLivre+rematesFora+rematesBloq+golos;
- let totalAcoes=reg.length;
- let eficacia=percentagem(golos,totalRemates);
- let rematesBaliza=totalRemates-rematesFora-rematesBloq;
+ let totalRemates=golosTotal+rematesJogo+rematesLivre+rematesFora;
+ let rematesBaliza=Math.max(0,totalRemates-rematesFora);
+ let eficacia=percentagem(golosTotal,totalRemates);
  let acertoBaliza=percentagem(rematesBaliza,totalRemates);
- let pesoGolos=percentagem(golos,totalAcoes);
- let pesoRemates=percentagem(totalRemates,totalAcoes);
- let pesoDefesas=percentagem(defesas,totalAcoes);
- let pesoAssist=percentagem(assist,totalAcoes);
+ let eficaciaLivre=percentagem(golosLivre,golosLivre+rematesLivre);
+ let eficaciaJogo=percentagem(golosJogo,golosJogo+rematesJogo);
+ let pesoDefesas=percentagem(defesas,reg.length);
+ let pesoPassesFalhados=percentagem(passesFalhados,reg.length);
 
  function item(titulo,valor,sub,pct){
   return `<div class="percentItem">
@@ -2018,22 +2094,13 @@ function renderRelatorioPercentual(){
   <b>Resumo do jogo:</b> ${($("casa")?$("casa").value:"AD Pastéis")||"AD Pastéis"} ${casaGoals}-${foraGoals} ${$("fora").value||"Adversário"}<br>
   <div class="percentGrid">
    ${item("Eficácia de finalização",eficacia+"%","Golos / total de remates",eficacia)}
-   ${item("Remates à baliza",acertoBaliza+"%","Remates que não foram fora/bloqueados",acertoBaliza)}
-   ${item("Peso dos remates",pesoRemates+"%","Remates no total de ações",pesoRemates)}
-   ${item("Peso dos golos",pesoGolos+"%","Golos no total de ações",pesoGolos)}
-   ${item("Peso das defesas",pesoDefesas+"%","Defesas no total de ações",pesoDefesas)}
-   ${item("Peso das assistências",pesoAssist+"%","Assistências no total de ações",pesoAssist)}
+   ${item("Remates à baliza",acertoBaliza+"%","Remates que não foram fora",acertoBaliza)}
+   ${item("Golos de livre / Remates de livre",eficaciaLivre+"%",`${golosLivre} golos / ${golosLivre+rematesLivre} ações`,eficaciaLivre)}
+   ${item("Golos de jogo corrido / Remates de jogo corrido",eficaciaJogo+"%",`${golosJogo} golos / ${golosJogo+rematesJogo} ações`,eficaciaJogo)}
+   ${item("Defesas",defesas,"Peso nas ações: "+pesoDefesas+"%",pesoDefesas)}
+   ${item("Passes falhados",passesFalhados,"Peso nas ações: "+pesoPassesFalhados+"%",pesoPassesFalhados)}
   </div>
   <br>
-  <b>Totais:</b><br>
-  ⚽ Golos: ${golos}<br>
-  ✔️ Remates totais: ${totalRemates}<br>
-  ❌ Remates fora: ${rematesFora}<br>
-  
-  🧤 Defesas: ${defesas}<br>
-  🎁 Assistências: ${assist}<br>
-  ⚠️ Passes falhados: ${passesFalhados}<br>
-  🔴 Golos sofridos: ${golosSofridos}<br><br>
   <b>Destaques:</b><br>
   Melhor marcador: ${jogadorTopo(r=>r.acao&&r.acao.startsWith("Golo"))}<br>
   Mais remates: ${jogadorTopo(r=>r.acao&&r.acao.startsWith("Remate"))}<br>
@@ -2042,6 +2109,7 @@ function renderRelatorioPercentual(){
   Zona mais usada: ${zonaMaisUsada()}
  </div>`;
 }
+
 
 function renderStats(){
  let st=$("stats");
