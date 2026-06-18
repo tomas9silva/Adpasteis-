@@ -995,6 +995,17 @@ button{border:0;color:white;font-weight:bold}
  margin:6px 0;
 }
 
+
+.individualArenaHint{
+ background:rgba(255,255,255,.06);
+ border:1px solid rgba(255,255,255,.10);
+ border-radius:10px;
+ padding:8px;
+ margin:8px 0;
+ font-size:13px;
+ text-align:center;
+}
+
 @media(max-width:420px){
  .top{padding-top:4px}
  .score{grid-template-columns:1fr auto 1fr;gap:10px;padding-top:34px}
@@ -1284,6 +1295,7 @@ let departamentoMedico=JSON.parse(localStorage.getItem("departamento_medico_past
 let filtroMedico="todos";
 let exercicioAtualId=localStorage.getItem("exercicio_atual_pasteis")||"";
 let treinoAcaoTemp={exercicioId:null,x:null,y:null};
+let treinoIndividualTemp={exercicioId:null,x:null,y:null,jogador:null};
 
 const acoes=[
  {nome:"Golo dentro da área",emoji:"⚽"},
@@ -2386,13 +2398,8 @@ function renderExercicioIndividual(ex){
    <div class="collectiveBar"><div class="collectiveFill" style="width:${eficiencia}%"></div></div>
   </div>
 
-  <div class="individualButtons">
-   <button onclick="openIndividualJogador(${ex.id},'golo','')">⚽ Golo</button>
-   <button onclick="openIndividualJogador(${ex.id},'fora','')">❌ Remate fora</button>
-   <button onclick="openIndividualJogador(${ex.id},'defendido','Jamila')">🧤 Defendido por Jamila</button>
-   <button onclick="openIndividualJogador(${ex.id},'defendido','Crespo')">🧤 Defendido por Crespo</button>
-   <button onclick="openIndividualJogador(${ex.id},'defendido','Outro')">🧤 Defendido por outro</button>
-  </div>
+  <div class="individualArenaHint">Clica na mini arena para marcar o local do remate.</div>
+  ${renderMiniArenaIndividual(ex,eventos)}
 
   ${renderRelatoriosExercicio(ex)}
 
@@ -2401,23 +2408,80 @@ function renderExercicioIndividual(ex){
  </div>`;
 }
 
-function openIndividualJogador(exId,resultado,guardaRedes){
+
+function renderMiniArenaIndividual(ex,eventos){
+ let html=`<div class="trainingMiniArena" onclick="pickMiniArenaIndividual(event,${ex.id})">
+  <div class="trainingMiniArea leftMini"></div>
+  <div class="trainingMiniArea rightMini"></div>`;
+
+ eventos.filter(r=>r.x!==""&&r.x!==undefined&&r.y!==""&&r.y!==undefined).forEach(r=>{
+  let idx=reg.indexOf(r);
+  html+=`<span class="trainingMiniPoint" onclick="event.stopPropagation();apagarAcaoPorIndice(${idx})" style="left:${r.x}%;top:${r.y}%" title="${r.jogador} - ${r.acao}">${r.emoji||"•"}</span>`;
+ });
+
+ if(String(treinoIndividualTemp.exercicioId)===String(ex.id)&&treinoIndividualTemp.x&&treinoIndividualTemp.y){
+  html+=`<span class="trainingTempPoint" style="left:${treinoIndividualTemp.x}%;top:${treinoIndividualTemp.y}%"></span>`;
+ }
+
+ html+=`</div>`;
+ return html;
+}
+
+function pickMiniArenaIndividual(event,exId){
+ let rect=event.currentTarget.getBoundingClientRect();
+
+ treinoIndividualTemp={
+  exercicioId:exId,
+  x:Math.round(((event.clientX-rect.left)/rect.width)*100),
+  y:Math.round(((event.clientY-rect.top)/rect.height)*100),
+  jogador:null
+ };
+
+ openIndividualJogador(exId);
+}
+
+function openIndividualJogador(exId){
  let modal=$("quickModal");
  let title=$("quickTitle");
  let content=$("quickContent");
 
- title.innerHTML="Quem fez o remate?";
+ title.innerHTML="Quem rematou?";
 
  let jogadoresBase=treinoJogadores&&treinoJogadores.length?treinoJogadores:jogadores;
 
  content.innerHTML="<div class='players'>"+
-  jogadoresBase.map(j=>`<button class="pbtn" onclick="addIndividualEvento(${exId},'${resultado}','${guardaRedes}','${esc(j)}')">${j}</button>`).join("")+
+  jogadoresBase.map(j=>`<button class="pbtn" onclick="openIndividualResultado(${exId},'${esc(j)}')">${j}</button>`).join("")+
  "</div>";
 
  modal.classList.add("show");
 }
 
+function openIndividualResultado(exId,jogador){
+ treinoIndividualTemp.jogador=jogador;
+
+ let modal=$("quickModal");
+ let title=$("quickTitle");
+ let content=$("quickContent");
+
+ title.innerHTML=jogador+" — resultado do remate";
+
+ content.innerHTML=`
+  <div class="grid">
+   <button class="actionBtn dark" onclick="addIndividualEvento(${exId},'golo','','${esc(jogador)}')">⚽ Golo</button>
+   <button class="actionBtn dark" onclick="addIndividualEvento(${exId},'fora','','${esc(jogador)}')">❌ Remate fora</button>
+   <button class="actionBtn dark" onclick="addIndividualEvento(${exId},'defendido','Jamila','${esc(jogador)}')">🧤 Defendido por Jamila</button>
+   <button class="actionBtn dark" onclick="addIndividualEvento(${exId},'defendido','Crespo','${esc(jogador)}')">🧤 Defendido por Crespo</button>
+   <button class="actionBtn dark" onclick="addIndividualEvento(${exId},'defendido','Outro','${esc(jogador)}')">🧤 Defendido por outro</button>
+  </div>
+ `;
+}
+
 function addIndividualEvento(exId,resultado,guardaRedes,jogador){
+ if(!treinoIndividualTemp.x || !treinoIndividualTemp.y){
+  alert("Marca primeiro o local do remate na mini arena.");
+  return;
+ }
+
  let emoji=resultado==="golo"?"⚽":(resultado==="fora"?"❌":"🧤");
  let acao=resultado==="golo"?"Golo":(resultado==="fora"?"Remate fora":"Defendido por "+guardaRedes);
 
@@ -2428,8 +2492,8 @@ function addIndividualEvento(exId,resultado,guardaRedes,jogador){
   acao:acao,
   emoji:emoji,
   data:new Date().toLocaleString("pt-PT"),
-  x:"",
-  y:"",
+  x:treinoIndividualTemp.x,
+  y:treinoIndividualTemp.y,
   attackSide:"",
   exercicioId:String(exId),
   tipoRegisto:"treino",
@@ -2439,6 +2503,8 @@ function addIndividualEvento(exId,resultado,guardaRedes,jogador){
  });
 
  localStorage.setItem("registos_pasteis",JSON.stringify(reg));
+
+ treinoIndividualTemp={exercicioId:null,x:null,y:null,jogador:null};
 
  let modal=$("quickModal");
  if(modal)modal.classList.remove("show");
@@ -2500,8 +2566,21 @@ function renderRelatorioIndividualExercicio(ex){
    ❌ Fora: ${fora}<br>
    🧤 Jamila: ${jamila} · Crespo: ${crespo} · Outro: ${outro}<br>
    Eficiência: <b>${eficiencia}%</b>
+   ${renderMiniMapaJogadorExercicio(ex.id,j)}
   </div>`;
  }).join("");
+}
+
+function renderMiniMapaJogadorExercicio(exId,jogador){
+ let eventos=eventosIndividuaisDoExercicio(exId).filter(r=>r.jogador===jogador&&r.x!==""&&r.x!==undefined&&r.y!==""&&r.y!==undefined);
+ if(!eventos.length)return "";
+ let html=`<div class="miniPitch">`;
+ eventos.forEach(r=>{
+  let idx=reg.indexOf(r);
+  html+=`<span class="miniEmoji" onclick="apagarAcaoPorIndice(${idx})" style="left:${r.x}%;top:${r.y}%" title="${r.acao}">${r.emoji||"•"}</span>`;
+ });
+ html+=`</div>`;
+ return html;
 }
 
 
