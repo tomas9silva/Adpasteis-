@@ -723,6 +723,7 @@ button{border:0;color:white;font-weight:bold}
 .medRed{background:#d71920;color:white}
 .medYellow{background:#f28b12;color:#111}
 .medBlue{background:#087dcc;color:white}
+.medGreen{background:#26a626;color:white}
 
 .medicalFilter{
  display:grid;
@@ -1126,8 +1127,8 @@ button{border:0;color:white;font-weight:bold}
 
       <div class="trainingCard">
         <h3>Departamento médico</h3>
-        <label>Nome do jogador</label>
-        <input id="medJogador" placeholder="Ex: Jogador 1">
+        <label>Jogador</label>
+        <select id="medJogador"></select>
         <label>Causa</label>
         <textarea id="medCausa" placeholder="Ex: dor no tornozelo, sobrecarga, entorse..."></textarea>
         <label>Estado</label>
@@ -1135,6 +1136,7 @@ button{border:0;color:white;font-weight:bold}
           <option>Não treina</option>
           <option>Treina condicionado</option>
           <option>Em tratamento</option>
+          <option>Disponível</option>
         </select>
         <button class="trainingStartBtn" onclick="addRegistoMedico()">Guardar registo médico</button>
       </div>
@@ -2004,6 +2006,7 @@ function openTrainingTab(tab){
 
  renderTreinoJogadores();
  renderPresencas();
+ renderMedicalSelect();
  renderMedicalList();
  atualizarTreinoResumo();
 }
@@ -2065,6 +2068,7 @@ function carregarDadosTreino(){
  renderTreinoJogadores();
  renderPresencas();
  renderExerciciosTreino();
+ renderMedicalSelect();
  renderMedicalList();
 }
 
@@ -2082,6 +2086,7 @@ function addTreinoJogador(){
  $("novoTreinoJogador").value="";
  renderTreinoJogadores();
  renderPresencas();
+ renderMedicalSelect();
  atualizarTreinoResumo();
 }
 
@@ -2095,7 +2100,28 @@ function removeTreinoJogador(nome){
 
  renderTreinoJogadores();
  renderPresencas();
+ renderMedicalSelect();
  atualizarTreinoResumo();
+}
+
+
+function renderMedicalSelect(){
+ let sel=$("medJogador");
+ if(!sel)return;
+
+ let atual=sel.value;
+ let lista=treinoJogadores&&treinoJogadores.length?treinoJogadores:[];
+
+ if(!lista.length){
+  sel.innerHTML="<option value=''>Sem jogadores no grupo</option>";
+  return;
+ }
+
+ sel.innerHTML=lista.map(j=>`<option value="${j}">${j}</option>`).join("");
+
+ if(atual && lista.includes(atual)){
+  sel.value=atual;
+ }
 }
 
 function renderTreinoJogadores(){
@@ -2110,8 +2136,7 @@ function renderTreinoJogadores(){
  box.innerHTML=treinoJogadores.map(j=>`
   <div class="trainingPlayerRow">
    <b>${j}</b>
-   <div class="trainingPlayerActions">
-    <button class="exerciseSmallBtn" onclick="document.getElementById('medJogador').value='${esc(j)}';openTrainingTab('treino');openTrainingSubTab('presencas')">Clínica</button>
+   <div class="trainingPlayerActions" style="grid-template-columns:44px;justify-content:end">
     <button class="exerciseDeleteBtn" onclick="removeTreinoJogador('${esc(j)}')">🗑️</button>
    </div>
   </div>
@@ -2250,7 +2275,7 @@ function addRegistoMedico(){
  let causa=($("medCausa")?.value||"").trim();
  let estado=$("medEstado")?.value||"Não treina";
 
- if(!jogador){alert("Escreve o nome do jogador.");return;}
+ if(!jogador){alert("Escolhe um jogador do grupo de treino.");return;}
  if(!causa){alert("Escreve a causa.");return;}
 
  departamentoMedico.unshift({
@@ -2278,6 +2303,7 @@ function setFiltroMedico(filtro){
 function classeEstadoMedico(estado){
  if(estado==="Não treina")return "medRed";
  if(estado==="Treina condicionado")return "medYellow";
+ if(estado==="Disponível")return "medGreen";
  return "medBlue";
 }
 
