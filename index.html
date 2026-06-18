@@ -1487,7 +1487,7 @@ input[type="date"]{
    <h1>𝕊𝕥𝕒𝕥𝕊</h1>
 <p class="landingSub">Match Analysis Platform</p>
 <p class="landingVersion">Version 1.0</p>
-    <button id="enterMainBtn" onclick="abrirMenu()" class="enterBtn">ENTRAR</button>
+    <button id="enterMainBtn" type="button" onclick="abrirMenu()" class="enterBtn">ENTRAR</button>
   </div>
 </div>
 
@@ -2432,55 +2432,23 @@ function aplicarEntradaInicial(){
 
 let tipoTreinoAtual=localStorage.getItem("tipo_treino_pasteis") || "Técnico";
 
+
 function openTrainingTab(tab){
  const tabs=["grupo","presencas","exercicios","resumo"];
+
  const secAtual=$("trainingSection"+tab.charAt(0).toUpperCase()+tab.slice(1));
  const btnAtual=$("tab"+tab.charAt(0).toUpperCase()+tab.slice(1));
  const jaAberta=btnAtual && btnAtual.classList.contains("active");
 
  tabs.forEach(t=>{
-  let sec=$("trainingSection"+t.charAt(0).toUpperCase()+t.slice(1));
-  let btn=$("tab"+t.charAt(0).toUpperCase()+t.slice(1));
-  if(sec)sec.classList.add("hidden");
-  if(btn)btn.classList.remove("active");
+  const sec=$("trainingSection"+t.charAt(0).toUpperCase()+t.slice(1));
+  const btn=$("tab"+t.charAt(0).toUpperCase()+t.slice(1));
+  if(sec) sec.classList.add("hidden");
+  if(btn) btn.classList.remove("active");
  });
 
- if(jaAberta)return;
-
- if(secAtual)secAtual.classList.remove("hidden");
- if(btnAtual)btnAtual.classList.add("active");
-
- renderTreinoJogadores();
- renderPresencas();
- renderMedicalSelect();
- renderMedicalList();
- renderExerciciosTreino();
- atualizarTreinoResumo();
-}
-
-
-function openTrainingTab(tab){
-
- const tabs=["grupo","presencas","exercicios","resumo"];
-
- const secAtual=$("trainingSection"+tab.charAt(0).toUpperCase()+tab.slice(1));
- const btnAtual=$("tab"+tab.charAt(0).toUpperCase()+tab.slice(1));
-
- const jaAberta=btnAtual.classList.contains("active");
-
- // fecha tudo
- tabs.forEach(t=>{
-   let sec=$("trainingSection"+t.charAt(0).toUpperCase()+t.slice(1));
-   let btn=$("tab"+t.charAt(0).toUpperCase()+t.slice(1));
-
-   if(sec) sec.classList.add("hidden");
-   if(btn) btn.classList.remove("active");
- });
-
- // se já estava aberta, fica tudo fechado
  if(jaAberta) return;
 
- // caso contrário abre a selecionada
  if(secAtual) secAtual.classList.remove("hidden");
  if(btnAtual) btnAtual.classList.add("active");
 
@@ -2490,7 +2458,6 @@ function openTrainingTab(tab){
  renderMedicalList();
  renderExerciciosTreino();
  atualizarTreinoResumo();
-}
 }
 
 function voltarMenu(){
