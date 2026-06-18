@@ -10,17 +10,22 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#071326;color:wh
 body:before{content:"";position:fixed;inset:0;background:url("logo-pasteis.png") center 55%/75% no-repeat;opacity:.10;z-index:-1;pointer-events:none}
 .app{max-width:520px;margin:auto;padding:8px 10px 85px}
 button,input,select,textarea{width:100%;padding:10px;margin-top:6px;font-size:15px;border-radius:10px;border:1px solid #ccc}
- input[type="date"]{
-  width:100%;
-  height:40px;
-  padding:8px 10px;
-  margin-top:6px;
-  border-radius:10px;
-  border:1px solid #ccc;
-  font-size:15px;
-  box-sizing:border-box;
-}
 button{border:0;color:white;font-weight:bold}
+
+input[type="date"]{
+ width:100%;
+ height:42px;
+ min-height:42px;
+ padding:8px 10px;
+ margin-top:6px;
+ border-radius:10px;
+ border:1px solid #ccc;
+ font-size:15px;
+ box-sizing:border-box;
+ -webkit-appearance:none;
+ appearance:none;
+}
+
 .dark{background:#101b31}.red,.danger{background:#d71920}.green{background:#26a626}.orange{background:#f28b12}.yellow{background:#ffd21a;color:#111}.blue{background:#087dcc}
 .card{
  background:transparent;
@@ -1804,7 +1809,7 @@ function goal(team,v){
   localStorage.setItem("golos_fora_pasteis",foraGoals);
   $("gf").innerText=foraGoals;
  }
-
+}
 function toggleAttack(ev){ev.stopPropagation();attackSide=attackSide==="right"?"left":"right";localStorage.setItem("attack_side_pasteis",attackSide);renderAttack()}
 function renderAttack(){let b=$("attackBtn");if(b)b.innerHTML=attackSide==="right"?"➡️":"⬅️"}
 function count(f){return reg.filter(f).length}
@@ -1926,7 +1931,7 @@ function renderMap(){
   tp.style.top=flow.y+"%";
   p.appendChild(tp);
  }
-
+}
 function openEvent(i){selectedEventIndex=i;let r=reg[i];$("eventTitle").innerText=(r.emoji||acaoObj(r.acao).emoji)+" "+r.acao;$("eventInfo").innerHTML=`<div class="log"><b>${r.jogador}</b><br>${r.periodo} · ${r.tempo}<br>X:${r.x}% · Y:${r.y}%<br>${r.attackSide==="left"?"⬅️ atacava esquerda":"➡️ atacava direita"}<br>${r.data}</div>`;$("eventModal").classList.add("show")}
 function closeEvent(){$("eventModal").classList.remove("show");selectedEventIndex=null}
 function deleteEvent(){if(selectedEventIndex===null)return;if(confirm("Apagar esta ação?")){reg.splice(selectedEventIndex,1);localStorage.setItem("registos_pasteis",JSON.stringify(reg));closeEvent();renderAll()}}
@@ -2061,7 +2066,7 @@ function apagarAcaoPorIndice(idx){
   localStorage.setItem("registos_pasteis",JSON.stringify(reg));
   renderAll();
  }
-
+}
 
 
 function percentagem(parte,total){
@@ -2386,8 +2391,17 @@ function exportCSV(){let casa=($("casa")?$("casa").value:"AD Pastéis")||"Equipa
 
 
 function abrirMenu(){
- $("landingPage").classList.add("hidden");
- $("menuPage").classList.remove("hidden");
+ let landing=$("landingPage");
+ let menu=$("menuPage");
+ let main=$("main");
+ let treino=$("trainingPage");
+ let settings=$("settingsPage");
+
+ if(landing)landing.classList.add("hidden");
+ if(menu)menu.classList.remove("hidden");
+ if(main)main.classList.add("hidden");
+ if(treino)treino.classList.add("hidden");
+ if(settings)settings.classList.add("hidden");
 }
 
 function entrarJogo(){
@@ -2410,6 +2424,10 @@ function aplicarEntradaInicial(){
   if($("trainingPage"))$("trainingPage").classList.add("hidden");
   $("main").classList.remove("hidden");
  }
+}
+
+
+
 
 let tipoTreinoAtual=localStorage.getItem("tipo_treino_pasteis") || "Técnico";
 
@@ -2473,7 +2491,7 @@ function openTrainingTab(tab){
  renderExerciciosTreino();
  atualizarTreinoResumo();
 }
-
+}
 
 function voltarMenu(){
  if($("trainingPage"))$("trainingPage").classList.add("hidden");
@@ -2557,7 +2575,7 @@ function renderMedicalSelect(){
  if(atual && lista.includes(atual)){
   sel.value=atual;
  }
-
+}
 
 function renderTreinoJogadores(){
  let box=$("treinoJogadoresLista");
