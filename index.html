@@ -4070,6 +4070,23 @@ document.addEventListener("DOMContentLoaded",function(){
   btn.addEventListener("click",function(e){
    e.preventDefault();
    abrirMenu();
+}
+                       
+ function openConvocatoria(){
+
+ $("main").classList.add("hidden");
+
+ $("convocatoriaPage").classList.remove("hidden");
+
+ renderConvocatoria();
+
+}
+
+function closeConvocatoria(){
+
+ $("convocatoriaPage").classList.add("hidden");
+
+ $("main").classList.remove("hidden");
   });
  }
 });
