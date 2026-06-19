@@ -304,6 +304,32 @@ ARENA DO JOGO
 .pitchQuarter.q1{left:25%}
 .pitchQuarter.q3{left:75%}
 
+.pitchHalf{
+ position:absolute;
+ left:6%;
+ right:6%;
+ top:50%;
+ height:0;
+ border-top:2px solid rgba(23,63,159,.24);
+ pointer-events:none;
+ z-index:1;
+}
+
+.zoneLabel{
+ position:absolute;
+ transform:translate(-50%,-50%);
+ color:white;
+ opacity:.28;
+ font-size:9px;
+ font-weight:800;
+ text-align:center;
+ pointer-events:none;
+ z-index:2;
+ text-shadow:0 1px 4px rgba(0,0,0,.55);
+ line-height:1.05;
+}
+
+
 .area{
  position:absolute;
  top:38%;
@@ -1861,10 +1887,23 @@ MÓDULO JOGO
     </div>
    </div>
    <div id="pitch" class="pitch" onclick="pickMap(event)">
-    <div id="attackDirectionBig" class="attackDirectionBig">➡</div>
-   <div id="goalkeeperMarker" class="goalkeeperMarker">GR</div> 
+     <div id="attackDirectionBig" class="attackDirectionBig">→</div>
+     <div id="goalkeeperMarker" class="goalkeeperMarker">GR</div>
+
      <div class="pitchQuarter q1"></div>
      <div class="pitchQuarter q3"></div>
+     <div class="pitchHalf"></div>
+
+     <span class="zoneLabel zoneLabel1" style="left:12.5%;top:25%">DEF<br>ESQ</span>
+     <span class="zoneLabel zoneLabel2" style="left:37.5%;top:25%">CON<br>ESQ</span>
+     <span class="zoneLabel zoneLabel3" style="left:62.5%;top:25%">CRI<br>ESQ</span>
+     <span class="zoneLabel zoneLabel4" style="left:87.5%;top:25%">FIN<br>ESQ</span>
+
+     <span class="zoneLabel zoneLabel5" style="left:12.5%;top:75%">DEF<br>DIR</span>
+     <span class="zoneLabel zoneLabel6" style="left:37.5%;top:75%">CON<br>DIR</span>
+     <span class="zoneLabel zoneLabel7" style="left:62.5%;top:75%">CRI<br>DIR</span>
+     <span class="zoneLabel zoneLabel8" style="left:87.5%;top:75%">FIN<br>DIR</span>
+
      <div class="area left"></div>
      <div class="area right"></div>
      <div class="cornerFlag tl"></div>
@@ -1900,22 +1939,13 @@ DEFINIÇÕES / ESTATÍSTICAS / HISTÓRICO
   </div>
  </div>
  <div class="card"><button class="dark" onclick="toggle('editNames')">Editar nomes dos jogadores</button><div id="editNames" class="hidden"></div></div>
-<button class="dark" onclick="toggle('stats');renderStats()">Estatísticas completas</button>
-<div id="stats" class="hidden"></div>
-
-<div id="stats" class="hidden">
-  <label>Período das estatísticas</label>
-  <select id="filtroPeriodoStats" onchange="renderStats()">
-    <option value="Todos">Todos</option>
-    <option value="1.º período">1.º período</option>
-    <option value="2.º período">2.º período</option>
-    <option value="3.º período">3.º período</option>
-  </select>
-
-  <div id="statsContent"></div>
+<div class="card">
+  <button class="dark" onclick="toggle('stats');renderStats()">Estatísticas completas</button>
+  <div id="stats" class="hidden"></div>
 </div>
-<button class="dark" onclick="toggle('report');renderReport()">Relatório do jogo 📊</button>
-<div id="report" class="hidden"></div>
+<div class="card">
+  <button class="dark" onclick="toggle('report');renderReport()">Relatório do jogo 📊</button>
+  <div id="report" class="hidden"></div>
  <div class="card"><button class="dark" onclick="toggle('history')">Histórico</button><div id="history" class="hidden"></div></div>
  <div class="card">
   <button class="green" onclick="guardarSessaoAtual()">Guardar jogo/treino atual</button>
@@ -2065,19 +2095,12 @@ function goal(team,v){
 function toggleAttack(ev){ev.stopPropagation();attackSide=attackSide==="right"?"left":"right";localStorage.setItem("attack_side_pasteis",attackSide);renderAttack()}
 function renderAttack(){
  let b=$("attackBtn");
-
- if(b){
-  b.innerHTML=attackSide==="right"?"➡️":"⬅️";
- }
+ if(b)b.innerHTML=attackSide==="right"?"➡️":"⬅️";
 
  let big=$("attackDirectionBig");
-
- if(big){
-  big.innerHTML=attackSide==="right"?"→":"←";
- }
+ if(big)big.innerHTML=attackSide==="right"?"→":"←";
 
  let gr=$("goalkeeperMarker");
-
  if(gr){
   if(attackSide==="right"){
    gr.style.left="8px";
@@ -2087,6 +2110,23 @@ function renderAttack(){
    gr.style.left="auto";
   }
  }
+
+ let nomesRight=[
+  ["DEF","ESQ"],["CON","ESQ"],["CRI","ESQ"],["FIN","ESQ"],
+  ["DEF","DIR"],["CON","DIR"],["CRI","DIR"],["FIN","DIR"]
+ ];
+
+ let nomesLeft=[
+  ["FIN","ESQ"],["CRI","ESQ"],["CON","ESQ"],["DEF","ESQ"],
+  ["FIN","DIR"],["CRI","DIR"],["CON","DIR"],["DEF","DIR"]
+ ];
+
+ let nomes=attackSide==="right"?nomesRight:nomesLeft;
+
+ nomes.forEach((n,i)=>{
+  let el=document.querySelector(".zoneLabel"+(i+1));
+  if(el)el.innerHTML=n[0]+"<br>"+n[1];
+ });
 }
 function count(f){return reg.filter(f).length}
 function goals(j){return count(r=>r.jogador===j&&r.acao&&r.acao.startsWith("Golo"))}
@@ -2212,18 +2252,13 @@ function renderMap(){
   p.appendChild(tp);
  }
 }
-function openEvent(i){selectedEventIndex=i;let r=reg[i];$("eventTitle").innerText=(r.emoji||acaoObj(r.acao).emoji)+" "+r.acao;$("eventInfo").innerHTML=`<div class="log"><b>${r.jogador}</b><br>${r.periodo} · ${r.tempo}<br>X:${r.x}% · Y:${r.y}%<br>${r.attackSide==="left"?"⬅️ atacava esquerda":"➡️ atacava direita"}<br>${r.data}</div>`;$("eventModal").classList.add("show")}
-function closeEvent(){$("eventModal").classList.remove("show");selectedEventIndex=null}
-function deleteEvent(){if(selectedEventIndex===null)return;if(confirm("Apagar esta ação?")){reg.splice(selectedEventIndex,1);localStorage.setItem("registos_pasteis",JSON.stringify(reg));closeEvent();renderAll()}}
-
-
-/* =====================================
-JOGO: JOGADOR ATIVO
-===================================== */
-function renderPlayerCard(){
- let html=`<button class="editBtn" onclick="event.stopPropagation();openEditStats()">✏️ Editar</button><b>${active} ${details?"▲":"▼"}</b><br><span class="small">⚽ ${goals(active)} | ✔️ ${count(r=>r.jogador===active&&r.acao&&r.acao.startsWith("Remate"))} | 🧤 ${count(r=>r.jogador===active&&r.acao==="Defesa")} | 🎁 ${count(r=>r.jogador===active&&r.acao==="Assistência")}</span>`;
- if(details){html+="<hr>";acoes.forEach(a=>html+=`${a.emoji} ${a.nome}: <b>${count(r=>r.jogador===active&&r.acao===a.nome)}</b><br>`)}
- $("playerCard").innerHTML=html;
+function openEvent(i){
+ selectedEventIndex=i;
+ let r=reg[i];
+ let zona=(r.x!==""&&r.x!==undefined&&r.y!==""&&r.y!==undefined)?getZonaCampo(Number(r.x),Number(r.y),r.attackSide||attackSide):"-";
+ $("eventTitle").innerText=(r.emoji||acaoObj(r.acao).emoji)+" "+r.acao;
+ $("eventInfo").innerHTML=`<div class="log"><b>${r.jogador}</b><br>${r.periodo} · ${r.tempo}<br>Zona: ${zona}<br>${r.attackSide==="left"?"⬅️ atacava esquerda":"➡️ atacava direita"}<br>${r.data}</div>`;
+ $("eventModal").classList.add("show");
 }
 function toggleDetails(){details=!details;renderPlayerCard()}
 function undo(){if(!reg.length){alert("Não há ações para desfazer.");return}reg.shift();localStorage.setItem("registos_pasteis",JSON.stringify(reg));renderAll()}
@@ -2393,32 +2428,46 @@ function jogadorTopo(filtro){
  return arr[0]&&arr[0].n>0?`${arr[0].j} (${arr[0].n})`:"-";
 }
 
-function zonaCampo(x){
- if(x<33)return "Zona defensiva";
- if(x<66)return "Meio-campo";
- return "Zona ofensiva";
-}
-function getZonaCampo(x,y){
- const lado = y < 50 ? "Esquerda" : "Direita";
+function getZonaCampo(x,y,ladoAtaque){
+ x=Number(x);
+ y=Number(y);
+ ladoAtaque=ladoAtaque||"right";
 
- if(attackSide==="right"){
-  if(x < 25) return "Defesa " + lado;
-  if(x < 50) return "Construção " + lado;
-  if(x < 75) return "Criação " + lado;
-  return "Finalização " + lado;
+ let corredor=y<50?"Esquerda":"Direita";
+ let faixa;
+
+ if(ladoAtaque==="right"){
+  if(x<25)faixa="Defesa";
+  else if(x<50)faixa="Construção";
+  else if(x<75)faixa="Criação";
+  else faixa="Finalização";
  }else{
-  if(x < 25) return "Finalização " + lado;
-  if(x < 50) return "Criação " + lado;
-  if(x < 75) return "Construção " + lado;
-  return "Defesa " + lado;
+  if(x<25)faixa="Finalização";
+  else if(x<50)faixa="Criação";
+  else if(x<75)faixa="Construção";
+  else faixa="Defesa";
  }
+
+ return faixa+" "+corredor;
 }
+
+function zonaCampo(x){
+ return getZonaCampo(x,50,attackSide);
+}
+
 function zonaMaisUsada(){
- let eventos=reg.filter(r=>r.x!==""&&r.x!==undefined);
- let zonas={"Zona defensiva":0,"Meio-campo":0,"Zona ofensiva":0};
- eventos.forEach(r=>zonas[zonaCampo(Number(r.x))]++);
- let top=Object.entries(zonas).sort((a,b)=>b[1]-a[1])[0];
- return top&&top[1]>0?`${top[0]} (${top[1]})`:"-";
+ let eventos=reg.filter(r=>r.x!==""&&r.x!==undefined&&r.y!==""&&r.y!==undefined);
+ if(!eventos.length)return "-";
+
+ let contagem={};
+
+ eventos.forEach(r=>{
+  let z=getZonaCampo(Number(r.x),Number(r.y),r.attackSide||attackSide);
+  contagem[z]=(contagem[z]||0)+1;
+ });
+
+ let top=Object.entries(contagem).sort((a,b)=>b[1]-a[1])[0];
+ return top?`${top[0]} (${top[1]})`:"-";
 }
 
 
@@ -2482,10 +2531,7 @@ function renderStats(){
  if(!box)return;
 
  let filtro=$("filtroPeriodoStats")?.value || "Todos";
-
- let dados=filtro==="Todos"
-  ? reg
-  : reg.filter(r=>r.periodo===filtro);
+ let dados=filtro==="Todos"?reg:reg.filter(r=>r.periodo===filtro);
 
  box.innerHTML=`
   <label>Período das estatísticas</label>
@@ -2497,48 +2543,44 @@ function renderStats(){
   </select>
  `;
 
- // 1) MAPA COLETIVO NO TOPO
- let eventosColetivos=reg
-  .map((r,regIndex)=>({r,regIndex}))
+ let eventosColetivos=dados
+  .map((r)=>({r,regIndex:reg.indexOf(r)}))
   .filter(obj=>obj.r.x!==""&&obj.r.x!==undefined&&obj.r.y!==""&&obj.r.y!==undefined);
 
- st.innerHTML+=`
+ box.innerHTML+=`
  <div class="collectiveBox">
   <h3>📍 Mapa coletivo da equipa</h3>
-  <div class="small">Clica num emoji para apagar essa ação.</div>
+  <div class="small">Filtro: <b>${filtro}</b> · Clica num emoji para apagar essa ação.</div>
   ${desenharCampoEventos(eventosColetivos)}
  </div>`;
 
- // 2) JOGADORES FECHADOS POR DEFEITO
  jogadores.forEach((p,idx)=>{
-  let eventosJogador=reg
-   .map((r,regIndex)=>({r,regIndex}))
+  let eventosJogador=dados
+   .map((r)=>({r,regIndex:reg.indexOf(r)}))
    .filter(obj=>obj.r.jogador===p&&obj.r.x!==""&&obj.r.x!==undefined&&obj.r.y!==""&&obj.r.y!==undefined);
 
-  let totalGolos=goals(p);
-  let totalRemates=count(r=>r.jogador===p&&r.acao&&r.acao.startsWith("Remate"));
-  let totalDefesas=count(r=>r.jogador===p&&r.acao==="Defesa");
-  let totalAssist=count(r=>r.jogador===p&&r.acao==="Assistência");
+  let totalGolos=dados.filter(r=>r.jogador===p&&r.acao&&r.acao.startsWith("Golo")).length;
+  let totalRemates=dados.filter(r=>r.jogador===p&&r.acao&&r.acao.startsWith("Remate")).length;
+  let totalDefesas=dados.filter(r=>r.jogador===p&&r.acao==="Defesa").length;
+  let totalAssist=dados.filter(r=>r.jogador===p&&r.acao==="Assistência").length;
 
   let bloco=`<div class="playerAccordion" id="acc_${idx}">
    <button class="playerAccordionHeader" onclick="toggleJogadorStats(${idx})">
     ▶️ ${p} — ⚽ ${totalGolos} | ✔️ ${totalRemates} | 🧤 ${totalDefesas} | 🎁 ${totalAssist}
    </button>
    <div class="playerAccordionBody">
-    <div class="small">Clica num emoji do mapa para apagar essa ação.</div>
+    <div class="small">Filtro: <b>${filtro}</b> · Clica num emoji do mapa para apagar essa ação.</div>
     ${desenharCampoEventos(eventosJogador)}
     <h4>Ações</h4>`;
 
-  // Aparecem todas as ações, mesmo as que estão a zero
   acoes.forEach(a=>{
-   let n=count(r=>r.jogador===p&&r.acao===a.nome);
+   let n=dados.filter(r=>r.jogador===p&&r.acao===a.nome).length;
    bloco+=`<div class="stat"><span>${a.emoji} ${a.nome}</span><b>${n}</b></div>`;
   });
 
   bloco+=`</div></div>`;
-  st.innerHTML+=bloco;
+  box.innerHTML+=bloco;
  });
-
 }
 function renderReport(){
  let r=$("report");
