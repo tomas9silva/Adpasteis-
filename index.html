@@ -1656,6 +1656,110 @@ PÁGINA CONVOCATÓRIA
  .centerBottom{gap:12px}
  .players{grid-template-columns:repeat(3,1fr)}
 }
+
+/* =====================================
+POP-UP DAS ESTATÍSTICAS
+===================================== */
+.statPopupDetail{
+ background:linear-gradient(180deg,#071326,#101b31);
+ color:white;
+ border:1px solid rgba(255,255,255,.16);
+ border-radius:16px;
+ padding:12px;
+}
+
+.statPopupHero{
+ display:flex;
+ align-items:center;
+ gap:10px;
+ margin-bottom:10px;
+}
+
+.statPopupEmoji{
+ width:46px;
+ height:46px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ border-radius:14px;
+ background:rgba(215,25,32,.18);
+ border:1px solid rgba(215,25,32,.45);
+ font-size:26px;
+}
+
+.statPopupTitle{
+ font-size:18px;
+ font-weight:900;
+ line-height:1.1;
+}
+
+.statPopupSub{
+ font-size:12px;
+ opacity:.82;
+ margin-top:3px;
+}
+
+.statPopupGrid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:7px;
+ margin-top:8px;
+}
+
+.statPopupItem{
+ background:rgba(255,255,255,.06);
+ border:1px solid rgba(255,255,255,.10);
+ border-radius:10px;
+ padding:8px;
+ font-size:12px;
+}
+
+.statPopupItem b{
+ display:block;
+ color:#ffd21a;
+ font-size:14px;
+ margin-top:2px;
+}
+
+.statPopupDirection{
+ margin-top:8px;
+ padding:8px;
+ border-radius:10px;
+ background:rgba(255,255,255,.05);
+ border:1px solid rgba(255,255,255,.10);
+ font-size:12px;
+}
+
+.statPopupActions{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+ margin-top:10px;
+}
+
+.statPopupActions button{
+ margin:0;
+}
+
+
+/* Pop-ups hierárquicos da arena principal */
+.quickFlowBack{
+ background:transparent!important;
+ border:1px solid rgba(0,0,0,.18)!important;
+ color:#111!important;
+ margin-bottom:8px;
+}
+
+.quickFlowGrid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+}
+
+.quickFlowGrid button{
+ min-height:54px;
+}
+
 </style>
 </head>
 <body>
@@ -2032,7 +2136,7 @@ MODAIS
 </div>
 <div id="subsModal" class="modal"><div class="modalContent"><h2>Substituição</h2><h4>Em campo</h4><div id="campoGrid" class="players"></div><h4>Banco</h4><div id="bancoGrid" class="players"></div><div id="subInfo" class="playerCard">Seleciona quem sai e quem entra.</div><button class="green" onclick="confirmSub()">Confirmar substituição</button><button class="danger" onclick="closeSubs()">Cancelar</button><div id="subsHist"></div></div></div>
 <div id="editModal" class="modal"><div class="modalContent"><h2 id="editTitle">Editar estatísticas</h2><div id="editStats"></div><button class="danger" onclick="closeEditStats()">Fechar</button></div></div>
-<div id="eventModal" class="modal"><div class="modalContent"><h2 id="eventTitle">Ação</h2><div id="eventInfo"></div><button class="danger" onclick="deleteEvent()">Apagar ação</button><button class="dark" onclick="closeEvent()">Fechar</button></div></div>
+<div id="eventModal" class="modal"><div class="modalContent"><h2 id="eventTitle">Ação</h2><div id="eventInfo"></div></div></div>
 
 <script>
 
@@ -2082,18 +2186,23 @@ if(!convocatoria.tecnica)convocatoria.tecnica=[];
 LISTA DE AÇÕES DO JOGO
 ===================================== */
 const acoes=[
- {nome:"Golo dentro da área",emoji:"⚽"},
- {nome:"Golo fora da área",emoji:"⚽"},
+ {nome:"Golo corrido",emoji:"⚽"},
  {nome:"Golo de livre",emoji:"⚽"},
+ {nome:"Golo acrobático",emoji:"⚽"},
  {nome:"Golo de cabeça",emoji:"⚽"},
- {nome:"Golo de canto",emoji:"⚽"},
- {nome:"Remate jogo corrido",emoji:"✔️"},
- {nome:"Remate livre",emoji:"✔️"},
+ {nome:"Golo de pontapé de saída",emoji:"⚽"},
+ {nome:"Golo sofrido",emoji:"🔴"},
+ {nome:"Remate corrido fora",emoji:"❌"},
+ {nome:"Remate corrido defesa",emoji:"🧤"},
+ {nome:"Remate de livre fora",emoji:"❌"},
+ {nome:"Remate de livre defesa",emoji:"🧤"},
+ {nome:"Remate acrobático fora",emoji:"❌"},
+ {nome:"Remate acrobático defesa",emoji:"🧤"},
+ {nome:"Remate de cabeça fora",emoji:"❌"},
+ {nome:"Remate de cabeça defesa",emoji:"🧤"},
  {nome:"Defesa",emoji:"🧤"},
  {nome:"Assistência",emoji:"🎁"},
- {nome:"Remate fora",emoji:"❌"},
- {nome:"Passe falhado",emoji:"⚠️"},
- {nome:"Golo sofrido",emoji:"🔴"}
+ {nome:"Passe falhado",emoji:"⚠️"}
 ];
 
 
@@ -2194,6 +2303,103 @@ function choosePlayer(j){
  renderPlayerCard();
  abrirPopupAcoes();
 }
+function chooseActionPrincipal(tipo){
+ flow.tipoPrincipal=tipo;
+
+ if(tipo==="Golo"){
+  abrirPopupTiposGolo();
+  return;
+ }
+
+ if(tipo==="Remate"){
+  abrirPopupTiposRemate();
+  return;
+ }
+
+ flow.acao=tipo;
+ flow.emoji=acaoObj(tipo).emoji;
+ confirmarAcaoRapida();
+}
+
+function abrirPopupTiposGolo(){
+ let title=$("quickTitle");
+ let content=$("quickContent");
+
+ title.innerHTML="Tipo de golo";
+
+ const golos=[
+  {nome:"Golo corrido",emoji:"⚽"},
+  {nome:"Golo de livre",emoji:"⚽"},
+  {nome:"Golo acrobático",emoji:"⚽"},
+  {nome:"Golo de cabeça",emoji:"⚽"},
+  {nome:"Golo de pontapé de saída",emoji:"⚽"},
+  {nome:"Golo sofrido",emoji:"🔴"}
+ ];
+
+ content.innerHTML=`
+  <button class="quickFlowBack" onclick="abrirPopupAcoes()">← Voltar</button>
+  <div class="quickFlowGrid">
+   ${golos.map(g=>`<button class="actionBtn dark" onclick="chooseGoloFinal('${esc(g.nome)}','${esc(g.emoji)}')">${g.emoji} ${g.nome}</button>`).join("")}
+  </div>
+ `;
+}
+
+function chooseGoloFinal(nome,emoji){
+ flow.acao=nome;
+ flow.emoji=emoji;
+ confirmarAcaoRapida();
+}
+
+function abrirPopupTiposRemate(){
+ let title=$("quickTitle");
+ let content=$("quickContent");
+
+ title.innerHTML="Tipo de remate";
+
+ const remates=[
+  "Remate corrido",
+  "Remate de livre",
+  "Remate acrobático",
+  "Remate de cabeça"
+ ];
+
+ content.innerHTML=`
+  <button class="quickFlowBack" onclick="abrirPopupAcoes()">← Voltar</button>
+  <div class="quickFlowGrid">
+   ${remates.map(r=>`<button class="actionBtn dark" onclick="chooseTipoRemate('${esc(r)}')">✔️ ${r}</button>`).join("")}
+  </div>
+ `;
+}
+
+function chooseTipoRemate(tipo){
+ flow.tipoRemate=tipo;
+ abrirPopupResultadoRemate();
+}
+
+function abrirPopupResultadoRemate(){
+ let title=$("quickTitle");
+ let content=$("quickContent");
+
+ title.innerHTML=flow.tipoRemate;
+
+ content.innerHTML=`
+  <button class="quickFlowBack" onclick="abrirPopupTiposRemate()">← Voltar</button>
+  <div class="quickFlowGrid">
+   <button class="actionBtn dark" onclick="chooseResultadoRemate('fora')">❌ Fora</button>
+   <button class="actionBtn dark" onclick="chooseResultadoRemate('defesa')">🧤 Defesa</button>
+  </div>
+ `;
+}
+
+function chooseResultadoRemate(resultado){
+ const emoji=resultado==="fora"?"❌":"🧤";
+ const sufixo=resultado==="fora"?"fora":"defesa";
+
+ flow.acao=flow.tipoRemate+" "+sufixo;
+ flow.emoji=emoji;
+ confirmarAcaoRapida();
+}
+
 function chooseAction(a){
  flow.acao=a;
  confirmarAcaoRapida();
@@ -2218,8 +2424,16 @@ function abrirPopupAcoes(){
 
  title.innerHTML=flow.jogador;
 
- content.innerHTML="<div class='grid'>"+
-  acoes.map(a=>`<button class="actionBtn dark" onclick="chooseAction('${esc(a.nome)}')">${a.emoji} ${a.nome}</button>`).join("")+
+ const principais=[
+  {nome:"Golo",emoji:"⚽"},
+  {nome:"Remate",emoji:"✔️"},
+  {nome:"Defesa",emoji:"🧤"},
+  {nome:"Assistência",emoji:"🎁"},
+  {nome:"Passe falhado",emoji:"⚠️"}
+ ];
+
+ content.innerHTML="<div class='quickFlowGrid'>"+
+  principais.map(a=>`<button class="actionBtn dark" onclick="chooseActionPrincipal('${esc(a.nome)}')">${a.emoji} ${a.nome}</button>`).join("")+
  "</div>";
 }
 
@@ -2236,7 +2450,7 @@ function confirmarAcaoRapida(){
   periodo:$("periodo").value,
   tempo:t(),
   acao:flow.acao,
-  emoji:obj.emoji,
+  emoji:flow.emoji || obj.emoji,
   data:new Date().toLocaleString("pt-PT"),
   x:flow.x,
   y:flow.y,
@@ -2285,16 +2499,64 @@ function renderMap(){
   p.appendChild(tp);
  }
 }
-function openEvent(i){
+function openStatEvent(i){
  selectedEventIndex=i;
  let r=reg[i];
- let zona=(r.x!==""&&r.x!==undefined&&r.y!==""&&r.y!==undefined)?getZonaCampo(Number(r.x),Number(r.y),r.attackSide||attackSide):"-";
- $("eventTitle").innerText=(r.emoji||acaoObj(r.acao).emoji)+" "+r.acao;
- $("eventInfo").innerHTML=`<div class="log"><b>${r.jogador}</b><br>${r.periodo} · ${r.tempo}<br>Zona: ${zona}<br>${r.attackSide==="left"?"⬅️ atacava esquerda":"➡️ atacava direita"}<br>${r.data}</div>`;
+ if(!r)return;
+
+ let emoji=r.emoji||acaoObj(r.acao).emoji;
+ let zona=(r.x!==""&&r.x!==undefined&&r.y!==""&&r.y!==undefined)
+  ? getZonaCampo(Number(r.x),Number(r.y),r.attackSide||attackSide)
+  : "-";
+
+ let direcao=r.attackSide==="left"?"⬅️ Atacava para a esquerda":"➡️ Atacava para a direita";
+
+ $("eventTitle").innerText="Detalhe da ação";
+
+ $("eventInfo").innerHTML=`
+  <div class="statPopupDetail">
+   <div class="statPopupHero">
+    <div class="statPopupEmoji">${emoji}</div>
+    <div>
+     <div class="statPopupTitle">${r.acao||"-"}</div>
+     <div class="statPopupSub">${r.jogador||"Sem jogadora"} · ${r.data||""}</div>
+    </div>
+   </div>
+
+   <div class="statPopupGrid">
+    <div class="statPopupItem">Jogadora<b>${r.jogador||"-"}</b></div>
+    <div class="statPopupItem">Ação<b>${r.acao||"-"}</b></div>
+    <div class="statPopupItem">Período<b>${r.periodo||"-"}</b></div>
+    <div class="statPopupItem">Tempo<b>${r.tempo||"-"}</b></div>
+    <div class="statPopupItem">Zona<b>${zona}</b></div>
+    <div class="statPopupItem">Local técnico<b>${r.x||"-"}% · ${r.y||"-"}%</b></div>
+   </div>
+
+   <div class="statPopupDirection">${direcao}</div>
+
+   <div class="statPopupActions">
+    <button class="danger" onclick="deleteEvent()">Apagar ação</button>
+    <button class="dark" onclick="closeEvent()">Fechar</button>
+   </div>
+  </div>
+ `;
+
  $("eventModal").classList.add("show");
 }
+function openEvent(i){
+ openStatEvent(i);
+}
 function closeEvent(){$("eventModal").classList.remove("show");selectedEventIndex=null}
-function deleteEvent(){if(selectedEventIndex===null)return;if(confirm("Apagar esta ação?")){reg.splice(selectedEventIndex,1);localStorage.setItem("registos_pasteis",JSON.stringify(reg));closeEvent();renderAll()}}
+function deleteEvent(){
+ if(selectedEventIndex===null)return;
+
+ if(confirm("Apagar esta ação?")){
+  reg.splice(selectedEventIndex,1);
+  localStorage.setItem("registos_pasteis",JSON.stringify(reg));
+  closeEvent();
+  renderAll();
+ }
+}
 
 
 /* =====================================
@@ -2472,12 +2734,16 @@ function eventosComLocal(){
 
 function desenharCampoEventos(eventos){
  let html='<div class="miniPitch"><div class="miniQuarter q1"></div><div class="miniQuarter q3"></div><div class="miniArea leftMini"></div><div class="miniArea rightMini"></div>';
+
  eventos.forEach(obj=>{
   let r=obj.r || obj;
   let idx=obj.regIndex;
-  let click = idx!==undefined ? `onclick="apagarAcaoPorIndice(${idx})"` : "";
-  html+=`<span class="miniEmoji" ${click} style="left:${r.x}%;top:${r.y}%" title="${r.jogador} - ${r.acao}">${r.emoji||acaoObj(r.acao).emoji}</span>`;
+  let click = idx!==undefined ? `onclick="openStatEvent(${idx})"` : "";
+  let zona=(r.x!==""&&r.x!==undefined&&r.y!==""&&r.y!==undefined)?getZonaCampo(Number(r.x),Number(r.y),r.attackSide||attackSide):"-";
+
+  html+=`<span class="miniEmoji" ${click} style="left:${r.x}%;top:${r.y}%" title="${r.jogador} - ${r.acao} · ${zona}">${r.emoji||acaoObj(r.acao).emoji}</span>`;
  });
+
  html+='</div>';
  return html;
 }
