@@ -2107,12 +2107,13 @@ function $(id){return document.getElementById(id)}
 NAVEGAÇÃO PRINCIPAL
 ===================================== */
 function abrirMenu(){
- const landing=document.getElementById("landingPage");
- const menu=document.getElementById("menuPage");
- const main=document.getElementById("main");
- const training=document.getElementById("trainingPage");
- const settings=document.getElementById("settingsPage");
- const conv=document.getElementById("convocatoriaPage");
+ const landing=$("landingPage");
+ const menu=$("menuPage");
+ const main=$("main");
+ const training=$("trainingPage");
+ const settings=$("settingsPage");
+ const conv=$("convocatoriaPage");
+
  if(landing)landing.classList.add("hidden");
  if(menu)menu.classList.remove("hidden");
  if(main)main.classList.add("hidden");
@@ -2313,18 +2314,26 @@ DEFINIÇÕES DO JOGO
 ===================================== */
 function openSettings(){
  flow={x:null,y:null,jogador:null,acao:null,step:"idle"};
- let qm=$("quickModal");
- if(qm)qm.classList.remove("show");
+
+ ["quickModal","eventModal","subsModal","startersModal","editModal"].forEach(id=>{
+  let m=$(id);
+  if(m)m.classList.remove("show");
+ });
+
  renderMap();
 
- $("main").classList.add("hidden");
- $("settingsPage").classList.remove("hidden");
- $("setCasa").value=$("casa").value;
- $("setFora").value=$("fora").value;
- $("setTotal").value=total;
- $("setCampo").value=inField;
- $("setDur").value=dur;
- $("detalhes").value=localStorage.getItem("detalhes_jogo_pasteis")||"";
+ if($("main"))$("main").classList.add("hidden");
+ if($("trainingPage"))$("trainingPage").classList.add("hidden");
+ if($("convocatoriaPage"))$("convocatoriaPage").classList.add("hidden");
+ if($("settingsPage"))$("settingsPage").classList.remove("hidden");
+
+ if($("setCasa"))$("setCasa").value=$("casa")?.value||"AD Pastéis";
+ if($("setFora"))$("setFora").value=$("fora")?.value||"";
+ if($("setTotal"))$("setTotal").value=total;
+ if($("setCampo"))$("setCampo").value=inField;
+ if($("setDur"))$("setDur").value=dur;
+ if($("detalhes"))$("detalhes").value=localStorage.getItem("detalhes_jogo_pasteis")||"";
+
  renderEditNames();
  renderStats();
  renderReport();
@@ -2428,11 +2437,24 @@ function setActiveControl(tipo){
 /* =====================================
 JOGO: CRONÓMETRO
 ===================================== */
-function start(){if(timer)return;timer=setInterval(()=>{if(time>0){time--;updateTimer()}else{pause();alert("Fim do período")}},1000)}
+function start(){
+ if(timer)return;
+
+ timer=setInterval(()=>{
+  if(time>0){
+   time--;
+   updateTimer();
+  }else{
+   pause();
+   alert("⚠️ Mudar período e direção do jogo");
+  }
+ },1000);
+}
 function pause(){clearInterval(timer);timer=null}
 function resetTimer(){pause();time=dur*60;updateTimer()}
 function updateTimer(){
- $("tempo").innerText=t();
+ if($("tempo"))$("tempo").innerText=t();
+
  if(time<=0 && timer){
   pause();
   alert("⚠️ Mudar período e direção do jogo");
@@ -2599,6 +2621,8 @@ function renderStats(){
    <option value="1.º período" ${filtro==="1.º período"?"selected":""}>1.º período</option>
    <option value="2.º período" ${filtro==="2.º período"?"selected":""}>2.º período</option>
    <option value="3.º período" ${filtro==="3.º período"?"selected":""}>3.º período</option>
+   <option value="Prolongamento" ${filtro==="Prolongamento"?"selected":""}>Prolongamento</option>
+   <option value="Penáltis" ${filtro==="Penáltis"?"selected":""}>Penáltis</option>
   </select>
  `;
 
@@ -2842,10 +2866,14 @@ ENTRADA NO JOGO
 ===================================== */
 function entrarJogo(){
  localStorage.setItem("modo_pasteis","jogo");
- $("menuPage").classList.add("hidden");
- if($("convocatoriaPage"))$("convocatoriaPage").classList.add("hidden");
+
+ if($("landingPage"))$("landingPage").classList.add("hidden");
+ if($("menuPage"))$("menuPage").classList.add("hidden");
  if($("trainingPage"))$("trainingPage").classList.add("hidden");
- $("main").classList.remove("hidden");
+ if($("settingsPage"))$("settingsPage").classList.add("hidden");
+ if($("convocatoriaPage"))$("convocatoriaPage").classList.add("hidden");
+ if($("main"))$("main").classList.remove("hidden");
+
  aplicarModoVisual();
 }
 
@@ -2858,25 +2886,20 @@ function abrirTreinoPage(){
  pause();
  localStorage.setItem("modo_pasteis","treino");
 
- const landing=$("landingPage");
- const menu=$("menuPage");
- const training=$("trainingPage");
- const main=$("main");
- const settings=$("settingsPage");
-
- if(landing) landing.classList.add("hidden");
- if(menu) menu.classList.add("hidden");
- if(main) main.classList.add("hidden");
- if(settings) settings.classList.add("hidden");
- if(training) training.classList.remove("hidden");
+ if($("landingPage"))$("landingPage").classList.add("hidden");
+ if($("menuPage"))$("menuPage").classList.add("hidden");
+ if($("main"))$("main").classList.add("hidden");
+ if($("settingsPage"))$("settingsPage").classList.add("hidden");
+ if($("convocatoriaPage"))$("convocatoriaPage").classList.add("hidden");
+ if($("trainingPage"))$("trainingPage").classList.remove("hidden");
 
  carregarDadosTreino();
 
  ["grupo","presencas","exercicios","resumo"].forEach(t=>{
   const sec=$("trainingSection"+t.charAt(0).toUpperCase()+t.slice(1));
   const btn=$("tab"+t.charAt(0).toUpperCase()+t.slice(1));
-  if(sec) sec.classList.add("hidden");
-  if(btn) btn.classList.remove("active");
+  if(sec)sec.classList.add("hidden");
+  if(btn)btn.classList.remove("active");
  });
 }
 
@@ -2887,10 +2910,13 @@ function entrarTreino(){
 function aplicarEntradaInicial(){
  if(localStorage.getItem("abrir_direto_pasteis")==="1"){
   localStorage.removeItem("abrir_direto_pasteis");
-  $("landingPage").classList.add("hidden");
+
+  if($("landingPage"))$("landingPage").classList.add("hidden");
   if($("menuPage"))$("menuPage").classList.add("hidden");
   if($("trainingPage"))$("trainingPage").classList.add("hidden");
-  $("main").classList.remove("hidden");
+  if($("settingsPage"))$("settingsPage").classList.add("hidden");
+  if($("convocatoriaPage"))$("convocatoriaPage").classList.add("hidden");
+  if($("main"))$("main").classList.remove("hidden");
  }
 }
 
@@ -2937,10 +2963,13 @@ function openTrainingTab(tab){
 }
 
 function voltarMenu(){
+ pause();
+
  if($("trainingPage"))$("trainingPage").classList.add("hidden");
  if($("main"))$("main").classList.add("hidden");
  if($("settingsPage"))$("settingsPage").classList.add("hidden");
- $("menuPage").classList.remove("hidden");
+ if($("convocatoriaPage"))$("convocatoriaPage").classList.add("hidden");
+ if($("menuPage"))$("menuPage").classList.remove("hidden");
 }
 
 function setTipoTreino(tipo,btn){
@@ -4141,14 +4170,23 @@ function saveConvocatoria(){
 }
 function openConvocatoria(){
  pause();
+
+ if($("landingPage"))$("landingPage").classList.add("hidden");
  if($("menuPage"))$("menuPage").classList.add("hidden");
  if($("main"))$("main").classList.add("hidden");
  if($("trainingPage"))$("trainingPage").classList.add("hidden");
  if($("settingsPage"))$("settingsPage").classList.add("hidden");
  if($("convocatoriaPage"))$("convocatoriaPage").classList.remove("hidden");
- loadConvocatoria();renderConvocatoria();
+
+ loadConvocatoria();
+ renderConvocatoria();
 }
-function closeConvocatoria(){saveConvocatoria();$("convocatoriaPage").classList.add("hidden");$("menuPage").classList.remove("hidden")}
+function closeConvocatoria(){
+ saveConvocatoria();
+
+ if($("convocatoriaPage"))$("convocatoriaPage").classList.add("hidden");
+ if($("menuPage"))$("menuPage").classList.remove("hidden");
+}
 function loadConvocatoria(){
  if($("convAdversario"))$("convAdversario").value=convocatoria.adversario||"";
  if($("convCompeticao"))$("convCompeticao").value=convocatoria.competicao||"";
@@ -4210,75 +4248,5 @@ function renderAll(){renderAttack();renderMap();renderFlow();renderPlayerCard();
 loadGame();updateTimer();renderAll();aplicarEntradaInicial();
 
 </script>
- <div id="convocatoriaPage" class="hidden">
-
- <div class="topbar">
-  <button onclick="closeConvocatoria()">⬅ Voltar</button>
-  <h2>📋 Convocatória</h2>
- </div>
-
- <div class="card">
-  <label>Adversário</label>
-  <input id="convAdversario">
-
-  <label>Competição</label>
-  <input id="convCompeticao">
-
-  <label>Dia do jogo</label>
-  <input id="convData" type="date">
-
-  <label>Hora do jogo</label>
-  <input id="convHoraJogo" type="time">
- </div>
-
- <div class="card">
-  <h3>Horas de Concentração</h3>
-
-  <div id="convHoras"></div>
-
-  <button onclick="addHoraConv()">
-   + Adicionar hora
-  </button>
- </div>
-
- <div class="card">
-  <h3>Localizações</h3>
-
-  <div id="convLocais"></div>
-
-  <button onclick="addLocalConv()">
-   + Adicionar local
-  </button>
- </div>
-
- <div class="card">
-  <h3>Convocadas</h3>
-
-  <div id="convJogadoras"></div>
- </div>
-
- <div class="card">
-  <h3>Equipa Técnica</h3>
-
-  <div id="convTecnica"></div>
- </div>
-
- <div class="card">
-  <label>Observações</label>
-
-  <textarea id="convObs"></textarea>
- </div>
-
- <div class="card">
-  <button class="green">
-   👁 Pré-visualizar
-  </button>
-
-  <button class="dark">
-   🖼 Gerar imagem
-  </button>
- </div>
-
-</div>
 </body>
 </html>
