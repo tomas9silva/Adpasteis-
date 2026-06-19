@@ -3426,7 +3426,13 @@ TREINO: EDIÇÃO DE REMATES
 ===================================== */
 function renderListaTentativasExercicio(ex){
  let eventos=treinoEventosDoExercicio(ex.id);
- if(!eventos.length)return "<div class='log'>Sem tentativas registadas.</div>";
+if(!eventos.length){
+  return `
+    <div class="log">
+      Ainda não existem tentativas registadas.
+    </div>
+  `;
+}
 
  let html="<div class='trainingAttemptsList'><b>Tentativas registadas</b>";
  eventos.forEach(r=>{
