@@ -1760,6 +1760,99 @@ POP-UP DAS ESTATÍSTICAS
  min-height:54px;
 }
 
+
+/* =====================================
+TESTE VISUAL FUTEBOL PRAIA — SEGURO
+===================================== */
+:root{
+ --sand:#E8D6B3;
+ --sand2:#DCC292;
+ --lineBlue:#0057B8;
+ --goalYellow:#F4C542;
+ --deepBlue:#071326;
+ --panel:#0D1A2F;
+}
+
+body{
+ font-family:Inter,Arial,Helvetica,sans-serif!important;
+}
+
+/* Arena principal: areia clara */
+.pitch{
+ background:
+  radial-gradient(circle at 18% 22%,rgba(255,255,255,.16),transparent 10%),
+  radial-gradient(circle at 76% 68%,rgba(255,255,255,.11),transparent 12%),
+  linear-gradient(135deg,var(--sand),var(--sand2))!important;
+ border-color:var(--lineBlue)!important;
+}
+
+/* Linhas da arena principal */
+.pitch:before{
+ border-color:var(--lineBlue)!important;
+ opacity:.92;
+}
+
+.pitch:after,
+.pitchQuarter{
+ border-color:rgba(0,87,184,.45)!important;
+}
+
+/* Balizas principais */
+.area{
+ border-color:var(--goalYellow)!important;
+ background:rgba(244,197,66,.14)!important;
+}
+
+/* Mini arenas: areia clara */
+.miniPitch{
+ background:
+  radial-gradient(circle at 20% 25%,rgba(255,255,255,.13),transparent 9%),
+  linear-gradient(135deg,var(--sand),var(--sand2))!important;
+ border-color:var(--lineBlue)!important;
+}
+
+.miniPitch:before{
+ border-color:var(--lineBlue)!important;
+ opacity:.9;
+}
+
+.miniPitch:after,
+.miniPitch .miniQuarter{
+ border-color:rgba(0,87,184,.42)!important;
+}
+
+/* Balizas das mini arenas */
+.miniArea{
+ border-color:var(--goalYellow)!important;
+ background:rgba(244,197,66,.12)!important;
+}
+
+/* Seta de ataque */
+.attackDirectionBig{
+ color:var(--lineBlue)!important;
+ opacity:.16!important;
+}
+
+/* Cartões ligeiramente mais profissionais, sem interferir em páginas */
+.card,
+.pitchCard,
+.trainingCard,
+.convCard,
+.playerCard,
+.collectiveBox,
+.playerAccordion,
+.percentReport{
+ border-color:rgba(255,255,255,.08)!important;
+ box-shadow:0 8px 22px rgba(0,0,0,.16)!important;
+ border-radius:18px!important;
+}
+
+.enterBtn{
+ position:relative;
+ z-index:10;
+ pointer-events:auto!important;
+}
+
 </style>
 </head>
 <body>
@@ -1794,7 +1887,7 @@ PÁGINA INICIAL
    <h1>𝕊𝕥𝕒𝕥𝕊</h1>
 <p class="landingSub">Match Analysis Platform</p>
 <p class="landingVersion">Version 1.0</p>
-    <button id="enterMainBtn" type="button" onclick="abrirMenu()" class="enterBtn">ENTRAR</button>
+    <button id="enterMainBtn" type="button" onclick="abrirMenu();return false;" class="enterBtn">ENTRAR</button>
   </div>
 </div>
 
@@ -2230,6 +2323,8 @@ function abrirMenu(){
  if(settings)settings.classList.add("hidden");
  if(conv)conv.classList.add("hidden");
 }
+
+window.abrirMenu=abrirMenu;
 
 function toggle(id){$(id).classList.toggle("hidden")}
 function t(){let m=Math.floor(time/60),s=time%60;return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")}
@@ -4511,7 +4606,28 @@ function textoConvocatoria(){
 function copiarConvocatoriaWhatsApp(){saveConvocatoria();let texto=textoConvocatoria();if(navigator.clipboard){navigator.clipboard.writeText(texto).then(()=>alert("Texto da convocatória copiado para WhatsApp."))}else{alert(texto)}}
 
 function renderAll(){renderAttack();renderMap();renderFlow();renderPlayerCard();renderStats();renderReport();renderHistory();renderSubs();atualizarTreinoResumo();aplicarModoVisual()}
-loadGame();updateTimer();renderAll();aplicarEntradaInicial();
+function bindEntradaInicial(){
+ const btn=$("enterMainBtn");
+ if(btn){
+  btn.onclick=function(e){
+   if(e)e.preventDefault();
+   abrirMenu();
+   return false;
+  };
+ }
+}
+
+bindEntradaInicial();
+
+try{
+ loadGame();
+ updateTimer();
+ renderAll();
+ aplicarEntradaInicial();
+}catch(err){
+ console.error("Erro ao iniciar aplicação:",err);
+ bindEntradaInicial();
+}
 
 </script>
 </body>
