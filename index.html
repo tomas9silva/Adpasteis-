@@ -1640,6 +1640,26 @@ DEFINIÇÕES
  .centerBottom{gap:12px}
  .players{grid-template-columns:repeat(3,1fr)}
 }
+
+/* Correção clique na arena */
+#pitch > .attackDirectionBig,
+#pitch > .goalkeeperMarker,
+#pitch > .pitchQuarter,
+#pitch > .pitchHalf,
+#pitch > .zoneLabel,
+#pitch > .area,
+#pitch > .cornerFlag{
+ pointer-events:none!important;
+}
+
+#pitch{
+ position:relative;
+}
+
+#pitch .tempPoint{
+ pointer-events:none!important;
+}
+
 </style>
 </head>
 <body>
@@ -2138,9 +2158,10 @@ function esc(str){return String(str).replace(/\\/g,"\\\\").replace(/'/g,"\\'").r
 JOGO: ARENA E REGISTO DE AÇÕES
 ===================================== */
 function pickMap(e){
- if(e.target.id==="attackBtn")return;
+ let pitch=$("pitch");
+ if(!pitch)return;
 
- let r=e.currentTarget.getBoundingClientRect();
+ let r=pitch.getBoundingClientRect();
 
  flow={
   x:Math.round(((e.clientX-r.left)/r.width)*100),
@@ -2239,11 +2260,10 @@ function renderFlow(){
 }
 function renderMap(){
  let p=$("pitch");
+ if(!p)return;
+
  p.querySelectorAll(".mapEmoji,.tempPoint").forEach(m=>m.remove());
 
- // Campo limpo por defeito.
- // As ações continuam guardadas nas estatísticas, histórico e CSV.
- // Só aparece o ponto temporário enquanto estás a criar uma nova ação.
  if(flow.x&&flow.y){
   let tp=document.createElement("div");
   tp.className="tempPoint";
@@ -2267,29 +2287,24 @@ function undo(){if(!reg.length){alert("Não há ações para desfazer.");return}
 /* =====================================
 DEFINIÇÕES DO JOGO
 ===================================== */
-function openSettings(){$("main").classList.add("hidden");$("settingsPage").classList.remove("hidden");$("setCasa").value=$("casa").value;$("setFora").value=$("fora").value;$("setTotal").value=total;$("setCampo").value=inField;$("setDur").value=dur;$("detalhes").value=localStorage.getItem("detalhes_jogo_pasteis")||"";renderEditNames();renderStats();renderReport();renderHistory()}
-function closeSettings(){$("settingsPage").classList.add("hidden");$("main").classList.remove("hidden")}
-function saveSettings(){total=Math.max(1,+$("setTotal").value||12);inField=Math.max(1,Math.min(+$("setCampo").value||5,total));dur=Math.max(1,+$("setDur").value||12);localStorage.setItem("total_jogadores_pasteis",total);localStorage.setItem("jogadores_campo_pasteis",inField);localStorage.setItem("duracao_periodo_pasteis",dur);localStorage.setItem("equipa_casa_pasteis",$("setCasa").value||"Equipa da Casa");localStorage.setItem("equipa_fora_pasteis",$("setFora").value||"");localStorage.setItem("detalhes_jogo_pasteis",$("detalhes").value||"");while(jogadores.length<total)jogadores.push("Jogador "+(jogadores.length+1));while(jogadores.length>total)jogadores.pop();campo=jogadores.slice(0,inField);banco=jogadores.slice(inField);active=jogadores[0]||"Jogador 1";time=dur*60;pause();saveAll();loadGame();updateTimer();renderAll();alert("Definições guardadas.")}
-function renderEditNames(){let e=$("editNames");e.innerHTML="";jogadores.forEach((j,i)=>e.innerHTML+=`<input id="nome${i}" value="${j}">`);e.innerHTML+=`<button class="green" onclick="saveNames()">Guardar nomes</button><button class="danger" onclick="resetNames()">Repor Jogador 1-${total}</button>`}
-function saveNames(){let old=[...jogadores];jogadores=jogadores.map((j,i)=>$("nome"+i).value||("Jogador "+(i+1)));reg.forEach(r=>{let idx=old.indexOf(r.jogador);if(idx>=0)r.jogador=jogadores[idx]});subs.forEach(s=>{let a=old.indexOf(s.sai),b=old.indexOf(s.entra);if(a>=0)s.sai=jogadores[a];if(b>=0)s.entra=jogadores[b]});campo=campo.map(p=>{let i=old.indexOf(p);return i>=0?jogadores[i]:p});banco=banco.map(p=>{let i=old.indexOf(p);return i>=0?jogadores[i]:p});active=jogadores[0]||"Jogador 1";saveAll();renderAll();renderEditNames()}
-function resetNames(){jogadores=[];for(let i=1;i<=total;i++)jogadores.push("Jogador "+i);campo=jogadores.slice(0,inField);banco=jogadores.slice(inField);active=jogadores[0]||"Jogador 1";saveAll();renderAll();renderEditNames()}
+function openSettings(){
+ flow={x:null,y:null,jogador:null,acao:null,step:"idle"};
+ let qm=$("quickModal");
+ if(qm)qm.classList.remove("show");
+ renderMap();
 
-function openEditStats(){$("editTitle").innerText="Editar estatísticas - "+active;let c=$("editStats");c.innerHTML="";acoes.forEach(a=>c.innerHTML+=`<div class="editRow"><span>${a.emoji} ${a.nome}: <b>${count(r=>r.jogador===active&&r.acao===a.nome)}</b></span><button class="green" onclick="adjust('${esc(a.nome)}',1)">+</button><button class="danger" onclick="adjust('${esc(a.nome)}',-1)">-</button></div>`);$("editModal").classList.add("show")}
-function closeEditStats(){$("editModal").classList.remove("show")}
-function adjust(a,v){let obj=acaoObj(a);if(v>0)reg.unshift({jogador:active,periodo:$("periodo").value,tempo:t(),acao:a,emoji:obj.emoji,data:"Correção manual",x:"",y:"",attackSide:attackSide});else{let i=reg.findIndex(r=>r.jogador===active&&r.acao===a);if(i>=0)reg.splice(i,1)}localStorage.setItem("registos_pasteis",JSON.stringify(reg));renderAll();openEditStats()}
-
-
-let startersTemp=[];
-
-
-/* =====================================
-JOGO: TITULARES
-===================================== */
-function openStarters(){
- startersTemp=[...campo];
- let modal=$("startersModal");
- if(modal)modal.classList.add("show");
- renderStarters();
+ $("main").classList.add("hidden");
+ $("settingsPage").classList.remove("hidden");
+ $("setCasa").value=$("casa").value;
+ $("setFora").value=$("fora").value;
+ $("setTotal").value=total;
+ $("setCampo").value=inField;
+ $("setDur").value=dur;
+ $("detalhes").value=localStorage.getItem("detalhes_jogo_pasteis")||"";
+ renderEditNames();
+ renderStats();
+ renderReport();
+ renderHistory();
 }
 
 function closeStarters(){
