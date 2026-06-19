@@ -1671,11 +1671,21 @@ MÓDULO TREINO
 
   <div id="trainingSectionGrupo" class="trainingSection hidden">
     <div class="trainingCard">
-      <h3>Grupo de treino</h3>
-      <label>Nome do jogador</label>
-      <input id="novoTreinoJogador" placeholder="Ex: Jogador 1">
-      <button class="trainingStartBtn" onclick="addTreinoJogador()">Adicionar jogador ao treino</button>
+      <h3>Atletas</h3>
+      <label>Nome da atleta</label>
+      <input id="novoTreinoJogador" placeholder="Ex: Jogadora 1">
+      <button class="trainingStartBtn" onclick="addTreinoJogador()">Adicionar atleta</button>
       <div id="treinoJogadoresLista"></div>
+    </div>
+
+    <div class="trainingCard">
+      <h3>Equipa Técnica</h3>
+      <label>Nome do membro</label>
+      <input id="novoTreinador" placeholder="Ex: Tomás Silva">
+      <label>Função</label>
+      <input id="novaFuncaoTreinador" placeholder="Ex: Treinador Principal, Adjunto, Fisioterapeuta">
+      <button class="trainingStartBtn" onclick="addTreinadorTreino()">Adicionar membro</button>
+      <div id="treinadoresLista"></div>
     </div>
   </div>
 
@@ -1687,12 +1697,9 @@ MÓDULO TREINO
     </div>
 
     <div class="trainingCard">
-      <h3>Treinadores</h3>
-      <label>Nome do treinador</label>
-      <input id="novoTreinador" placeholder="Ex: Treinador 1">
-      <button class="trainingStartBtn" onclick="addTreinadorTreino()">Adicionar treinador</button>
+      <h3>Equipa Técnica</h3>
+      <div class="small">Seleciona os elementos da equipa técnica presentes.</div>
       <div id="coachPresenceGrid" class="presenceGrid"></div>
-      <div id="treinadoresLista"></div>
     </div>
 
     <div class="trainingCard">
@@ -1751,7 +1758,8 @@ MÓDULO TREINO
   <div id="trainingSectionResumo" class="trainingSection hidden">
     <div class="trainingCard">
       <h3>Resumo</h3>
-      <div class="trainingInfoLine"><span>Presentes</span><b id="treinoPresentes">0</b></div>
+      <div class="trainingInfoLine"><span>Atletas presentes</span><b id="treinoPresentes">0</b></div>
+      <div class="trainingInfoLine"><span>Equipa técnica presente</span><b id="treinoStaffPresentes">0</b></div>
       <div class="trainingInfoLine"><span>Exercícios</span><b id="treinoExercicios">0</b></div>
       <div class="trainingInfoLine"><span>Ações registadas</span><b id="treinoAcoes">0</b></div>
       <button class="trainingStartBtn" onclick="guardarSessaoAtual()">Guardar treino atual</button>
@@ -1841,7 +1849,7 @@ MÓDULO JOGO
  </div>
 
  <div class="card">
-   <h3>🎯 Jogador ativo</h3>
+   <h3>🎯 Jogadora ativa</h3>
    <div id="playerCard" class="playerCard" onclick="toggleDetails()"></div>
  </div>
 </div>
@@ -1895,7 +1903,7 @@ MODAIS
 <div id="startersModal" class="modal">
   <div class="modalContent">
     <h2>Quem começa?</h2>
-    <div class="startersInfo" id="startersInfo">Seleciona os jogadores iniciais.</div>
+    <div class="startersInfo" id="startersInfo">Seleciona as jogadoras iniciais.</div>
     <div id="startersGrid" class="players"></div>
     <button class="green" onclick="confirmStarters()">Guardar titulares</button>
     <button class="danger" onclick="closeStarters()">Cancelar</button>
@@ -1938,9 +1946,11 @@ let exerciciosTreino=JSON.parse(localStorage.getItem("exercicios_treino_pasteis"
 let presencasTreino=JSON.parse(localStorage.getItem("presencas_treino_pasteis")||"[]");
 let departamentoMedico=JSON.parse(localStorage.getItem("departamento_medico_pasteis")||"[]");
 let treinoTreinadores=JSON.parse(localStorage.getItem("treino_treinadores_pasteis")||"[]");
-if(!treinoTreinadores.length)treinoTreinadores=["Treinador 1"];
+if(!treinoTreinadores.length)treinoTreinadores=[{nome:"Membro 1",funcao:"Equipa Técnica"}];
+treinoTreinadores=treinoTreinadores.map(t=>typeof t==="string"?{nome:t,funcao:"Equipa Técnica"}:{nome:t.nome||"Membro",funcao:t.funcao||"Equipa Técnica"});
 let presencasTreinadores=JSON.parse(localStorage.getItem("presencas_treinadores_pasteis")||"[]");
-if(!presencasTreinadores.length)presencasTreinadores=[...treinoTreinadores];
+presencasTreinadores=presencasTreinadores.map(t=>typeof t==="string"?t:(t.nome||""));
+if(!presencasTreinadores.length)presencasTreinadores=treinoTreinadores.map(t=>t.nome);
 let treinoConfirmTemp=null;
 let treinoEditIndex=null;
 let filtroMedico="todos";
@@ -2848,23 +2858,28 @@ TREINO: TREINADORES
 ===================================== */
 function addTreinadorTreino(){
  let nome=($("novoTreinador")?.value||"").trim();
- if(!nome){alert("Escreve o nome do treinador.");return;}
- if(treinoTreinadores.includes(nome)){alert("Esse treinador já existe.");return;}
+ let funcao=($("novaFuncaoTreinador")?.value||"").trim() || "Equipa Técnica";
 
- treinoTreinadores.push(nome);
+ if(!nome){alert("Escreve o nome do membro da equipa técnica.");return;}
+ if(treinoTreinadores.some(t=>t.nome===nome)){alert("Esse membro já existe.");return;}
+
+ treinoTreinadores.push({nome,funcao});
  presencasTreinadores.push(nome);
 
  localStorage.setItem("treino_treinadores_pasteis",JSON.stringify(treinoTreinadores));
  localStorage.setItem("presencas_treinadores_pasteis",JSON.stringify(presencasTreinadores));
 
  $("novoTreinador").value="";
+ if($("novaFuncaoTreinador"))$("novaFuncaoTreinador").value="";
+
  renderTreinadores();
  atualizarTreinoResumo();
 }
 
 function removeTreinadorTreino(nome){
- if(!confirm("Remover este treinador?"))return;
- treinoTreinadores=treinoTreinadores.filter(t=>t!==nome);
+ if(!confirm("Remover este membro da equipa técnica?"))return;
+
+ treinoTreinadores=treinoTreinadores.filter(t=>t.nome!==nome);
  presencasTreinadores=presencasTreinadores.filter(t=>t!==nome);
 
  localStorage.setItem("treino_treinadores_pasteis",JSON.stringify(treinoTreinadores));
@@ -2877,28 +2892,42 @@ function removeTreinadorTreino(nome){
 function renderTreinadores(){
  let grid=$("coachPresenceGrid");
  let lista=$("treinadoresLista");
- if(!grid||!lista)return;
 
- grid.innerHTML="";
- treinoTreinadores.forEach(t=>{
-  let b=document.createElement("button");
-  b.className="presenceBtn"+(presencasTreinadores.includes(t)?" active":"");
-  b.textContent=t;
-  b.onclick=()=>{
-   presencasTreinadores=presencasTreinadores.includes(t)?presencasTreinadores.filter(x=>x!==t):[...presencasTreinadores,t];
-   localStorage.setItem("presencas_treinadores_pasteis",JSON.stringify(presencasTreinadores));
-   renderTreinadores();
-   atualizarTreinoResumo();
-  };
-  grid.appendChild(b);
- });
+ if(grid){
+  grid.innerHTML="";
+  treinoTreinadores.forEach(m=>{
+   let b=document.createElement("button");
+   b.className="presenceBtn"+(presencasTreinadores.includes(m.nome)?" active":"");
+   b.innerHTML=m.nome+"<br><span style='font-size:10px;opacity:.8'>"+(m.funcao||"Equipa Técnica")+"</span>";
+   b.onclick=()=>{
+    presencasTreinadores=presencasTreinadores.includes(m.nome)
+     ? presencasTreinadores.filter(x=>x!==m.nome)
+     : [...presencasTreinadores,m.nome];
 
- lista.innerHTML=treinoTreinadores.map(t=>`
-  <div class="coachRow">
-   <b>${t}</b>
-   <button class="exerciseDeleteBtn" onclick="removeTreinadorTreino('${esc(t)}')">🗑️</button>
-  </div>
- `).join("");
+    localStorage.setItem("presencas_treinadores_pasteis",JSON.stringify(presencasTreinadores));
+    renderTreinadores();
+    atualizarTreinoResumo();
+   };
+   grid.appendChild(b);
+  });
+ }
+
+ if(lista){
+  if(!treinoTreinadores.length){
+   lista.innerHTML="<div class='log'>Ainda não adicionaste membros da equipa técnica.</div>";
+   return;
+  }
+
+  lista.innerHTML=treinoTreinadores.map(m=>`
+   <div class="coachRow">
+    <div>
+     <b>${m.nome}</b><br>
+     <span class="small">${m.funcao||"Equipa Técnica"}</span>
+    </div>
+    <button class="exerciseDeleteBtn" onclick="removeTreinadorTreino('${esc(m.nome)}')">🗑️</button>
+   </div>
+  `).join("");
+ }
 }
 
 
@@ -3831,7 +3860,12 @@ function exportPDFTreino(){
  <h2>${nome}</h2>
  <p><b>Data:</b> ${data}</p>
  <p><b>Objetivo:</b> ${objetivo}</p>
- <p><b>Presentes:</b> ${presencasTreino.length}</p>
+ <p><b>Atletas presentes:</b> ${presencasTreino.length}/${treinoJogadores.length}</p>
+ <p><b>Equipa técnica presente:</b> ${presencasTreinadores.length}/${treinoTreinadores.length}</p>
+ <p>${presencasTreinadores.map(n=>{
+   let m=treinoTreinadores.find(t=>t.nome===n);
+   return m?`${m.nome} (${m.funcao})`:n;
+ }).join(" · ")}</p>
  <hr>`;
 
  exerciciosTreino.forEach((ex,i)=>{
@@ -3862,7 +3896,8 @@ function exportPDFTreino(){
 
 
 function atualizarTreinoResumo(){
- if($("treinoPresentes"))$("treinoPresentes").innerText=presencasTreino.length;
+ if($("treinoPresentes"))$("treinoPresentes").innerText=presencasTreino.length+"/"+treinoJogadores.length;
+ if($("treinoStaffPresentes"))$("treinoStaffPresentes").innerText=presencasTreinadores.length+"/"+treinoTreinadores.length;
  if($("treinoExercicios"))$("treinoExercicios").innerText=exerciciosTreino.length;
  if($("treinoAcoes"))$("treinoAcoes").innerText=reg.filter(r=>r.tipoRegisto==="treino"||r.exercicioId).length;
 }
