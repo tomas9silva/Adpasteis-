@@ -1886,7 +1886,19 @@ DEFINIÇÕES / ESTATÍSTICAS / HISTÓRICO
   </div>
  </div>
  <div class="card"><button class="dark" onclick="toggle('editNames')">Editar nomes dos jogadores</button><div id="editNames" class="hidden"></div></div>
- <div class="card"><button class="dark" onclick="toggle('stats')">Estatísticas completas</button><div id="stats" class="hidden"></div></div>
+<button class="dark" onclick="toggle('stats');renderStats()">Estatísticas completas</button>
+
+<div id="stats" class="hidden">
+  <label>Período das estatísticas</label>
+  <select id="filtroPeriodoStats" onchange="renderStats()">
+    <option value="Todos">Todos</option>
+    <option value="1.º período">1.º período</option>
+    <option value="2.º período">2.º período</option>
+    <option value="3.º período">3.º período</option>
+  </select>
+
+  <div id="statsContent"></div>
+</div>
  <div class="card"><button class="dark" onclick="toggle('report')">Relatório do jogo 📊</button><div id="report" class="hidden"></div></div>
  <div class="card"><button class="dark" onclick="toggle('history')">Histórico</button><div id="history" class="hidden"></div></div>
  <div class="card">
