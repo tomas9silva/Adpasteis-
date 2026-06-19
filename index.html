@@ -2478,9 +2478,24 @@ function regStats(){
 }
 
 function renderStats(){
- let box=$("statsContent") || $("stats");
- if(!st)return;
- st.innerHTML="";
+ let box=$("stats");
+ if(!box)return;
+
+ let filtro=$("filtroPeriodoStats")?.value || "Todos";
+
+ let dados=filtro==="Todos"
+  ? reg
+  : reg.filter(r=>r.periodo===filtro);
+
+ box.innerHTML=`
+  <label>Período das estatísticas</label>
+  <select id="filtroPeriodoStats" onchange="renderStats()">
+   <option value="Todos" ${filtro==="Todos"?"selected":""}>Todos</option>
+   <option value="1.º período" ${filtro==="1.º período"?"selected":""}>1.º período</option>
+   <option value="2.º período" ${filtro==="2.º período"?"selected":""}>2.º período</option>
+   <option value="3.º período" ${filtro==="3.º período"?"selected":""}>3.º período</option>
+  </select>
+ `;
 
  // 1) MAPA COLETIVO NO TOPO
  let eventosColetivos=reg
