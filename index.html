@@ -2352,7 +2352,19 @@ JOGO: CRONÓMETRO
 function start(){if(timer)return;timer=setInterval(()=>{if(time>0){time--;updateTimer()}else{pause();alert("Fim do período")}},1000)}
 function pause(){clearInterval(timer);timer=null}
 function resetTimer(){pause();time=dur*60;updateTimer()}
-function updateTimer(){$("tempo").innerText=t()}
+function updateTimer(){
+
+ $("tempo").innerText=t();
+
+ if(time<=0){
+
+  pause();
+
+  alert("⚠️ Mudar período e direção do jogo");
+
+ }
+
+}
 
 
 
