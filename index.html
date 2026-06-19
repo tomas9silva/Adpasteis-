@@ -2061,15 +2061,29 @@ function goal(team,v){
  }
 }
 function toggleAttack(ev){ev.stopPropagation();attackSide=attackSide==="right"?"left":"right";localStorage.setItem("attack_side_pasteis",attackSide);renderAttack()}
-function renderAttack(){let b=$("attackBtn");if(b)b.innerHTML=attackSide==="right"?"➡️":"⬅️"} let gr=$("goalkeeperMarker");
+function renderAttack(){
+ let b=$("attackBtn");
 
-if(gr){
- if(attackSide==="right"){
-  gr.style.left="8px";
-  gr.style.right="auto";
- }else{
-  gr.style.right="8px";
-  gr.style.left="auto";
+ if(b){
+  b.innerHTML=attackSide==="right"?"➡️":"⬅️";
+ }
+
+ let big=$("attackDirectionBig");
+
+ if(big){
+  big.innerHTML=attackSide==="right"?"→":"←";
+ }
+
+ let gr=$("goalkeeperMarker");
+
+ if(gr){
+  if(attackSide==="right"){
+   gr.style.left="8px";
+   gr.style.right="auto";
+  }else{
+   gr.style.right="8px";
+   gr.style.left="auto";
+  }
  }
 }
 function count(f){return reg.filter(f).length}
