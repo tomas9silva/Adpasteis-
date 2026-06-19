@@ -4075,5 +4075,75 @@ document.addEventListener("DOMContentLoaded",function(){
 });
 
 </script>
+ <div id="convocatoriaPage" class="hidden">
+
+ <div class="topbar">
+  <button onclick="closeConvocatoria()">⬅ Voltar</button>
+  <h2>📋 Convocatória</h2>
+ </div>
+
+ <div class="card">
+  <label>Adversário</label>
+  <input id="convAdversario">
+
+  <label>Competição</label>
+  <input id="convCompeticao">
+
+  <label>Dia do jogo</label>
+  <input id="convData" type="date">
+
+  <label>Hora do jogo</label>
+  <input id="convHoraJogo" type="time">
+ </div>
+
+ <div class="card">
+  <h3>Horas de Concentração</h3>
+
+  <div id="convHoras"></div>
+
+  <button onclick="addHoraConv()">
+   + Adicionar hora
+  </button>
+ </div>
+
+ <div class="card">
+  <h3>Localizações</h3>
+
+  <div id="convLocais"></div>
+
+  <button onclick="addLocalConv()">
+   + Adicionar local
+  </button>
+ </div>
+
+ <div class="card">
+  <h3>Convocadas</h3>
+
+  <div id="convJogadoras"></div>
+ </div>
+
+ <div class="card">
+  <h3>Equipa Técnica</h3>
+
+  <div id="convTecnica"></div>
+ </div>
+
+ <div class="card">
+  <label>Observações</label>
+
+  <textarea id="convObs"></textarea>
+ </div>
+
+ <div class="card">
+  <button class="green">
+   👁 Pré-visualizar
+  </button>
+
+  <button class="dark">
+   🖼 Gerar imagem
+  </button>
+ </div>
+
+</div>
 </body>
 </html>
