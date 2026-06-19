@@ -6,6 +6,10 @@
 <title>AD Pastéis Jogo</title>
 <style>
 *{box-sizing:border-box}
+
+/* =====================================
+BASE GERAL
+===================================== */
 body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#071326;color:white}
 body:before{content:"";position:fixed;inset:0;background:url("logo-pasteis.png") center 55%/75% no-repeat;opacity:.10;z-index:-1;pointer-events:none}
 .app{max-width:520px;margin:auto;padding:8px 10px 85px}
@@ -225,6 +229,10 @@ input[type="date"]{
 .editBtn{float:right;width:auto;padding:4px 8px;font-size:12px;background:#ffd21a;color:#111;margin:0}
 
 /* Campo limpo, grande, sem bancada */
+
+/* =====================================
+ARENA DO JOGO
+===================================== */
 .pitchCard{background:rgba(16,27,49,.74);color:white;border-radius:16px;padding:10px;margin:8px 0;border:1px solid rgba(255,255,255,.20)}
 .pitch{
  position:relative;
@@ -426,6 +434,10 @@ input[type="date"]{
 }
 
 
+
+/* =====================================
+RELATÓRIO PERCENTUAL
+===================================== */
 .percentReport{
  background:rgba(16,27,49,.94);
  color:white;
@@ -462,6 +474,10 @@ input[type="date"]{
  background:#ffd21a;
  border-radius:10px;
 }
+
+/* =====================================
+PÁGINA INICIAL E MENU
+===================================== */
 .landingPage{
  position:fixed;
  inset:0;
@@ -627,6 +643,10 @@ input[type="date"]{
 
 
 /* Página base de treino */
+
+/* =====================================
+PÁGINA DE TREINO
+===================================== */
 .trainingPage{
  max-width:520px;
  margin:auto;
@@ -727,6 +747,10 @@ input[type="date"]{
 .trainingSelectRow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 
 
+
+/* =====================================
+ABAS DO TREINO
+===================================== */
 .trainingTabs{
  display:grid;
  grid-template-columns:1fr 1fr 1fr;
@@ -810,6 +834,10 @@ input[type="date"]{
  background:rgba(16,27,49,.55);
 }
 
+
+/* =====================================
+MINI ARENAS DO TREINO
+===================================== */
 .trainingMiniArena{
  position:relative;
  width:100%;
@@ -931,6 +959,10 @@ input[type="date"]{
 }
 
 
+
+/* =====================================
+EXERCÍCIOS COLETIVOS
+===================================== */
 .collectiveCounterBox{
  background:rgba(255,255,255,.05);
  border:1px solid rgba(255,255,255,.12);
@@ -1012,6 +1044,10 @@ input[type="date"]{
 }
 
 
+
+/* =====================================
+EXERCÍCIOS INDIVIDUAIS
+===================================== */
 .individualBox{
  background:rgba(255,255,255,.05);
  border:1px solid rgba(255,255,255,.12);
@@ -1154,6 +1190,10 @@ input[type="date"]{
 
 
 
+
+/* =====================================
+TOPO DO JOGO
+===================================== */
 .gameBrand{
  text-align:center;
  flex:1;
@@ -1199,6 +1239,10 @@ input[type="date"]{
  text-align:center;
 }
 
+
+/* =====================================
+MARCADOR PREMIUM DO JOGO
+===================================== */
 .matchBoard{
  position:relative;
  background:
@@ -1416,6 +1460,10 @@ input[type="date"]{
 }
 
 
+
+/* =====================================
+DEFINIÇÕES
+===================================== */
 .settingsHeader{
  max-width:520px;
  margin:auto;
@@ -1452,6 +1500,68 @@ input[type="date"]{
  border:1px solid rgba(255,255,255,.12)!important;
 }
 
+
+/* Ajustes treino: confirmação, edição de remates, treinadores */
+.coachRow{
+ background:rgba(255,255,255,.05);
+ border:1px solid rgba(255,255,255,.12);
+ border-radius:12px;
+ padding:8px;
+ margin:7px 0;
+ color:white;
+ display:grid;
+ grid-template-columns:1fr 44px;
+ gap:6px;
+ align-items:center;
+}
+
+.trainingAttemptsList{
+ margin-top:10px;
+}
+
+.trainingAttemptRow{
+ display:grid;
+ grid-template-columns:1fr 44px;
+ gap:6px;
+ align-items:center;
+ background:transparent;
+ color:white;
+ border:1px solid rgba(255,255,255,.12);
+ border-radius:10px;
+ padding:8px;
+ margin:6px 0;
+ font-size:12px;
+}
+
+.trainingAttemptRow button{
+ margin:0;
+ padding:7px;
+ font-size:13px;
+}
+
+.confirmBox{
+ background:rgba(16,27,49,.08);
+ border:1px solid rgba(0,0,0,.10);
+ border-radius:12px;
+ padding:10px;
+ margin:8px 0;
+}
+
+.confirmActions{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+ margin-top:8px;
+}
+
+.medicalDescription{
+ margin-top:6px;
+ padding-top:6px;
+ border-top:1px solid rgba(255,255,255,.10);
+ font-size:12px;
+ opacity:.95;
+}
+
 @media(max-width:420px){
  .matchBoard{padding:16px 10px 14px;border-radius:20px}
  .matchScore{gap:6px;padding-top:22px}
@@ -1482,7 +1592,33 @@ input[type="date"]{
 </style>
 </head>
 <body>
- <div id="landingPage" class="landingPage">
+<!--
+=====================================
+ÍNDICE RÁPIDO PARA EDITAR NO GITHUB
+
+1. PÁGINA INICIAL
+2. MENU PRINCIPAL
+3. MÓDULO TREINO
+4. MÓDULO JOGO
+5. DEFINIÇÕES / ESTATÍSTICAS / HISTÓRICO
+6. MODAIS
+7. JAVASCRIPT
+   - ESTADO GLOBAL
+   - JOGO
+   - TREINO
+   - MÉDICO
+   - EXPORTAÇÕES
+   - RENDERIZAÇÃO GERAL
+
+Para procurar rápido no GitHub:
+Ctrl + F e escreve o nome da secção.
+=====================================
+-->
+
+ <!-- =====================================
+PÁGINA INICIAL
+===================================== -->
+<div id="landingPage" class="landingPage">
   <div class="landingContent">
    <h1>𝕊𝕥𝕒𝕥𝕊</h1>
 <p class="landingSub">Match Analysis Platform</p>
@@ -1491,6 +1627,9 @@ input[type="date"]{
   </div>
 </div>
 
+<!-- =====================================
+MENU PRINCIPAL
+===================================== -->
 <div id="menuPage" class="landingPage hidden">
   <div class="landingContent">
     <h1>𝕊𝕥𝕒𝕥𝕊</h1>
@@ -1510,6 +1649,9 @@ input[type="date"]{
 
 
 
+<!-- =====================================
+MÓDULO TREINO
+===================================== -->
 <div id="trainingPage" class="trainingPage hidden">
   <div class="trainingHeader">
     <button class="trainingBack" onclick="voltarMenu()">← Voltar</button>
@@ -1545,11 +1687,22 @@ input[type="date"]{
     </div>
 
     <div class="trainingCard">
+      <h3>Treinadores</h3>
+      <label>Nome do treinador</label>
+      <input id="novoTreinador" placeholder="Ex: Treinador 1">
+      <button class="trainingStartBtn" onclick="addTreinadorTreino()">Adicionar treinador</button>
+      <div id="coachPresenceGrid" class="presenceGrid"></div>
+      <div id="treinadoresLista"></div>
+    </div>
+
+    <div class="trainingCard">
       <h3>Departamento médico</h3>
       <label>Jogador</label>
       <select id="medJogador"></select>
       <label>Causa</label>
       <textarea id="medCausa" placeholder="Ex: dor no tornozelo, sobrecarga, entorse..."></textarea>
+      <label>Descrição / atualização durante o treino</label>
+      <textarea id="medDescricao" placeholder="Ex: começou condicionado, sentiu dor aos 20 min, saiu do exercício..."></textarea>
       <label>Estado</label>
       <select id="medEstado">
         <option>Não treina</option>
@@ -1610,6 +1763,9 @@ input[type="date"]{
   </div>
 </div>
 
+<!-- =====================================
+MÓDULO JOGO
+===================================== -->
 <div class="app hidden" id="main">
  <div class="gameHeader">
   <button class="gameBack" onclick="voltarMenu()">←</button>
@@ -1690,6 +1846,9 @@ input[type="date"]{
  </div>
 </div>
 
+<!-- =====================================
+DEFINIÇÕES / ESTATÍSTICAS / HISTÓRICO
+===================================== -->
 <div class="app hidden" id="settingsPage">
  <div class="settingsHeader"><button class="settingsBack" onclick="closeSettings()">←</button><div class="settingsTitle">Definições</div></div>
  <div class="card">
@@ -1723,6 +1882,9 @@ input[type="date"]{
   <button class="danger" onclick="fullReset()">Reset completo</button>
  </div>
 </div>
+<!-- =====================================
+MODAIS
+===================================== -->
 <div id="sessoesModal" class="modal">
   <div class="modalContent">
     <h2>Jogos e treinos guardados</h2>
@@ -1751,6 +1913,10 @@ input[type="date"]{
 <div id="eventModal" class="modal"><div class="modalContent"><h2 id="eventTitle">Ação</h2><div id="eventInfo"></div><button class="danger" onclick="deleteEvent()">Apagar ação</button><button class="dark" onclick="closeEvent()">Fechar</button></div></div>
 
 <script>
+
+/* =====================================
+ESTADO GLOBAL DA APLICAÇÃO
+===================================== */
 let total=+localStorage.getItem("total_jogadores_pasteis")||12;
 let inField=+localStorage.getItem("jogadores_campo_pasteis")||5;
 let dur=+localStorage.getItem("duracao_periodo_pasteis")||12;
@@ -1771,11 +1937,21 @@ if(!treinoJogadores.length){for(let i=1;i<=10;i++)treinoJogadores.push("Jogador 
 let exerciciosTreino=JSON.parse(localStorage.getItem("exercicios_treino_pasteis")||"[]");
 let presencasTreino=JSON.parse(localStorage.getItem("presencas_treino_pasteis")||"[]");
 let departamentoMedico=JSON.parse(localStorage.getItem("departamento_medico_pasteis")||"[]");
+let treinoTreinadores=JSON.parse(localStorage.getItem("treino_treinadores_pasteis")||"[]");
+if(!treinoTreinadores.length)treinoTreinadores=["Treinador 1"];
+let presencasTreinadores=JSON.parse(localStorage.getItem("presencas_treinadores_pasteis")||"[]");
+if(!presencasTreinadores.length)presencasTreinadores=[...treinoTreinadores];
+let treinoConfirmTemp=null;
+let treinoEditIndex=null;
 let filtroMedico="todos";
 let exercicioAtualId=localStorage.getItem("exercicio_atual_pasteis")||"";
 let treinoAcaoTemp={exercicioId:null,x:null,y:null};
 let treinoIndividualTemp={exercicioId:null,x:null,y:null,jogador:null};
 
+
+/* =====================================
+LISTA DE AÇÕES DO JOGO
+===================================== */
 const acoes=[
  {nome:"Golo dentro da área",emoji:"⚽"},
  {nome:"Golo fora da área",emoji:"⚽"},
@@ -1791,8 +1967,16 @@ const acoes=[
  {nome:"Golo sofrido",emoji:"🔴"}
 ];
 
+
+/* =====================================
+FUNÇÕES AUXILIARES
+===================================== */
 function $(id){return document.getElementById(id)}
 
+
+/* =====================================
+NAVEGAÇÃO PRINCIPAL
+===================================== */
 function abrirMenu(){
  const landing=document.getElementById("landingPage");
  const menu=document.getElementById("menuPage");
@@ -1810,6 +1994,10 @@ function abrirMenu(){
 function toggle(id){$(id).classList.toggle("hidden")}
 function t(){let m=Math.floor(time/60),s=time%60;return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")}
 function saveAll(){localStorage.setItem("jogadores_pasteis",JSON.stringify(jogadores));localStorage.setItem("campo_pasteis",JSON.stringify(campo));localStorage.setItem("banco_pasteis",JSON.stringify(banco));localStorage.setItem("registos_pasteis",JSON.stringify(reg));localStorage.setItem("subs_pasteis",JSON.stringify(subs))}
+
+/* =====================================
+JOGO: MARCADOR E EQUIPAS
+===================================== */
 function loadGame(){ if($("casa"))$("casa").value=localStorage.getItem("equipa_casa_pasteis")||"AD Pastéis"; if($("fora"))$("fora").value=localStorage.getItem("equipa_fora_pasteis")||""; $("gc").innerText=casaGoals; $("gf").innerText=foraGoals; renderAttack()}
 function saveGame(){ if($("casa"))localStorage.setItem("equipa_casa_pasteis",$("casa").value); localStorage.setItem("equipa_fora_pasteis",$("fora").value)}
 function goal(team,v){
@@ -1830,6 +2018,10 @@ function goals(j){return count(r=>r.jogador===j&&r.acao&&r.acao.startsWith("Golo
 function acaoObj(nome){return acoes.find(a=>a.nome===nome)||{nome,emoji:"✅"}}
 function esc(str){return String(str).replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/"/g,"&quot;")}
 
+
+/* =====================================
+JOGO: ARENA E REGISTO DE AÇÕES
+===================================== */
 function pickMap(e){
  if(e.target.id==="attackBtn")return;
 
@@ -1949,6 +2141,10 @@ function openEvent(i){selectedEventIndex=i;let r=reg[i];$("eventTitle").innerTex
 function closeEvent(){$("eventModal").classList.remove("show");selectedEventIndex=null}
 function deleteEvent(){if(selectedEventIndex===null)return;if(confirm("Apagar esta ação?")){reg.splice(selectedEventIndex,1);localStorage.setItem("registos_pasteis",JSON.stringify(reg));closeEvent();renderAll()}}
 
+
+/* =====================================
+JOGO: JOGADOR ATIVO
+===================================== */
 function renderPlayerCard(){
  let html=`<button class="editBtn" onclick="event.stopPropagation();openEditStats()">✏️ Editar</button><b>${active} ${details?"▲":"▼"}</b><br><span class="small">⚽ ${goals(active)} | ✔️ ${count(r=>r.jogador===active&&r.acao&&r.acao.startsWith("Remate"))} | 🧤 ${count(r=>r.jogador===active&&r.acao==="Defesa")} | 🎁 ${count(r=>r.jogador===active&&r.acao==="Assistência")}</span>`;
  if(details){html+="<hr>";acoes.forEach(a=>html+=`${a.emoji} ${a.nome}: <b>${count(r=>r.jogador===active&&r.acao===a.nome)}</b><br>`)}
@@ -1957,6 +2153,10 @@ function renderPlayerCard(){
 function toggleDetails(){details=!details;renderPlayerCard()}
 function undo(){if(!reg.length){alert("Não há ações para desfazer.");return}reg.shift();localStorage.setItem("registos_pasteis",JSON.stringify(reg));renderAll()}
 
+
+/* =====================================
+DEFINIÇÕES DO JOGO
+===================================== */
 function openSettings(){$("main").classList.add("hidden");$("settingsPage").classList.remove("hidden");$("setCasa").value=$("casa").value;$("setFora").value=$("fora").value;$("setTotal").value=total;$("setCampo").value=inField;$("setDur").value=dur;$("detalhes").value=localStorage.getItem("detalhes_jogo_pasteis")||"";renderEditNames();renderStats();renderReport();renderHistory()}
 function closeSettings(){$("settingsPage").classList.add("hidden");$("main").classList.remove("hidden")}
 function saveSettings(){total=Math.max(1,+$("setTotal").value||12);inField=Math.max(1,Math.min(+$("setCampo").value||5,total));dur=Math.max(1,+$("setDur").value||12);localStorage.setItem("total_jogadores_pasteis",total);localStorage.setItem("jogadores_campo_pasteis",inField);localStorage.setItem("duracao_periodo_pasteis",dur);localStorage.setItem("equipa_casa_pasteis",$("setCasa").value||"Equipa da Casa");localStorage.setItem("equipa_fora_pasteis",$("setFora").value||"");localStorage.setItem("detalhes_jogo_pasteis",$("detalhes").value||"");while(jogadores.length<total)jogadores.push("Jogador "+(jogadores.length+1));while(jogadores.length>total)jogadores.pop();campo=jogadores.slice(0,inField);banco=jogadores.slice(inField);active=jogadores[0]||"Jogador 1";time=dur*60;pause();saveAll();loadGame();updateTimer();renderAll();alert("Definições guardadas.")}
@@ -1971,6 +2171,10 @@ function adjust(a,v){let obj=acaoObj(a);if(v>0)reg.unshift({jogador:active,perio
 
 let startersTemp=[];
 
+
+/* =====================================
+JOGO: TITULARES
+===================================== */
 function openStarters(){
  startersTemp=[...campo];
  let modal=$("startersModal");
@@ -2031,6 +2235,10 @@ function confirmStarters(){
 }
 
 
+
+/* =====================================
+JOGO: SUBSTITUIÇÕES
+===================================== */
 function openSubs(){$("subsModal").classList.add("show");renderSubs()}
 function closeSubs(){outTemp=null;inTemp=null;$("subsModal").classList.remove("show");renderSubs()}
 function renderSubs(){let cg=$("campoGrid"),bg=$("bancoGrid");if(!cg||!bg)return;cg.innerHTML="";bg.innerHTML="";campo.forEach(j=>{let b=document.createElement("button");b.className="pbtn campo"+(outTemp===j?" active":"");b.textContent=j;b.onclick=()=>{outTemp=j;renderSubs();subInfo()};cg.appendChild(b)});banco.forEach(j=>{let b=document.createElement("button");b.className="pbtn banco"+(inTemp===j?" active":"");b.textContent=j;b.onclick=()=>{inTemp=j;renderSubs();subInfo()};bg.appendChild(b)});subInfo()}
@@ -2044,12 +2252,20 @@ function setActiveControl(tipo){
  if(btn)btn.classList.add("controlActive");
 }
 
+
+/* =====================================
+JOGO: CRONÓMETRO
+===================================== */
 function start(){if(timer)return;timer=setInterval(()=>{if(time>0){time--;updateTimer()}else{pause();alert("Fim do período")}},1000)}
 function pause(){clearInterval(timer);timer=null}
 function resetTimer(){pause();time=dur*60;updateTimer()}
 function updateTimer(){$("tempo").innerText=t()}
 
 
+
+/* =====================================
+ESTATÍSTICAS E RELATÓRIOS DO JOGO
+===================================== */
 function eventosComLocal(){
  return reg.filter(r=>r.x!==""&&r.x!==undefined&&r.y!==""&&r.y!==undefined);
 }
@@ -2262,7 +2478,7 @@ function guardarSessaoAtual(){
   reg:JSON.parse(JSON.stringify(reg)),
   subs:JSON.parse(JSON.stringify(subs)),
   attackSide:attackSide,
-  treino:{tipo:tipoTreinoAtual,nome:localStorage.getItem("nome_treino_pasteis")||"",data:localStorage.getItem("data_treino_pasteis")||"",duracao:localStorage.getItem("duracao_treino_pasteis")||"",objetivo:localStorage.getItem("objetivo_treino_pasteis")||"",jogadores:treinoJogadores,exercicios:exerciciosTreino,presencas:presencasTreino,medico:departamentoMedico}
+  treino:{tipo:tipoTreinoAtual,nome:localStorage.getItem("nome_treino_pasteis")||"",data:localStorage.getItem("data_treino_pasteis")||"",duracao:localStorage.getItem("duracao_treino_pasteis")||"",objetivo:localStorage.getItem("objetivo_treino_pasteis")||"",jogadores:treinoJogadores,exercicios:exerciciosTreino,presencas:presencasTreino,treinadores:treinoTreinadores,presencasTreinadores:presencasTreinadores,medico:departamentoMedico}
  };
  let lista=getSessoes();
  lista.unshift(sessao);
@@ -2348,7 +2564,7 @@ function exportBackupJSON(){
    reg:JSON.parse(JSON.stringify(reg)),
    subs:JSON.parse(JSON.stringify(subs)),
    attackSide:attackSide,
-   treino:{tipo:tipoTreinoAtual,nome:localStorage.getItem("nome_treino_pasteis")||"",data:localStorage.getItem("data_treino_pasteis")||"",duracao:localStorage.getItem("duracao_treino_pasteis")||"",objetivo:localStorage.getItem("objetivo_treino_pasteis")||"",jogadores:treinoJogadores,exercicios:exerciciosTreino,presencas:presencasTreino,medico:departamentoMedico}
+   treino:{tipo:tipoTreinoAtual,nome:localStorage.getItem("nome_treino_pasteis")||"",data:localStorage.getItem("data_treino_pasteis")||"",duracao:localStorage.getItem("duracao_treino_pasteis")||"",objetivo:localStorage.getItem("objetivo_treino_pasteis")||"",jogadores:treinoJogadores,exercicios:exerciciosTreino,presencas:presencasTreino,treinadores:treinoTreinadores,presencasTreinadores:presencasTreinadores,medico:departamentoMedico}
   }
  };
  let blob=new Blob([JSON.stringify(backup,null,2)],{type:"application/json;charset=utf-8"});
@@ -2400,11 +2616,19 @@ function importBackupJSON(event){
 function clearGame(){if(confirm("Apagar todos os registos deste jogo/treino?")){reg=[];subs=[];casaGoals=0;foraGoals=0;localStorage.removeItem("registos_pasteis");localStorage.removeItem("subs_pasteis");localStorage.setItem("golos_casa_pasteis",0);localStorage.setItem("golos_fora_pasteis",0);loadGame();renderAll()}}
 function clearMapOnly(){if(confirm("Apagar apenas ações com localização no campo?")){reg=reg.filter(r=>r.x===""||r.x===undefined);localStorage.setItem("registos_pasteis",JSON.stringify(reg));renderAll()}}
 function fullReset(){if(confirm("Apagar tudo e repor a aplicação?")){localStorage.clear();location.reload()}}
+
+/* =====================================
+EXPORTAÇÕES
+===================================== */
 function exportCSV(){let casa=($("casa")?$("casa").value:"AD Pastéis")||"Equipa da Casa",fora=$("fora").value||"Equipa Adversária",jogo=casa+" vs "+fora,resultado=casaGoals+"-"+foraGoals,det=localStorage.getItem("detalhes_jogo_pasteis")||"";let csv="Jogo,Resultado,Detalhes,Tipo,Data,Periodo,Tempo,Jogador,Acao,Emoji,Sai,Entra,X,Y,LadoAtaque\n";reg.forEach(r=>csv+=`"${jogo}","${resultado}","${det}","Ação","${r.data}","${r.periodo}","${r.tempo}","${r.jogador}","${r.acao}","${r.emoji||acaoObj(r.acao).emoji}","","","${r.x||""}","${r.y||""}","${r.attackSide||attackSide}"\n`);subs.forEach(s=>csv+=`"${jogo}","${resultado}","${det}","Substituição","${s.data}","${s.periodo}","${s.tempo}","","","","${s.sai}","${s.entra}","","",""\n`);let blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="estatisticas_"+casa+"_vs_"+fora+".csv";a.click();URL.revokeObjectURL(url)}
 
 
 
 
+
+/* =====================================
+ENTRADA NO JOGO
+===================================== */
 function entrarJogo(){
  localStorage.setItem("modo_pasteis","jogo");
  $("menuPage").classList.add("hidden");
@@ -2414,6 +2638,10 @@ function entrarJogo(){
 }
 
 
+
+/* =====================================
+TREINO: ENTRADA
+===================================== */
 function abrirTreinoPage(){
  localStorage.setItem("modo_pasteis","treino");
 
@@ -2456,9 +2684,17 @@ function aplicarEntradaInicial(){
 
 
 
+
+/* =====================================
+TREINO: ESTADO E NAVEGAÇÃO
+===================================== */
 let tipoTreinoAtual=localStorage.getItem("tipo_treino_pasteis") || "Técnico";
 
 
+
+/* =====================================
+TREINO: ABAS
+===================================== */
 function openTrainingTab(tab){
  const tabs=["grupo","presencas","exercicios","resumo"];
 
@@ -2480,6 +2716,7 @@ function openTrainingTab(tab){
 
  renderTreinoJogadores();
  renderPresencas();
+ renderTreinadores();
  renderMedicalSelect();
  renderMedicalList();
  renderExerciciosTreino();
@@ -2500,6 +2737,10 @@ function setTipoTreino(tipo,btn){
  if(btn)btn.classList.add("active");
 }
 
+
+/* =====================================
+TREINO: DADOS GERAIS
+===================================== */
 function carregarDadosTreino(){
  if($("treinoData") && !$("treinoData").value)$("treinoData").value=localStorage.getItem("data_treino_pasteis") || new Date().toISOString().slice(0,10);
  if($("treinoNome") && !$("treinoNome").value)$("treinoNome").value=localStorage.getItem("nome_treino_pasteis") || ("Treino - "+new Date().toLocaleDateString("pt-PT"));
@@ -2513,6 +2754,7 @@ function carregarDadosTreino(){
 
  renderTreinoJogadores();
  renderPresencas();
+ renderTreinadores();
  renderExerciciosTreino();
  renderMedicalSelect();
  renderMedicalList();
@@ -2532,6 +2774,7 @@ function addTreinoJogador(){
  $("novoTreinoJogador").value="";
  renderTreinoJogadores();
  renderPresencas();
+ renderTreinadores();
  renderMedicalSelect();
  atualizarTreinoResumo();
 }
@@ -2546,11 +2789,16 @@ function removeTreinoJogador(nome){
 
  renderTreinoJogadores();
  renderPresencas();
+ renderTreinadores();
  renderMedicalSelect();
  atualizarTreinoResumo();
 }
 
 
+
+/* =====================================
+TREINO: DEPARTAMENTO MÉDICO
+===================================== */
 function renderMedicalSelect(){
  let sel=$("medJogador");
  if(!sel)return;
@@ -2570,6 +2818,10 @@ function renderMedicalSelect(){
  }
 }
 
+
+/* =====================================
+TREINO: GRUPO DE ATLETAS
+===================================== */
 function renderTreinoJogadores(){
  let box=$("treinoJogadoresLista");
  if(!box)return;
@@ -2589,6 +2841,70 @@ function renderTreinoJogadores(){
  `).join("");
 }
 
+
+
+/* =====================================
+TREINO: TREINADORES
+===================================== */
+function addTreinadorTreino(){
+ let nome=($("novoTreinador")?.value||"").trim();
+ if(!nome){alert("Escreve o nome do treinador.");return;}
+ if(treinoTreinadores.includes(nome)){alert("Esse treinador já existe.");return;}
+
+ treinoTreinadores.push(nome);
+ presencasTreinadores.push(nome);
+
+ localStorage.setItem("treino_treinadores_pasteis",JSON.stringify(treinoTreinadores));
+ localStorage.setItem("presencas_treinadores_pasteis",JSON.stringify(presencasTreinadores));
+
+ $("novoTreinador").value="";
+ renderTreinadores();
+ atualizarTreinoResumo();
+}
+
+function removeTreinadorTreino(nome){
+ if(!confirm("Remover este treinador?"))return;
+ treinoTreinadores=treinoTreinadores.filter(t=>t!==nome);
+ presencasTreinadores=presencasTreinadores.filter(t=>t!==nome);
+
+ localStorage.setItem("treino_treinadores_pasteis",JSON.stringify(treinoTreinadores));
+ localStorage.setItem("presencas_treinadores_pasteis",JSON.stringify(presencasTreinadores));
+
+ renderTreinadores();
+ atualizarTreinoResumo();
+}
+
+function renderTreinadores(){
+ let grid=$("coachPresenceGrid");
+ let lista=$("treinadoresLista");
+ if(!grid||!lista)return;
+
+ grid.innerHTML="";
+ treinoTreinadores.forEach(t=>{
+  let b=document.createElement("button");
+  b.className="presenceBtn"+(presencasTreinadores.includes(t)?" active":"");
+  b.textContent=t;
+  b.onclick=()=>{
+   presencasTreinadores=presencasTreinadores.includes(t)?presencasTreinadores.filter(x=>x!==t):[...presencasTreinadores,t];
+   localStorage.setItem("presencas_treinadores_pasteis",JSON.stringify(presencasTreinadores));
+   renderTreinadores();
+   atualizarTreinoResumo();
+  };
+  grid.appendChild(b);
+ });
+
+ lista.innerHTML=treinoTreinadores.map(t=>`
+  <div class="coachRow">
+   <b>${t}</b>
+   <button class="exerciseDeleteBtn" onclick="removeTreinadorTreino('${esc(t)}')">🗑️</button>
+  </div>
+ `).join("");
+}
+
+
+/* =====================================
+TREINO: PRESENÇAS
+===================================== */
 function renderPresencas(){
  let grid=$("presenceGrid");
  if(!grid)return;
@@ -2608,6 +2924,10 @@ function renderPresencas(){
  });
 }
 
+
+/* =====================================
+TREINO: EXERCÍCIOS
+===================================== */
 function addExercicioTreino(){
  let nome=($("exNome")?.value||"").trim();
  if(!nome){alert("Escreve o nome do exercício.");return;}
@@ -2719,6 +3039,7 @@ function apagarExercicio(id){
 function addRegistoMedico(){
  let jogador=($("medJogador")?.value||"").trim();
  let causa=($("medCausa")?.value||"").trim();
+ let descricao=($("medDescricao")?.value||"").trim();
  let estado=$("medEstado")?.value||"Não treina";
 
  if(!jogador){alert("Escolhe um jogador do grupo de treino.");return;}
@@ -2728,6 +3049,7 @@ function addRegistoMedico(){
   id:Date.now(),
   jogador,
   causa,
+  descricao,
   estado,
   data:new Date().toLocaleString("pt-PT")
  });
@@ -2736,6 +3058,7 @@ function addRegistoMedico(){
 
  $("medJogador").value="";
  $("medCausa").value="";
+ if($("medDescricao"))$("medDescricao").value="";
  $("medEstado").value="Não treina";
 
  renderMedicalList();
@@ -2770,6 +3093,7 @@ function renderMedicalList(){
    <span class="medicalStatus ${classeEstadoMedico(r.estado)}">${r.estado}</span><br>
    <div class="small">${r.data}</div>
    <div>${r.causa}</div>
+   ${r.descricao?`<div class="medicalDescription"><b>Atualização:</b><br>${r.descricao}</div>`:""}
    <div class="medicalActions">
     <button class="exerciseSmallBtn" onclick="editarRegistoMedico(${r.id})">Editar</button>
     <button class="exerciseDeleteBtn" onclick="apagarRegistoMedico(${r.id})">🗑️</button>
@@ -2790,6 +3114,7 @@ function editarRegistoMedico(id){
  if(!r)return;
  $("medJogador").value=r.jogador;
  $("medCausa").value=r.causa;
+ if($("medDescricao"))$("medDescricao").value=r.descricao||"";
  $("medEstado").value=r.estado;
  apagarRegistoMedico(id);
 }
@@ -2841,6 +3166,10 @@ function renderExercicioAberto(ex){
 }
 
 
+
+/* =====================================
+TREINO: EXERCÍCIO COLETIVO
+===================================== */
 function renderExercicioColetivo(ex){
  let eventos=treinoEventosDoExercicio(ex.id).filter(r=>r.tipoColetivo==="coletivo");
  let total=eventos.length;
@@ -2877,6 +3206,8 @@ function renderExercicioColetivo(ex){
    <button class="collectiveMiss" onclick="openFalhaColetivo(${ex.id})">🔴 Falha</button>
   </div>
 
+  ${renderListaTentativasExercicio(ex)}
+  ${renderListaTentativasExercicio(ex)}
   ${renderRelatoriosExercicio(ex)}
 
   <label>Observações do exercício</label>
@@ -2885,7 +3216,15 @@ function renderExercicioColetivo(ex){
 }
 
 function addColetivoAcerto(exId){
- addColetivoEvento(exId,"acerto","");
+ openConfirmTreinoEvento({
+  tipo:"coletivo",
+  exId:String(exId),
+  resultado:"acerto",
+  guardaRedes:"",
+  jogador:"Coletivo",
+  acao:"Tentativa acertada",
+  emoji:"🟢"
+ });
 }
 
 function openFalhaColetivo(exId){
@@ -2897,17 +3236,75 @@ function openFalhaColetivo(exId){
 
  content.innerHTML=`
   <div class="grid">
-   <button class="actionBtn dark" onclick="addColetivoEvento(${exId},'falhou','')">🔴 Falhou</button>
-   <button class="actionBtn dark" onclick="addColetivoEvento(${exId},'defendido','Jamila')">🧤 Jamila defendeu</button>
-   <button class="actionBtn dark" onclick="addColetivoEvento(${exId},'defendido','Crespo')">🧤 Crespo defendeu</button>
-   <button class="actionBtn dark" onclick="addColetivoEvento(${exId},'defendido','Outro')">🧤 Outro defendeu</button>
+   <button class="actionBtn dark" onclick="confirmFalhaColetivo(${exId},'falhou','')">🔴 Falhou</button>
+   <button class="actionBtn dark" onclick="confirmFalhaColetivo(${exId},'defendido','Jamila')">🧤 Jamila defendeu</button>
+   <button class="actionBtn dark" onclick="confirmFalhaColetivo(${exId},'defendido','Crespo')">🧤 Crespo defendeu</button>
+   <button class="actionBtn dark" onclick="confirmFalhaColetivo(${exId},'defendido','Outro')">🧤 Outro defendeu</button>
   </div>
  `;
 
  modal.classList.add("show");
 }
 
-function addColetivoEvento(exId,resultado,guardaRedes){
+
+function confirmFalhaColetivo(exId,resultado,guardaRedes){
+ let emoji=resultado==="falhou"?"🔴":"🧤";
+ let acao=resultado==="falhou"?"Tentativa falhada":guardaRedes+" defendeu";
+ openConfirmTreinoEvento({
+  tipo:"coletivo",
+  exId:String(exId),
+  resultado,
+  guardaRedes:guardaRedes||"",
+  jogador:"Coletivo",
+  acao,
+  emoji
+ });
+}
+
+function openConfirmTreinoEvento(dados){
+ treinoConfirmTemp=dados;
+ let modal=$("quickModal");
+ let title=$("quickTitle");
+ let content=$("quickContent");
+
+ title.innerHTML="Confirmar seleção";
+
+ content.innerHTML=`
+  <div class="confirmBox">
+   <b>${dados.emoji||""} ${dados.acao}</b><br>
+   <span>Jogador: <b>${dados.jogador||"Coletivo"}</b></span>
+   ${dados.guardaRedes?`<br><span>Guarda-redes: <b>${dados.guardaRedes}</b></span>`:""}
+  </div>
+  <div class="confirmActions">
+   <button class="green" onclick="guardarTreinoConfirmado()">Confirmar</button>
+   <button class="danger" onclick="cancelMapFlow()">Cancelar</button>
+  </div>
+ `;
+
+ modal.classList.add("show");
+}
+
+function guardarTreinoConfirmado(){
+ if(!treinoConfirmTemp)return;
+
+ if(treinoConfirmTemp.tipo==="coletivo"){
+  gravarColetivoEvento(treinoConfirmTemp.exId,treinoConfirmTemp.resultado,treinoConfirmTemp.guardaRedes);
+ }
+
+ if(treinoConfirmTemp.tipo==="individual"){
+  gravarIndividualEvento(
+   treinoConfirmTemp.exId,
+   treinoConfirmTemp.resultado,
+   treinoConfirmTemp.guardaRedes,
+   treinoConfirmTemp.jogador
+  );
+ }
+
+ treinoConfirmTemp=null;
+}
+
+
+function gravarColetivoEvento(exId,resultado,guardaRedes){
  let emoji=resultado==="acerto"?"🟢":(resultado==="falhou"?"🔴":"🧤");
  let acao=resultado==="acerto"?"Tentativa acertada":(resultado==="falhou"?"Tentativa falhada":guardaRedes+" defendeu");
 
@@ -2939,10 +3336,19 @@ function addColetivoEvento(exId,resultado,guardaRedes){
 
 
 
+
+function addColetivoEvento(exId,resultado,guardaRedes){
+ confirmFalhaColetivo(exId,resultado,guardaRedes);
+}
+
 function eventosIndividuaisDoExercicio(exId){
  return treinoEventosDoExercicio(exId).filter(r=>r.tipoIndividual==="individual");
 }
 
+
+/* =====================================
+TREINO: EXERCÍCIO INDIVIDUAL
+===================================== */
 function renderExercicioIndividual(ex){
  let eventos=eventosIndividuaisDoExercicio(ex.id);
  let total=eventos.length;
@@ -2984,15 +3390,127 @@ function renderExercicioIndividual(ex){
 }
 
 
+
+
+/* =====================================
+TREINO: EDIÇÃO DE REMATES
+===================================== */
+function renderListaTentativasExercicio(ex){
+ let eventos=treinoEventosDoExercicio(ex.id);
+ if(!eventos.length)return "<div class='log'>Sem tentativas registadas.</div>";
+
+ let html="<div class='trainingAttemptsList'><b>Tentativas registadas</b>";
+ eventos.forEach(r=>{
+  let idx=reg.indexOf(r);
+  html+=`<div class="trainingAttemptRow">
+    <span>${r.emoji||acaoObj(r.acao).emoji} <b>${r.jogador||"Coletivo"}</b> · ${r.acao} · ${r.tempo||""}</span>
+    <button class="exerciseSmallBtn" onclick="openEditTreinoRemate(${idx})">✏️</button>
+  </div>`;
+ });
+ html+="</div>";
+ return html;
+}
+
+function openEditTreinoRemate(idx){
+ treinoEditIndex=idx;
+ let r=reg[idx];
+ if(!r)return;
+
+ let modal=$("quickModal");
+ let title=$("quickTitle");
+ let content=$("quickContent");
+
+ title.innerHTML="Editar remate";
+
+ let jogadoresBase=treinoJogadores&&treinoJogadores.length?treinoJogadores:jogadores;
+ let jogadorOptions=jogadoresBase.map(j=>`<option ${r.jogador===j?"selected":""}>${j}</option>`).join("");
+
+ content.innerHTML=`
+  <label>Jogador</label>
+  <select id="editTreinoJogador">
+    <option ${r.jogador==="Coletivo"?"selected":""}>Coletivo</option>
+    ${jogadorOptions}
+  </select>
+
+  <label>Resultado</label>
+  <select id="editTreinoResultado">
+    <option value="golo" ${r.resultadoIndividual==="golo"||r.resultadoColetivo==="acerto"?"selected":""}>Golo / Acerto</option>
+    <option value="fora" ${r.resultadoIndividual==="fora"||r.resultadoColetivo==="falhou"?"selected":""}>Remate fora / Falhou</option>
+    <option value="Jamila" ${r.guardaRedes==="Jamila"?"selected":""}>Defendido por Jamila</option>
+    <option value="Crespo" ${r.guardaRedes==="Crespo"?"selected":""}>Defendido por Crespo</option>
+    <option value="Outro" ${r.guardaRedes==="Outro"?"selected":""}>Defendido por outro</option>
+  </select>
+
+  <div class="confirmActions">
+   <button class="green" onclick="saveEditTreinoRemate()">Guardar</button>
+   <button class="danger" onclick="deleteEditTreinoRemate()">Apagar</button>
+  </div>
+ `;
+
+ modal.classList.add("show");
+}
+
+function saveEditTreinoRemate(){
+ if(treinoEditIndex===null)return;
+ let r=reg[treinoEditIndex];
+ if(!r)return;
+
+ let jogador=$("editTreinoJogador").value;
+ let resultado=$("editTreinoResultado").value;
+
+ r.jogador=jogador;
+
+ if(resultado==="golo"){
+  r.acao=jogador==="Coletivo"?"Tentativa acertada":"Golo";
+  r.emoji=jogador==="Coletivo"?"🟢":"⚽";
+  r.resultadoColetivo=jogador==="Coletivo"?"acerto":"";
+  r.resultadoIndividual=jogador==="Coletivo"?"":"golo";
+  r.guardaRedes="";
+ }
+
+ if(resultado==="fora"){
+  r.acao=jogador==="Coletivo"?"Tentativa falhada":"Remate fora";
+  r.emoji="❌";
+  r.resultadoColetivo=jogador==="Coletivo"?"falhou":"";
+  r.resultadoIndividual=jogador==="Coletivo"?"":"fora";
+  r.guardaRedes="";
+ }
+
+ if(["Jamila","Crespo","Outro"].includes(resultado)){
+  r.acao=resultado+" defendeu";
+  r.emoji="🧤";
+  r.resultadoColetivo=jogador==="Coletivo"?"defendido":"";
+  r.resultadoIndividual=jogador==="Coletivo"?"":"defendido";
+  r.guardaRedes=resultado;
+ }
+
+ localStorage.setItem("registos_pasteis",JSON.stringify(reg));
+ treinoEditIndex=null;
+ $("quickModal").classList.remove("show");
+ renderExerciciosTreino();
+ atualizarTreinoResumo();
+}
+
+function deleteEditTreinoRemate(){
+ if(treinoEditIndex===null)return;
+ if(!confirm("Apagar este remate?"))return;
+
+ reg.splice(treinoEditIndex,1);
+ localStorage.setItem("registos_pasteis",JSON.stringify(reg));
+ treinoEditIndex=null;
+ $("quickModal").classList.remove("show");
+ renderExerciciosTreino();
+ atualizarTreinoResumo();
+}
+
+
 function renderMiniArenaIndividual(ex,eventos){
  let html=`<div class="trainingMiniArena" onclick="pickMiniArenaIndividual(event,${ex.id})">
   <div class="trainingMiniArea leftMini"></div>
   <div class="trainingMiniArea rightMini"></div>`;
 
- eventos.filter(r=>r.x!==""&&r.x!==undefined&&r.y!==""&&r.y!==undefined).forEach(r=>{
-  let idx=reg.indexOf(r);
-  html+=`<span class="trainingMiniPoint" onclick="event.stopPropagation();apagarAcaoPorIndice(${idx})" style="left:${r.x}%;top:${r.y}%" title="${r.jogador} - ${r.acao}">${r.emoji||"•"}</span>`;
- });
+ // As ações já guardadas não ficam desenhadas no campo.
+ // Ficam editáveis na lista de remates em baixo, mantendo a mini arena limpa.
 
  if(String(treinoIndividualTemp.exercicioId)===String(ex.id)&&treinoIndividualTemp.x&&treinoIndividualTemp.y){
   html+=`<span class="trainingTempPoint" style="left:${treinoIndividualTemp.x}%;top:${treinoIndividualTemp.y}%"></span>`;
@@ -3042,16 +3560,31 @@ function openIndividualResultado(exId,jogador){
 
  content.innerHTML=`
   <div class="grid">
-   <button class="actionBtn dark" onclick="addIndividualEvento(${exId},'golo','','${esc(jogador)}')">⚽ Golo</button>
-   <button class="actionBtn dark" onclick="addIndividualEvento(${exId},'fora','','${esc(jogador)}')">❌ Remate fora</button>
-   <button class="actionBtn dark" onclick="addIndividualEvento(${exId},'defendido','Jamila','${esc(jogador)}')">🧤 Defendido por Jamila</button>
-   <button class="actionBtn dark" onclick="addIndividualEvento(${exId},'defendido','Crespo','${esc(jogador)}')">🧤 Defendido por Crespo</button>
-   <button class="actionBtn dark" onclick="addIndividualEvento(${exId},'defendido','Outro','${esc(jogador)}')">🧤 Defendido por outro</button>
+   <button class="actionBtn dark" onclick="confirmIndividualResultado(${exId},'golo','','${esc(jogador)}')">⚽ Golo</button>
+   <button class="actionBtn dark" onclick="confirmIndividualResultado(${exId},'fora','','${esc(jogador)}')">❌ Remate fora</button>
+   <button class="actionBtn dark" onclick="confirmIndividualResultado(${exId},'defendido','Jamila','${esc(jogador)}')">🧤 Defendido por Jamila</button>
+   <button class="actionBtn dark" onclick="confirmIndividualResultado(${exId},'defendido','Crespo','${esc(jogador)}')">🧤 Defendido por Crespo</button>
+   <button class="actionBtn dark" onclick="confirmIndividualResultado(${exId},'defendido','Outro','${esc(jogador)}')">🧤 Defendido por outro</button>
   </div>
  `;
 }
 
-function addIndividualEvento(exId,resultado,guardaRedes,jogador){
+
+function confirmIndividualResultado(exId,resultado,guardaRedes,jogador){
+ let emoji=resultado==="golo"?"⚽":(resultado==="fora"?"❌":"🧤");
+ let acao=resultado==="golo"?"Golo":(resultado==="fora"?"Remate fora":"Defendido por "+guardaRedes);
+ openConfirmTreinoEvento({
+  tipo:"individual",
+  exId:String(exId),
+  resultado,
+  guardaRedes:guardaRedes||"",
+  jogador,
+  acao,
+  emoji
+ });
+}
+
+function gravarIndividualEvento(exId,resultado,guardaRedes,jogador){
  if(!treinoIndividualTemp.x || !treinoIndividualTemp.y){
   alert("Marca primeiro o local do remate na mini arena.");
   return;
@@ -3086,6 +3619,11 @@ function addIndividualEvento(exId,resultado,guardaRedes,jogador){
 
  renderExerciciosTreino();
  atualizarTreinoResumo();
+}
+
+
+function addIndividualEvento(exId,resultado,guardaRedes,jogador){
+ confirmIndividualResultado(exId,resultado,guardaRedes,jogador);
 }
 
 function renderRelatoriosExercicio(ex){
@@ -3164,10 +3702,8 @@ function renderMiniArenaTreino(ex,eventos){
   <div class="trainingMiniArea leftMini"></div>
   <div class="trainingMiniArea rightMini"></div>`;
 
- eventos.filter(r=>r.x!==""&&r.x!==undefined&&r.y!==""&&r.y!==undefined).forEach(r=>{
-  let idx=reg.indexOf(r);
-  html+=`<span class="trainingMiniPoint" onclick="event.stopPropagation();apagarAcaoPorIndice(${idx})" style="left:${r.x}%;top:${r.y}%">${r.emoji||acaoObj(r.acao).emoji}</span>`;
- });
+ // As ações já guardadas não ficam desenhadas no campo.
+ // Ficam editáveis na lista de ações do exercício.
 
  if(String(treinoAcaoTemp.exercicioId)===String(ex.id)&&treinoAcaoTemp.x&&treinoAcaoTemp.y){
   html+=`<span class="trainingTempPoint" style="left:${treinoAcaoTemp.x}%;top:${treinoAcaoTemp.y}%"></span>`;
@@ -3256,6 +3792,10 @@ function saveObsExercicio(exId,valor){
  localStorage.setItem("exercicios_treino_pasteis",JSON.stringify(exerciciosTreino));
 }
 
+
+/* =====================================
+TREINO: EXPORTAÇÕES
+===================================== */
 function exportCSVTreino(){
  let nome=localStorage.getItem("nome_treino_pasteis")||($("treinoNome")?.value)||"Treino";
  let data=localStorage.getItem("data_treino_pasteis")||($("treinoData")?.value)||"";
@@ -3345,6 +3885,10 @@ function aplicarModoVisual(){
  if(modo==="treino" && $("fora"))$("fora").placeholder="Treino";
 }
 
+
+/* =====================================
+RENDERIZAÇÃO GERAL
+===================================== */
 function renderAll(){renderAttack();renderMap();renderFlow();renderPlayerCard();renderStats();renderReport();renderHistory();renderSubs();atualizarTreinoResumo();aplicarModoVisual()}
 loadGame();updateTimer();renderAll();aplicarEntradaInicial();
 
