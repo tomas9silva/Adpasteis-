@@ -1069,7 +1069,7 @@ EXERCÍCIOS INDIVIDUAIS
 }
 .exerciseReportTabs{
  display:grid;
- grid-template-columns:1fr 1fr;
+ grid-template-columns:1fr 1fr 1fr;
  gap:6px;
  margin-top:10px;
 }
@@ -2653,6 +2653,7 @@ function entrarJogo(){
 TREINO: ENTRADA
 ===================================== */
 function abrirTreinoPage(){
+ pause();
  localStorage.setItem("modo_pasteis","treino");
 
  const landing=$("landingPage");
@@ -3235,8 +3236,6 @@ function renderExercicioColetivo(ex){
    <button class="collectiveMiss" onclick="openFalhaColetivo(${ex.id})">🔴 Falha</button>
   </div>
 
-  ${renderListaTentativasExercicio(ex)}
-  ${renderListaTentativasExercicio(ex)}
   ${renderRelatoriosExercicio(ex)}
 
   <label>Observações do exercício</label>
@@ -3340,7 +3339,7 @@ function gravarColetivoEvento(exId,resultado,guardaRedes){
  reg.unshift({
   jogador:"Coletivo",
   periodo:"Treino",
-  tempo:t(),
+  tempo:"",
   acao:acao,
   emoji:emoji,
   data:new Date().toLocaleString("pt-PT"),
@@ -3426,19 +3425,13 @@ TREINO: EDIÇÃO DE REMATES
 ===================================== */
 function renderListaTentativasExercicio(ex){
  let eventos=treinoEventosDoExercicio(ex.id);
-if(!eventos.length){
-  return `
-    <div class="log">
-      Ainda não existem tentativas registadas.
-    </div>
-  `;
-}
+ if(!eventos.length)return "<div class='log'>Sem tentativas registadas.</div>";
 
- let html="<div class='trainingAttemptsList'><b>Tentativas registadas</b>";
+ let html="<div class='trainingAttemptsList'>";
  eventos.forEach(r=>{
   let idx=reg.indexOf(r);
   html+=`<div class="trainingAttemptRow">
-    <span>${r.emoji||acaoObj(r.acao).emoji} <b>${r.jogador||"Coletivo"}</b> · ${r.acao} · ${r.tempo||""}</span>
+    <span>${r.emoji||acaoObj(r.acao).emoji} <b>${r.jogador||"Coletivo"}</b> · ${r.acao}</span>
     <button class="exerciseSmallBtn" onclick="openEditTreinoRemate(${idx})">✏️</button>
   </div>`;
  });
@@ -3631,7 +3624,7 @@ function gravarIndividualEvento(exId,resultado,guardaRedes,jogador){
  reg.unshift({
   jogador:jogador,
   periodo:"Treino",
-  tempo:t(),
+  tempo:"",
   acao:acao,
   emoji:emoji,
   data:new Date().toLocaleString("pt-PT"),
@@ -3663,9 +3656,11 @@ function addIndividualEvento(exId,resultado,guardaRedes,jogador){
 
 function renderRelatoriosExercicio(ex){
  return `<div class="exerciseReportTabs">
+  <button onclick="toggleExerciseReport('tentativas_${ex.id}')">Tentativas registadas</button>
   <button onclick="toggleExerciseReport('coletivo_${ex.id}')">Relatório coletivo</button>
   <button onclick="toggleExerciseReport('individual_${ex.id}')">Relatório individual</button>
  </div>
+ <div id="tentativas_${ex.id}" class="exerciseReportBox hidden">${renderListaTentativasExercicio(ex)}</div>
  <div id="coletivo_${ex.id}" class="exerciseReportBox hidden">${renderRelatorioColetivoExercicio(ex)}</div>
  <div id="individual_${ex.id}" class="exerciseReportBox hidden">${renderRelatorioIndividualExercicio(ex)}</div>`;
 }
@@ -3780,7 +3775,7 @@ function addTreinoActionComPonto(exId,acao){
  reg.unshift({
   jogador:"Treino",
   periodo:"Treino",
-  tempo:t(),
+  tempo:"",
   acao:acao,
   emoji:obj.emoji,
   data:new Date().toLocaleString("pt-PT"),
@@ -3804,7 +3799,7 @@ function addTreinoActionSemPonto(exId,acao){
  reg.unshift({
   jogador:"Treino",
   periodo:"Treino",
-  tempo:t(),
+  tempo:"",
   acao:acao,
   emoji:obj.emoji,
   data:new Date().toLocaleString("pt-PT"),
