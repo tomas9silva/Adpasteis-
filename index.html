@@ -2441,10 +2441,14 @@ function renderRelatorioPercentual(){
  </div>`;
 }
 
-
+function regStats(){
+ const filtro=$("filtroPeriodoStats")?.value || "Todos";
+ if(filtro==="Todos")return reg;
+ return reg.filter(r=>r.periodo===filtro);
+}
 
 function renderStats(){
- let st=$("stats");
+ let box=$("statsContent") || $("stats");
  if(!st)return;
  st.innerHTML="";
 
