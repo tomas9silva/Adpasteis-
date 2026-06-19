@@ -227,6 +227,9 @@ input[type="date"]{
 .modalContent{background:white;color:#111;border-radius:18px;padding:14px;max-width:500px;width:100%;max-height:92vh;overflow:auto}
 .editRow{display:grid;grid-template-columns:1fr 42px 42px;gap:6px;align-items:center;background:#f1f3f6;border-radius:8px;padding:7px;margin:5px 0}
 .editBtn{float:right;width:auto;padding:4px 8px;font-size:12px;background:#ffd21a;color:#111;margin:0}
+
+
+/* Atualização segura da arena: seta gigante e GR */
 .goalkeeperMarker{
  position:absolute;
  top:50%;
@@ -235,24 +238,35 @@ input[type="date"]{
  font-size:11px;
  font-weight:800;
  color:white;
- opacity:.65;
- pointer-events:none;
+ opacity:.70;
+ pointer-events:none!important;
  z-index:4;
 }
- 
+
 .attackDirectionBig{
  position:absolute;
  inset:0;
  display:flex;
  align-items:center;
  justify-content:center;
- font-size:180px;
+ font-size:170px;
  font-weight:900;
  color:white;
- opacity:.15;
- pointer-events:none;
+ opacity:.13;
+ pointer-events:none!important;
  z-index:1;
 }
+
+#pitch > .attackDirectionBig,
+#pitch > .goalkeeperMarker,
+#pitch > .pitchQuarter,
+#pitch > .pitchHalf,
+#pitch > .zoneLabel,
+#pitch > .area,
+#pitch > .cornerFlag{
+ pointer-events:none!important;
+}
+
 /* Campo limpo, grande, sem bancada */
 
 /* =====================================
@@ -303,32 +317,6 @@ ARENA DO JOGO
 }
 .pitchQuarter.q1{left:25%}
 .pitchQuarter.q3{left:75%}
-
-.pitchHalf{
- position:absolute;
- left:6%;
- right:6%;
- top:50%;
- height:0;
- border-top:2px solid rgba(23,63,159,.24);
- pointer-events:none;
- z-index:1;
-}
-
-.zoneLabel{
- position:absolute;
- transform:translate(-50%,-50%);
- color:white;
- opacity:.28;
- font-size:9px;
- font-weight:800;
- text-align:center;
- pointer-events:none;
- z-index:2;
- text-shadow:0 1px 4px rgba(0,0,0,.55);
- line-height:1.05;
-}
-
 
 .area{
  position:absolute;
@@ -1640,26 +1628,6 @@ DEFINIÇÕES
  .centerBottom{gap:12px}
  .players{grid-template-columns:repeat(3,1fr)}
 }
-
-/* Correção clique na arena */
-#pitch > .attackDirectionBig,
-#pitch > .goalkeeperMarker,
-#pitch > .pitchQuarter,
-#pitch > .pitchHalf,
-#pitch > .zoneLabel,
-#pitch > .area,
-#pitch > .cornerFlag{
- pointer-events:none!important;
-}
-
-#pitch{
- position:relative;
-}
-
-#pitch .tempPoint{
- pointer-events:none!important;
-}
-
 </style>
 </head>
 <body>
@@ -1909,21 +1877,8 @@ MÓDULO JOGO
    <div id="pitch" class="pitch" onclick="pickMap(event)">
      <div id="attackDirectionBig" class="attackDirectionBig">→</div>
      <div id="goalkeeperMarker" class="goalkeeperMarker">GR</div>
-
      <div class="pitchQuarter q1"></div>
      <div class="pitchQuarter q3"></div>
-     <div class="pitchHalf"></div>
-
-     <span class="zoneLabel zoneLabel1" style="left:12.5%;top:25%">DEF<br>ESQ</span>
-     <span class="zoneLabel zoneLabel2" style="left:37.5%;top:25%">CON<br>ESQ</span>
-     <span class="zoneLabel zoneLabel3" style="left:62.5%;top:25%">CRI<br>ESQ</span>
-     <span class="zoneLabel zoneLabel4" style="left:87.5%;top:25%">FIN<br>ESQ</span>
-
-     <span class="zoneLabel zoneLabel5" style="left:12.5%;top:75%">DEF<br>DIR</span>
-     <span class="zoneLabel zoneLabel6" style="left:37.5%;top:75%">CON<br>DIR</span>
-     <span class="zoneLabel zoneLabel7" style="left:62.5%;top:75%">CRI<br>DIR</span>
-     <span class="zoneLabel zoneLabel8" style="left:87.5%;top:75%">FIN<br>DIR</span>
-
      <div class="area left"></div>
      <div class="area right"></div>
      <div class="cornerFlag tl"></div>
@@ -1959,13 +1914,8 @@ DEFINIÇÕES / ESTATÍSTICAS / HISTÓRICO
   </div>
  </div>
  <div class="card"><button class="dark" onclick="toggle('editNames')">Editar nomes dos jogadores</button><div id="editNames" class="hidden"></div></div>
-<div class="card">
-  <button class="dark" onclick="toggle('stats');renderStats()">Estatísticas completas</button>
-  <div id="stats" class="hidden"></div>
-</div>
-<div class="card">
-  <button class="dark" onclick="toggle('report');renderReport()">Relatório do jogo 📊</button>
-  <div id="report" class="hidden"></div>
+ <div class="card"><button class="dark" onclick="toggle('stats');renderStats()">Estatísticas completas</button><div id="stats" class="hidden"></div></div>
+ <div class="card"><button class="dark" onclick="toggle('report');renderReport()">Relatório do jogo 📊</button><div id="report" class="hidden"></div></div>
  <div class="card"><button class="dark" onclick="toggle('history')">Histórico</button><div id="history" class="hidden"></div></div>
  <div class="card">
   <button class="green" onclick="guardarSessaoAtual()">Guardar jogo/treino atual</button>
@@ -2130,23 +2080,6 @@ function renderAttack(){
    gr.style.left="auto";
   }
  }
-
- let nomesRight=[
-  ["DEF","ESQ"],["CON","ESQ"],["CRI","ESQ"],["FIN","ESQ"],
-  ["DEF","DIR"],["CON","DIR"],["CRI","DIR"],["FIN","DIR"]
- ];
-
- let nomesLeft=[
-  ["FIN","ESQ"],["CRI","ESQ"],["CON","ESQ"],["DEF","ESQ"],
-  ["FIN","DIR"],["CRI","DIR"],["CON","DIR"],["DEF","DIR"]
- ];
-
- let nomes=attackSide==="right"?nomesRight:nomesLeft;
-
- nomes.forEach((n,i)=>{
-  let el=document.querySelector(".zoneLabel"+(i+1));
-  if(el)el.innerHTML=n[0]+"<br>"+n[1];
- });
 }
 function count(f){return reg.filter(f).length}
 function goals(j){return count(r=>r.jogador===j&&r.acao&&r.acao.startsWith("Golo"))}
@@ -2280,6 +2213,18 @@ function openEvent(i){
  $("eventInfo").innerHTML=`<div class="log"><b>${r.jogador}</b><br>${r.periodo} · ${r.tempo}<br>Zona: ${zona}<br>${r.attackSide==="left"?"⬅️ atacava esquerda":"➡️ atacava direita"}<br>${r.data}</div>`;
  $("eventModal").classList.add("show");
 }
+function closeEvent(){$("eventModal").classList.remove("show");selectedEventIndex=null}
+function deleteEvent(){if(selectedEventIndex===null)return;if(confirm("Apagar esta ação?")){reg.splice(selectedEventIndex,1);localStorage.setItem("registos_pasteis",JSON.stringify(reg));closeEvent();renderAll()}}
+
+
+/* =====================================
+JOGO: JOGADOR ATIVO
+===================================== */
+function renderPlayerCard(){
+ let html=`<button class="editBtn" onclick="event.stopPropagation();openEditStats()">✏️ Editar</button><b>${active} ${details?"▲":"▼"}</b><br><span class="small">⚽ ${goals(active)} | ✔️ ${count(r=>r.jogador===active&&r.acao&&r.acao.startsWith("Remate"))} | 🧤 ${count(r=>r.jogador===active&&r.acao==="Defesa")} | 🎁 ${count(r=>r.jogador===active&&r.acao==="Assistência")}</span>`;
+ if(details){html+="<hr>";acoes.forEach(a=>html+=`${a.emoji} ${a.nome}: <b>${count(r=>r.jogador===active&&r.acao===a.nome)}</b><br>`)}
+ $("playerCard").innerHTML=html;
+}
 function toggleDetails(){details=!details;renderPlayerCard()}
 function undo(){if(!reg.length){alert("Não há ações para desfazer.");return}reg.shift();localStorage.setItem("registos_pasteis",JSON.stringify(reg));renderAll()}
 
@@ -2305,6 +2250,29 @@ function openSettings(){
  renderStats();
  renderReport();
  renderHistory();
+}
+function closeSettings(){$("settingsPage").classList.add("hidden");$("main").classList.remove("hidden")}
+function saveSettings(){total=Math.max(1,+$("setTotal").value||12);inField=Math.max(1,Math.min(+$("setCampo").value||5,total));dur=Math.max(1,+$("setDur").value||12);localStorage.setItem("total_jogadores_pasteis",total);localStorage.setItem("jogadores_campo_pasteis",inField);localStorage.setItem("duracao_periodo_pasteis",dur);localStorage.setItem("equipa_casa_pasteis",$("setCasa").value||"Equipa da Casa");localStorage.setItem("equipa_fora_pasteis",$("setFora").value||"");localStorage.setItem("detalhes_jogo_pasteis",$("detalhes").value||"");while(jogadores.length<total)jogadores.push("Jogador "+(jogadores.length+1));while(jogadores.length>total)jogadores.pop();campo=jogadores.slice(0,inField);banco=jogadores.slice(inField);active=jogadores[0]||"Jogador 1";time=dur*60;pause();saveAll();loadGame();updateTimer();renderAll();alert("Definições guardadas.")}
+function renderEditNames(){let e=$("editNames");e.innerHTML="";jogadores.forEach((j,i)=>e.innerHTML+=`<input id="nome${i}" value="${j}">`);e.innerHTML+=`<button class="green" onclick="saveNames()">Guardar nomes</button><button class="danger" onclick="resetNames()">Repor Jogador 1-${total}</button>`}
+function saveNames(){let old=[...jogadores];jogadores=jogadores.map((j,i)=>$("nome"+i).value||("Jogador "+(i+1)));reg.forEach(r=>{let idx=old.indexOf(r.jogador);if(idx>=0)r.jogador=jogadores[idx]});subs.forEach(s=>{let a=old.indexOf(s.sai),b=old.indexOf(s.entra);if(a>=0)s.sai=jogadores[a];if(b>=0)s.entra=jogadores[b]});campo=campo.map(p=>{let i=old.indexOf(p);return i>=0?jogadores[i]:p});banco=banco.map(p=>{let i=old.indexOf(p);return i>=0?jogadores[i]:p});active=jogadores[0]||"Jogador 1";saveAll();renderAll();renderEditNames()}
+function resetNames(){jogadores=[];for(let i=1;i<=total;i++)jogadores.push("Jogador "+i);campo=jogadores.slice(0,inField);banco=jogadores.slice(inField);active=jogadores[0]||"Jogador 1";saveAll();renderAll();renderEditNames()}
+
+function openEditStats(){$("editTitle").innerText="Editar estatísticas - "+active;let c=$("editStats");c.innerHTML="";acoes.forEach(a=>c.innerHTML+=`<div class="editRow"><span>${a.emoji} ${a.nome}: <b>${count(r=>r.jogador===active&&r.acao===a.nome)}</b></span><button class="green" onclick="adjust('${esc(a.nome)}',1)">+</button><button class="danger" onclick="adjust('${esc(a.nome)}',-1)">-</button></div>`);$("editModal").classList.add("show")}
+function closeEditStats(){$("editModal").classList.remove("show")}
+function adjust(a,v){let obj=acaoObj(a);if(v>0)reg.unshift({jogador:active,periodo:$("periodo").value,tempo:t(),acao:a,emoji:obj.emoji,data:"Correção manual",x:"",y:"",attackSide:attackSide});else{let i=reg.findIndex(r=>r.jogador===active&&r.acao===a);if(i>=0)reg.splice(i,1)}localStorage.setItem("registos_pasteis",JSON.stringify(reg));renderAll();openEditStats()}
+
+
+let startersTemp=[];
+
+
+/* =====================================
+JOGO: TITULARES
+===================================== */
+function openStarters(){
+ startersTemp=[...campo];
+ let modal=$("startersModal");
+ if(modal)modal.classList.add("show");
+ renderStarters();
 }
 
 function closeStarters(){
@@ -2443,6 +2411,12 @@ function jogadorTopo(filtro){
  return arr[0]&&arr[0].n>0?`${arr[0].j} (${arr[0].n})`:"-";
 }
 
+function zonaCampo(x){
+ if(x<33)return "Zona defensiva";
+ if(x<66)return "Meio-campo";
+ return "Zona ofensiva";
+}
+
 function getZonaCampo(x,y,ladoAtaque){
  x=Number(x);
  y=Number(y);
@@ -2466,23 +2440,12 @@ function getZonaCampo(x,y,ladoAtaque){
  return faixa+" "+corredor;
 }
 
-function zonaCampo(x){
- return getZonaCampo(x,50,attackSide);
-}
-
 function zonaMaisUsada(){
- let eventos=reg.filter(r=>r.x!==""&&r.x!==undefined&&r.y!==""&&r.y!==undefined);
- if(!eventos.length)return "-";
-
- let contagem={};
-
- eventos.forEach(r=>{
-  let z=getZonaCampo(Number(r.x),Number(r.y),r.attackSide||attackSide);
-  contagem[z]=(contagem[z]||0)+1;
- });
-
- let top=Object.entries(contagem).sort((a,b)=>b[1]-a[1])[0];
- return top?`${top[0]} (${top[1]})`:"-";
+ let eventos=reg.filter(r=>r.x!==""&&r.x!==undefined);
+ let zonas={"Zona defensiva":0,"Meio-campo":0,"Zona ofensiva":0};
+ eventos.forEach(r=>zonas[zonaCampo(Number(r.x))]++);
+ let top=Object.entries(zonas).sort((a,b)=>b[1]-a[1])[0];
+ return top&&top[1]>0?`${top[0]} (${top[1]})`:"-";
 }
 
 
@@ -2535,20 +2498,16 @@ function renderRelatorioPercentual(){
  </div>`;
 }
 
-function regStats(){
- const filtro=$("filtroPeriodoStats")?.value || "Todos";
- if(filtro==="Todos")return reg;
- return reg.filter(r=>r.periodo===filtro);
-}
+
 
 function renderStats(){
- let box=$("stats");
- if(!box)return;
+ let st=$("stats");
+ if(!st)return;
 
  let filtro=$("filtroPeriodoStats")?.value || "Todos";
  let dados=filtro==="Todos"?reg:reg.filter(r=>r.periodo===filtro);
 
- box.innerHTML=`
+ st.innerHTML=`
   <label>Período das estatísticas</label>
   <select id="filtroPeriodoStats" onchange="renderStats()">
    <option value="Todos" ${filtro==="Todos"?"selected":""}>Todos</option>
@@ -2558,17 +2517,19 @@ function renderStats(){
   </select>
  `;
 
+ // 1) MAPA COLETIVO NO TOPO
  let eventosColetivos=dados
   .map((r)=>({r,regIndex:reg.indexOf(r)}))
   .filter(obj=>obj.r.x!==""&&obj.r.x!==undefined&&obj.r.y!==""&&obj.r.y!==undefined);
 
- box.innerHTML+=`
+ st.innerHTML+=`
  <div class="collectiveBox">
   <h3>📍 Mapa coletivo da equipa</h3>
   <div class="small">Filtro: <b>${filtro}</b> · Clica num emoji para apagar essa ação.</div>
   ${desenharCampoEventos(eventosColetivos)}
  </div>`;
 
+ // 2) JOGADORES FECHADOS POR DEFEITO
  jogadores.forEach((p,idx)=>{
   let eventosJogador=dados
    .map((r)=>({r,regIndex:reg.indexOf(r)}))
@@ -2594,7 +2555,7 @@ function renderStats(){
   });
 
   bloco+=`</div></div>`;
-  box.innerHTML+=bloco;
+  st.innerHTML+=bloco;
  });
 }
 function renderReport(){
