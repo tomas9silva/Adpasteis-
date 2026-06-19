@@ -2333,7 +2333,21 @@ function zonaCampo(x){
  if(x<66)return "Meio-campo";
  return "Zona ofensiva";
 }
+function getZonaCampo(x,y){
+ const lado = y < 50 ? "Esquerda" : "Direita";
 
+ if(attackSide==="right"){
+  if(x < 25) return "Defesa " + lado;
+  if(x < 50) return "Construção " + lado;
+  if(x < 75) return "Criação " + lado;
+  return "Finalização " + lado;
+ }else{
+  if(x < 25) return "Finalização " + lado;
+  if(x < 50) return "Criação " + lado;
+  if(x < 75) return "Construção " + lado;
+  return "Defesa " + lado;
+ }
+}
 function zonaMaisUsada(){
  let eventos=reg.filter(r=>r.x!==""&&r.x!==undefined);
  let zonas={"Zona defensiva":0,"Meio-campo":0,"Zona ofensiva":0};
