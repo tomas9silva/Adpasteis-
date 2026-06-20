@@ -3499,7 +3499,7 @@ function exportDashboard(){
 
  let topRemates=Object.entries(resumo.porJogador).sort((a,b)=>b[1].remates-a[1].remates).slice(0,3);
  let topAcoes=Object.entries(resumo.porJogador).sort((a,b)=>b[1].total-a[1].total).slice(0,3);
- let minsTop=Object.entries(minutos).sort((a,b)=>(b[1].total||0)-(a[1].total||0)).slice(0,8);
+ let minsTop=Object.entries(minutos).sort((a,b)=>(b[1].total||0)-(a[1].total||0)).slice(0,12);
 
  let dist=[
   ["Golos",resumo.totalGolos,"#E31B2F"],
@@ -3516,7 +3516,7 @@ function exportDashboard(){
  let ctx=canvas.getContext("2d");
 
  const W=1080,H=1920;
- const navy="#06152B", navy2="#0B1D38", red="#D71920", white="#FFFFFF", gold="#FFD21A", blue="#1E7CFF", green="#18A64A", sand="#D8BD7E";
+ const navy="#06152B", red="#D71920", white="#FFFFFF", gold="#FFD21A", blue="#1E7CFF", green="#18A64A", sand="#D8BD7E";
 
  function rr(x,y,w,h,r,fill,stroke,lw){
   ctx.beginPath();
@@ -3564,7 +3564,6 @@ function exportDashboard(){
   ctx.fillStyle=g;
   ctx.fillRect(0,0,W,H);
 
-  // pinceladas decorativas
   ctx.save();
   ctx.globalAlpha=.9;
   ctx.strokeStyle=red;
@@ -3635,55 +3634,47 @@ function exportDashboard(){
   ctx.restore();
  }
 
- function sectionTitle(t,x,y,w){
-  center(t,x+w/2,y,24,white,900);
- }
-
  function statCard(x,y,w,h,label,value,sub){
   rr(x,y,w,h,12,"rgba(255,255,255,.045)","rgba(255,255,255,.38)",1.2);
-  center(label,x+w/2,y+18,18,white,900);
-  center(value,x+w/2,y+48,46,white,900);
-  if(sub)center(sub,x+w/2,y+100,14,"rgba(255,255,255,.78)",700);
+  center(label,x+w/2,y+16,18,white,900);
+  center(value,x+w/2,y+45,42,white,900);
+  if(sub)center(sub,x+w/2,y+94,13,"rgba(255,255,255,.78)",700);
  }
 
- function resultBox(x,y,w,h,title,a,b){
+ function miniResultCell(x,y,w,h,title,a,b){
   rr(x,y,w,h,10,"rgba(255,255,255,.035)","rgba(255,255,255,.32)",1);
-  center(title,x+w/2,y+12,17,white,900);
-  right(a,x+w/2-18,y+42,42,white,900);
-  center("-",x+w/2,y+47,30,white,900);
-  tx(b,x+w/2+18,y+42,42,red,900);
+  center(title,x+w/2,y+9,14,white,900);
+  right(a,x+w/2-12,y+31,28,white,900);
+  center("-",x+w/2,y+34,22,white,900);
+  tx(b,x+w/2+12,y+31,28,red,900);
  }
 
- function donut(cx,cy,r,pct){
+ function miniEfficacyCell(x,y,w,h,title,pct,sub){
+  rr(x,y,w,h,10,"rgba(255,255,255,.035)","rgba(255,255,255,.32)",1);
+  center(title,x+w/2,y+8,13,white,900);
   ctx.strokeStyle="rgba(255,255,255,.18)";
-  ctx.lineWidth=13;
+  ctx.lineWidth=9;
   ctx.beginPath();
-  ctx.arc(cx,cy,r,0,Math.PI*2);
+  ctx.arc(x+35,y+42,18,0,Math.PI*2);
   ctx.stroke();
   ctx.strokeStyle=red;
-  ctx.lineWidth=13;
   ctx.beginPath();
-  ctx.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+(Math.PI*2*(pct/100)));
+  ctx.arc(x+35,y+42,18,-Math.PI/2,-Math.PI/2+(Math.PI*2*(pct/100)));
   ctx.stroke();
+  tx(pct+"%",x+62,y+29,24,white,900);
+  if(sub)center(sub,x+w/2,y+59,11,"rgba(255,255,255,.78)",700);
  }
 
- function efficacyBox(x,y,w,h,title,pct,sub){
-  rr(x,y,w,h,10,"rgba(255,255,255,.035)","rgba(255,255,255,.32)",1);
-  center(title,x+w/2,y+12,15,white,900);
-  donut(x+48,y+58,25,pct);
-  tx(pct+"%",x+86,y+42,32,white,900);
-  if(sub)center(sub,x+w/2,y+83,13,"rgba(255,255,255,.78)",700);
- }
-
- function miniPitch(x,y,w,h,title,data,events){
+ function drawAppPitch(x,y,w,h,title,data,events){
   rr(x,y,w,h,12,"rgba(255,255,255,.04)","rgba(255,255,255,.36)",1.1);
   rr(x,y,w,38,8,red,null,0);
-  center(title,x+w/2,y+8,17,white,900);
+  center(title,x+w/2,y+8,16,white,900);
 
-  let px=x+10, py=y+48, pw=w-20, ph=118;
-  rr(px,py,pw,ph,0,sand,"rgba(255,255,255,.7)",1);
-  ctx.strokeStyle="rgba(255,255,255,.78)";
-  ctx.lineWidth=1;
+  let px=x+10, py=y+48, pw=w-20, ph=h-118;
+  rr(px,py,pw,ph,0,sand,"rgba(255,255,255,.72)",1);
+
+  ctx.strokeStyle="rgba(255,255,255,.82)";
+  ctx.lineWidth=1.1;
   ctx.strokeRect(px+8,py+8,pw-16,ph-16);
   ctx.beginPath();
   ctx.moveTo(px+pw/2,py+8);
@@ -3692,29 +3683,22 @@ function exportDashboard(){
   ctx.strokeRect(px+pw/2-24,py+8,48,20);
   ctx.strokeRect(px+pw/2-24,py+ph-28,48,20);
 
+  // emojis iguais à aplicação
   events.forEach(r=>{
    let ex=px+(Number(r.x||50)/100)*pw;
    let ey=py+(Number(r.y||50)/100)*ph;
-   let ac=r.acao||"";
-   if(ac.startsWith("Golo") && ac!=="Golo sofrido"){
-    ctx.fillStyle=red;ctx.strokeStyle=white;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(ex,ey,5,0,Math.PI*2);ctx.fill();ctx.stroke();
-   }else if(ac.startsWith("Remate")){
-    ctx.fillStyle=gold;ctx.strokeStyle="#222";ctx.lineWidth=1.3;ctx.beginPath();ctx.arc(ex,ey,5,0,Math.PI*2);ctx.fill();ctx.stroke();
-   }else if(ac==="Defesa" || ac.endsWith("defesa")){
-    ctx.fillStyle=green;ctx.strokeStyle="#111";ctx.lineWidth=1.3;ctx.beginPath();ctx.arc(ex,ey,5,0,Math.PI*2);ctx.fill();ctx.stroke();
-   }else if(ac==="Passe falhado"){
-    ctx.strokeStyle=blue;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(ex-5,ey-5);ctx.lineTo(ex+5,ey+5);ctx.moveTo(ex+5,ey-5);ctx.lineTo(ex-5,ey+5);ctx.stroke();
-   }else{
-    ctx.fillStyle=white;ctx.beginPath();ctx.arc(ex,ey,4,0,Math.PI*2);ctx.fill();
-   }
+   ctx.font="14px Arial";
+   ctx.textAlign="center";
+   ctx.textBaseline="middle";
+   ctx.fillText(r.emoji||acaoObj(r.acao).emoji,ex,ey);
   });
 
-  let by=y+176;
-  let cols=[["G",data.golos],["R",data.remates],["D",data.defesas],["GS",data.sofridos]];
+  let by=y+h-55;
+  let cols=[["GOLOS",data.golos],["REMATES",data.remates],["DEFESAS",data.defesas],["SOFRIDOS",data.sofridos]];
   cols.forEach((c,i)=>{
-   let cx=x+24+i*((w-48)/4);
-   center(c[0],cx,by,12,"rgba(255,255,255,.75)",800);
-   center(c[1],cx,by+18,25,white,900);
+   let cx=x+22+i*((w-44)/4);
+   center(c[0],cx,by,9,"rgba(255,255,255,.78)",800);
+   center(c[1],cx,by+18,22,white,900);
   });
  }
 
@@ -3732,7 +3716,7 @@ function exportDashboard(){
    let val=kind==="remates"?s.remates:s.total;
    let yy=y+64+i*54;
    tx((i+1)+"º",x+18,yy,20,white,900);
-   fit(j,x+60,yy,110,20,white,800);
+   fit(j,x+60,yy,130,20,white,800);
    rr(x+w-48,yy-4,34,28,5,red,null,0);
    center(val,x+w-31,yy+1,19,white,900);
    ctx.strokeStyle="rgba(255,255,255,.22)";
@@ -3753,61 +3737,65 @@ function exportDashboard(){
    tx(r[0],x+18,yy,17,white,800);
    right(r[1],x+w-18,yy-4,24,white,900);
    ctx.strokeStyle="rgba(255,255,255,.18)";
-   ctx.beginPath();ctx.moveTo(x+16,yy+29);ctx.lineTo(x+w-16,yy+29);ctx.stroke();
+   ctx.beginPath();
+   ctx.moveTo(x+16,yy+29);
+   ctx.lineTo(x+w-16,yy+29);
+   ctx.stroke();
   });
  }
 
- function minutosBox(x,y,w,h){
+ function minutosWide(x,y,w,h){
   rr(x,y,w,h,12,"rgba(255,255,255,.045)","rgba(255,255,255,.36)",1.2);
   rr(x,y,w,42,8,red,null,0);
-  center("MINUTOS JOGADOS",x+w/2,y+10,18,white,900);
+  center("MINUTOS JOGADOS",x+w/2,y+10,19,white,900);
 
-  tx("JOGADORA",x+14,y+56,11,white,900);
-  center("1º",x+118,y+56,11,white,900);
-  center("2º",x+158,y+56,11,white,900);
-  center("3º",x+198,y+56,11,white,900);
-  right("TOTAL",x+w-12,y+56,11,red,900);
+  let c1=x+20, c2=x+320, c3=x+440, c4=x+560, c5=x+680, c6=x+w-25;
+  tx("JOGADORA",c1,y+60,14,white,900);
+  center("1.º PER.",c2,y+60,14,white,900);
+  center("2.º PER.",c3,y+60,14,white,900);
+  center("3.º PER.",c4,y+60,14,white,900);
+  center("PROL.",c5,y+60,14,white,900);
+  right("TOTAL",c6,y+60,14,red,900);
 
   minsTop.forEach(([j,m],i)=>{
-   let yy=y+78+i*25;
-   fit((i+1)+" "+j,x+14,yy,92,13,white,700);
-   center(minutosTexto(m["1.º período"]||0),x+118,yy,12,white,700);
-   center(minutosTexto(m["2.º período"]||0),x+158,yy,12,white,700);
-   center(minutosTexto(m["3.º período"]||0),x+198,yy,12,white,700);
-   right(minutosTexto(m.total||0),x+w-12,yy,12,red,900);
+   let yy=y+88+i*30;
+   fit((i+1)+". "+j,c1,yy,260,17,white,700);
+   center(minutosTexto(m["1.º período"]||0),c2,yy,16,white,700);
+   center(minutosTexto(m["2.º período"]||0),c3,yy,16,white,700);
+   center(minutosTexto(m["3.º período"]||0),c4,yy,16,white,700);
+   center(minutosTexto(m["Prolongamento"]||0),c5,yy,16,white,700);
+   right(minutosTexto(m.total||0),c6,yy,16,red,900);
   });
  }
 
  function distribution(x,y,w,h){
   rr(x,y,w,h,12,"rgba(255,255,255,.045)","rgba(255,255,255,.36)",1.2);
-  center("DISTRIBUIÇÃO DAS AÇÕES",x+w/2,y+22,22,white,900);
-  let cx=x+116,cy=y+126,r=66,start=-Math.PI/2;
+  center("DISTRIBUIÇÃO DAS AÇÕES",x+w/2,y+20,20,white,900);
+
+  let cx=x+102,cy=y+120,r=60,start=-Math.PI/2;
   dist.forEach(d=>{
    let a=(d[1]/distTotal)*Math.PI*2;
-   ctx.beginPath();ctx.moveTo(cx,cy);ctx.fillStyle=d[2];ctx.arc(cx,cy,r,start,start+a);ctx.closePath();ctx.fill();
+   ctx.beginPath();
+   ctx.moveTo(cx,cy);
+   ctx.fillStyle=d[2];
+   ctx.arc(cx,cy,r,start,start+a);
+   ctx.closePath();
+   ctx.fill();
    start+=a;
   });
-  ctx.fillStyle=navy;ctx.beginPath();ctx.arc(cx,cy,34,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=navy;
+  ctx.beginPath();
+  ctx.arc(cx,cy,31,0,Math.PI*2);
+  ctx.fill();
 
   dist.forEach((d,i)=>{
-   let yy=y+68+i*32;
-   ctx.fillStyle=d[2];ctx.fillRect(x+220,yy,20,20);
-   tx(d[0],x+252,yy-2,17,white,700);
-   right(d[1],x+w-70,yy-2,17,white,800);
-   right(Math.round((d[1]/distTotal)*100)+"%",x+w-18,yy-2,17,"rgba(255,255,255,.7)",700);
+   let yy=y+62+i*30;
+   ctx.fillStyle=d[2];
+   ctx.fillRect(x+205,yy,18,18);
+   tx(d[0],x+235,yy-2,16,white,700);
+   right(d[1],x+w-70,yy-2,16,white,800);
+   right(Math.round((d[1]/distTotal)*100)+"%",x+w-18,yy-2,16,"rgba(255,255,255,.7)",700);
   });
- }
-
- function resumoBox(x,y,w,h){
-  rr(x,y,w,h,12,"rgba(255,255,255,.045)","rgba(255,255,255,.36)",1.2);
-  center("RESUMO DO JOGO",x+w/2,y+22,24,white,900);
-  let linhas=[
-   resumo.totalGolos>resumo.totalGolosSofridos?"Boa eficácia ofensiva e vantagem no marcador.":"Jogo equilibrado, com pontos a melhorar.",
-   `Foram registados ${resumo.totalRemates} remates e ${resumo.eficacia}% de eficácia.`,
-   "Relatório gerado automaticamente pela StatS."
-  ];
-  linhas.forEach((l,i)=>tx(l,x+34,y+78+i*34,21,white,500));
-  center("PAIXÃO · ENTREGA · FAMÍLIA",x+w/2,y+h-48,24,red,900);
  }
 
  bg();
@@ -3822,50 +3810,50 @@ function exportDashboard(){
  rr(420,174,240,36,4,red,null,0);
  center("RESULTADO FINAL",540,181,23,white,900);
 
- // Linha estatísticas
+ // Estatísticas principais
  let topY=230;
- let statW=168;
- statCard(30,topY,statW,132,"GOLOS",resumo.totalGolos,(resumo.totalGolos/3).toFixed(2).replace(".",",")+" / PERÍODO");
- statCard(198,topY,statW,132,"REMATES",resumo.totalRemates,(resumo.totalRemates/3).toFixed(2).replace(".",",")+" / PERÍODO");
- statCard(366,topY,statW,132,"ASSISTÊNCIAS",resumo.totalAssist,(resumo.totalAssist/3).toFixed(2).replace(".",",")+" / PERÍODO");
- statCard(534,topY,statW,132,"DEFESAS",resumo.totalDefesas,(resumo.totalDefesas/3).toFixed(2).replace(".",",")+" / PERÍODO");
- statCard(702,topY,statW,132,"EFICÁCIA",resumo.eficacia+"%",resumo.totalGolos+" GOLOS / "+resumo.totalRemates+" REMATES");
- statCard(870,topY,180,132,"GOLOS SOFRIDOS",resumo.totalGolosSofridos,(resumo.totalGolosSofridos/3).toFixed(2).replace(".",",")+" / PERÍODO");
+ statCard(30,topY,168,122,"GOLOS",resumo.totalGolos,(resumo.totalGolos/3).toFixed(2).replace(".",",")+" / PERÍODO");
+ statCard(198,topY,168,122,"REMATES",resumo.totalRemates,(resumo.totalRemates/3).toFixed(2).replace(".",",")+" / PERÍODO");
+ statCard(366,topY,168,122,"ASSISTÊNCIAS",resumo.totalAssist,(resumo.totalAssist/3).toFixed(2).replace(".",",")+" / PERÍODO");
+ statCard(534,topY,168,122,"DEFESAS",resumo.totalDefesas,(resumo.totalDefesas/3).toFixed(2).replace(".",",")+" / PERÍODO");
+ statCard(702,topY,168,122,"EFICÁCIA",resumo.eficacia+"%",resumo.totalGolos+" G / "+resumo.totalRemates+" R");
+ statCard(870,topY,180,122,"GOLOS SOFR.",resumo.totalGolosSofridos,(resumo.totalGolosSofridos/3).toFixed(2).replace(".",",")+" / PERÍODO");
 
- // Resultado por período
- rr(30,382,1020,100,13,"rgba(255,255,255,.03)","rgba(255,255,255,.36)",1.2);
- tx("RESULTADO\nPOR PERÍODO",55,410,25,white,900);
- resultBox(220,397,180,70,"1.º PERÍODO",p1.golos,p1.sofridos);
- resultBox(430,397,180,70,"2.º PERÍODO",p2.golos,p2.sofridos);
- resultBox(640,397,180,70,"3.º PERÍODO",p3.golos,p3.sofridos);
- resultBox(850,397,170,70,"TOTAL",resumo.totalGolos,resumo.totalGolosSofridos);
+ // Resultado por período mais pequeno e limpo
+ rr(30,372,1020,82,12,"rgba(255,255,255,.03)","rgba(255,255,255,.34)",1.2);
+ tx("RESULTADO POR PERÍODO",55,402,22,white,900);
+ miniResultCell(270,386,150,54,"1.º",p1.golos,p1.sofridos);
+ miniResultCell(450,386,150,54,"2.º",p2.golos,p2.sofridos);
+ miniResultCell(630,386,150,54,"3.º",p3.golos,p3.sofridos);
+ miniResultCell(810,386,170,54,"TOTAL",resumo.totalGolos,resumo.totalGolosSofridos);
 
- // Eficácia por período
- rr(30,502,1020,116,13,"rgba(255,255,255,.03)","rgba(255,255,255,.36)",1.2);
- tx("EFICÁCIA REMATE\nPOR PERÍODO",55,532,24,white,900);
- efficacyBox(230,520,180,80,"1.º PERÍODO",p1.eficacia,p1.golos+" G / "+p1.remates+" R");
- efficacyBox(440,520,180,80,"2.º PERÍODO",p2.eficacia,p2.golos+" G / "+p2.remates+" R");
- efficacyBox(650,520,180,80,"3.º PERÍODO",p3.eficacia,p3.golos+" G / "+p3.remates+" R");
- efficacyBox(860,520,170,80,"TOTAL",resumo.eficacia,resumo.totalGolos+" G / "+resumo.totalRemates+" R");
+ // Eficácia por período mais pequena e legível
+ rr(30,470,1020,92,12,"rgba(255,255,255,.03)","rgba(255,255,255,.34)",1.2);
+ tx("EFICÁCIA REMATE",55,500,22,white,900);
+ miniEfficacyCell(270,486,150,60,"1.º",p1.eficacia,p1.golos+" G / "+p1.remates+" R");
+ miniEfficacyCell(450,486,150,60,"2.º",p2.eficacia,p2.golos+" G / "+p2.remates+" R");
+ miniEfficacyCell(630,486,150,60,"3.º",p3.eficacia,p3.golos+" G / "+p3.remates+" R");
+ miniEfficacyCell(810,486,170,60,"TOTAL",resumo.eficacia,resumo.totalGolos+" G / "+resumo.totalRemates+" R");
 
- // Arenas
- sectionTitle("ARENAS POR PERÍODO",30,642,1020);
- miniPitch(30,682,245,276,"1.º PERÍODO",p1,p1.eventos);
- miniPitch(295,682,245,276,"2.º PERÍODO",p2,p2.eventos);
- miniPitch(560,682,245,276,"3.º PERÍODO",p3,p3.eventos);
- miniPitch(825,682,225,276,"COLETIVO",{
+ // Arenas com emojis originais
+ center("ARENAS POR PERÍODO",540,590,24,white,900);
+ drawAppPitch(30,630,245,285,"1.º PERÍODO",p1,p1.eventos);
+ drawAppPitch(295,630,245,285,"2.º PERÍODO",p2,p2.eventos);
+ drawAppPitch(560,630,245,285,"3.º PERÍODO",p3,p3.eventos);
+ drawAppPitch(825,630,225,285,"COLETIVO",{
   golos:resumo.totalGolos,remates:resumo.totalRemates,defesas:resumo.totalDefesas,sofridos:resumo.totalGolosSofridos
  },reg);
 
- // Blocos intermédios
- leaderboard(30,988,255,250,"TOP 3 REMATES",topRemates,"remates");
- leaderboard(305,988,255,250,"TOP 3 AÇÕES",topAcoes,"acoes");
- coletivoBox(580,988,220,250);
- minutosBox(820,988,230,250);
+ // Blocos centrados
+ leaderboard(90,948,260,250,"TOP 3 REMATES",topRemates,"remates");
+ leaderboard(410,948,260,250,"TOP 3 AÇÕES",topAcoes,"acoes");
+ coletivoBox(730,948,260,250);
 
- // Baixo
- distribution(30,1268,455,265);
- resumoBox(515,1268,535,265);
+ // Minutos mais largo no lugar do resumo
+ minutosWide(30,1230,1020,350);
+
+ // Distribuição em baixo
+ distribution(30,1610,1020,210);
 
  center("PAIXÃO  •  ENTREGA  •  FAMÍLIA",540,1848,22,white,900);
 
