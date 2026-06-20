@@ -3845,7 +3845,8 @@ function exportDashboard(){
  function drawAppPitch(x,y,w,h,title,data,events){
   rr(x,y,w,h,12,"rgba(255,255,255,.04)","rgba(255,255,255,.34)",1);
   rr(x,y,w,38,8,red,null,0);
-  center(title,x+w/2,y+8,16,white,900);
+  let ladoTitulo=data.lado||ladoAtaquePeriodo(title.includes("1")?"1.º período":title.includes("2")?"2.º período":title.includes("3")?"3.º período":title.includes("PRO")?"Prolongamento":title.includes("PEN")?"Penáltis":$("periodo")?.value);
+  center(title+"  "+(ladoTitulo==="left"?"←":"→"),x+w/2,y+8,16,white,900);
 
   let px=x+10, py=y+48, pw=w-20, ph=h-118;
   rr(px,py,pw,ph,0,sand,"rgba(255,255,255,.78)",1);
@@ -3866,14 +3867,6 @@ function exportDashboard(){
   ctx.strokeRect(px+2,py+ph/2-20,12,40);
   // Baliza direita
   ctx.strokeRect(px+pw-14,py+ph/2-20,12,40);
-
-  // direção de ataque do período
-  let lado=data.lado||ladoAtaquePeriodo(title.includes("1")?"1.º período":title.includes("2")?"2.º período":title.includes("3")?"3.º período":$("periodo")?.value);
-  ctx.fillStyle="rgba(255,255,255,.70)";
-  ctx.font="900 18px Arial";
-  ctx.textAlign="center";
-  ctx.textBaseline="middle";
-  ctx.fillText(lado==="left"?"←":"→",px+pw/2,py+ph/2);
 
   // emojis iguais à aplicação, respeitando a direção
   events.forEach(r=>{
@@ -3919,7 +3912,7 @@ function exportDashboard(){
   rr(x,y,w,h,12,"rgba(255,255,255,.045)","rgba(255,255,255,.34)",1);
   rr(x,y,w,42,8,red,null,0);
   center("COLETIVO",x+w/2,y+10,19,white,900);
-  let rows=[["REMATES",resumo.totalRemates],["GOLOS",resumo.totalGolos],["SOFRIDOS",resumo.totalGolosSofridos],["EFICÁCIA",resumo.eficacia+"%"]];
+  let rows=[["REMATES",resumo.totalRemates],["GOLOS",resumo.totalGolos],["PERDAS",resumo.totalPerdas],["EFICÁCIA",resumo.eficacia+"%"]];
   rows.forEach((r,i)=>{
    let yy=y+62+i*41;
    tx(r[0],x+18,yy,17,white,800);
@@ -4142,6 +4135,8 @@ function exportDashboardIndividual(jogadora){
  let minutos=calcularMinutosJogadores()[jogadora]||{};
  let periodos=["1.º período","2.º período","3.º período","Prolongamento","Penáltis"];
  let st=estatisticasJogadora(jogadora);
+ let golosSofridos=reg.filter(r=>r.jogador===jogadora&&r.acao==="Golo sofrido").length;
+ let passesFalhados=reg.filter(r=>r.jogador===jogadora&&r.acao==="Passe falhado").length;
 
  let canvas=document.createElement("canvas");
  canvas.width=1080;
@@ -4159,7 +4154,7 @@ function exportDashboardIndividual(jogadora){
  function right(t,x,y,s,c,w){tx(t,x,y,s,c,w,"right");}
  function fit(t,x,y,maxW,s,c,w,a){ctx.fillStyle=c||white;ctx.font=(w||700)+" "+s+"px Arial";ctx.textAlign=a||"left";ctx.textBaseline="top";let txt=String(t||"");while(ctx.measureText(txt).width>maxW&&txt.length>4)txt=txt.slice(0,-2)+"…";ctx.fillText(txt,x,y);}
  function bg(){let g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,"#06152B");g.addColorStop(1,"#020A18");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);}
- function stat(x,y,w,h,label,value){rr(x,y,w,h,12,"rgba(255,255,255,.045)","rgba(255,255,255,.32)",1);center(label,x+w/2,y+15,17,white,900);center(value,x+w/2,y+46,42,white,900);}
+ function stat(x,y,w,h,label,value){rr(x,y,w,h,12,"rgba(255,255,255,.045)","rgba(255,255,255,.32)",1);center(label,x+w/2,y+15,15,white,900);center(value,x+w/2,y+44,36,white,900);}
  function pitch(x,y,w,h,title,events){
   rr(x,y,w,h,12,"rgba(255,255,255,.04)","rgba(255,255,255,.32)",1);
   rr(x,y,w,36,8,red,null,0);center(title,x+w/2,y+8,15,white,900);
@@ -4180,31 +4175,48 @@ function exportDashboardIndividual(jogadora){
  tx(casa+" vs "+fora,70,160,26,gold,900);
 
  let y=220;
- stat(40,y,150,118,"MINUTOS",minutosTexto(minutos.total||0));
- stat(200,y,130,118,"GOLOS",st.golos);
- stat(340,y,150,118,"REMATES",st.remates);
- stat(500,y,150,118,"ASSIST.",st.assist);
- stat(660,y,140,118,"DEFESAS",st.defesas);
- stat(810,y,230,118,"EFICÁCIA",st.eficacia+"%");
- y=358;
- stat(90,y,220,110,"🔙 RECUP.",st.rec);
- stat(330,y,220,110,"⛔️ PERDAS",st.perdas);
- stat(570,y,220,110,"🟥 EXPULSÕES",st.exp);
- stat(810,y,160,110,"TOTAL",st.total);
+ stat(40,y,150,110,"MINUTOS",minutosTexto(minutos.total||0));
+ stat(200,y,130,110,"GOLOS",st.golos);
+ stat(340,y,150,110,"REMATES",st.remates);
+ stat(500,y,150,110,"ASSIST.",st.assist);
+ stat(660,y,140,110,"DEFESAS",st.defesas);
+ stat(810,y,230,110,"EFICÁCIA",st.eficacia+"%");
 
- let pY=510;
+ y=342;
+ stat(40,y,160,105,"RECUP.",st.rec);
+ stat(210,y,160,105,"PERDAS",st.perdas);
+ stat(380,y,190,105,"PASSE FALH.",passesFalhados);
+ stat(580,y,190,105,"GOLO SOFR.",golosSofridos);
+ stat(780,y,260,105,"TOTAL AÇÕES",st.total);
+
+ let pY=490;
  pitch(40,pY,320,220,"1.º PERÍODO",reg.filter(r=>r.jogador===jogadora&&r.periodo==="1.º período"&&r.x!==""&&r.x!==undefined));
  pitch(380,pY,320,220,"2.º PERÍODO",reg.filter(r=>r.jogador===jogadora&&r.periodo==="2.º período"&&r.x!==""&&r.x!==undefined));
  pitch(720,pY,320,220,"3.º PERÍODO",reg.filter(r=>r.jogador===jogadora&&r.periodo==="3.º período"&&r.x!==""&&r.x!==undefined));
- pY=760;
+ pY=740;
  pitch(40,pY,320,220,"PROLONGAMENTO",reg.filter(r=>r.jogador===jogadora&&r.periodo==="Prolongamento"&&r.x!==""&&r.x!==undefined));
  pitch(380,pY,320,220,"PENÁLTIS",reg.filter(r=>r.jogador===jogadora&&r.periodo==="Penáltis"&&r.x!==""&&r.x!==undefined));
  pitch(720,pY,320,220,"TOTAL",reg.filter(r=>r.jogador===jogadora&&r.x!==""&&r.x!==undefined));
 
- rr(40,1020,1000,520,16,"rgba(255,255,255,.045)","rgba(255,255,255,.22)",1);
- center("AÇÕES POR PERÍODO",540,1048,24,white,900);
- let rowY=1100;
- periodos.forEach((p,i)=>{let ep=reg.filter(r=>r.jogador===jogadora&&r.periodo===p);let sp=estatisticasJogadora(jogadora,ep);let yy=rowY+i*75;tx(p,70,yy,22,white,900);right("⏱️ "+minutosTexto(minutos[p]||0),1010,yy,20,gold,900);tx(`⚽ ${sp.golos}   ✔️ ${sp.remates}   🎁 ${sp.assist}   🧤 ${sp.defesas}   🔙 ${sp.rec}   ⛔️ ${sp.perdas}   🟥 ${sp.exp}`,70,yy+34,21,white,700);});
+ rr(40,1000,1000,455,16,"rgba(255,255,255,.045)","rgba(255,255,255,.22)",1);
+ center("AÇÕES POR PERÍODO",540,1025,24,white,900);
+ let rowY=1075;
+ periodos.forEach((p,i)=>{
+  let ep=reg.filter(r=>r.jogador===jogadora&&r.periodo===p);
+  let sp=estatisticasJogadora(jogadora,ep);
+  let gs=ep.filter(r=>r.acao==="Golo sofrido").length;
+  let pf=ep.filter(r=>r.acao==="Passe falhado").length;
+  let yy=rowY+i*68;
+  tx(p,70,yy,21,white,900);
+  right("MIN "+minutosTexto(minutos[p]||0),1010,yy,18,gold,900);
+  tx(`G ${sp.golos}   R ${sp.remates}   A ${sp.assist}   D ${sp.defesas}   REC ${sp.rec}   PER ${sp.perdas}   PF ${pf}   GS ${gs}`,70,yy+32,18,white,700);
+ });
+
+ rr(40,1485,1000,170,16,"rgba(255,255,255,.035)","rgba(255,255,255,.16)",1);
+ center("LEGENDA",540,1510,22,white,900);
+ tx("⚽ Golo    ✔️ Remate    🎁 Assistência    🧤 Defesa    🔙 Recuperação",80,1560,20,white,700);
+ tx("⛔️ Perda de bola    ⚠️ Passe falhado    🔴 Golo sofrido    🟥 Expulsão",80,1600,20,white,700);
+
  center("PAIXÃO  •  ENTREGA  •  FAMÍLIA",540,1848,22,white,900);
 
  let nome="dashboard_individual_"+jogadora+"_"+casa+"_vs_"+fora+".png";
