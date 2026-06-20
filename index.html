@@ -4188,14 +4188,14 @@ function exportDashboardIndividual(jogadora){
  function stat(x,y,w,h,label,value){rr(x,y,w,h,12,"rgba(255,255,255,.045)","rgba(255,255,255,.32)",1);center(label,x+w/2,y+15,15,white,900);center(value,x+w/2,y+44,36,white,900);}
  function pitch(x,y,w,h,title,events){
   rr(x,y,w,h,12,"rgba(255,255,255,.04)","rgba(255,255,255,.32)",1);
-  rr(x,y,w,36,8,red,null,0);center(title,x+w/2,y+8,15,white,900);
+  rr(x,y,w,36,8,red,null,0);center(title+" "+(lado==="left"?"←":"→"),x+w/2,y+8,15,white,900);
   let px=x+10,py=y+46,pw=w-20,ph=h-58;
   rr(px,py,pw,ph,0,sand,"rgba(255,255,255,.75)",1);
   ctx.strokeStyle="rgba(255,255,255,.85)";ctx.lineWidth=1.3;
   ctx.beginPath();ctx.moveTo(px+8,py+8);ctx.lineTo(px+pw-8,py+8);ctx.lineTo(px+pw-8,py+ph-8);ctx.lineTo(px+8,py+ph-8);ctx.closePath();ctx.stroke();
   ctx.strokeRect(px+2,py+ph/2-18,12,36);ctx.strokeRect(px+pw-14,py+ph/2-18,12,36);
   let lado=events.length?ladoAtaquePeriodo(events[0].periodo):attackSide;
-  ctx.fillStyle="rgba(255,255,255,.45)";ctx.font="900 18px Arial";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(lado==="left"?"←":"→",px+pw/2,py+ph/2);
+  ctx.fillStyle="rgba(255,255,255,.45)";ctx.font="900 18px Arial";ctx.textAlign="center";ctx.textBaseline="middle";
   events.forEach(r=>{let rawX=Number(r.x||50);let plotX=(r.attackSide==="left")?(100-rawX):rawX;let ex=px+(plotX/100)*pw;let ey=py+(Number(r.y||50)/100)*ph;ctx.font="14px Arial";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(r.emoji||acaoObj(r.acao).emoji,ex,ey);});
  }
 
