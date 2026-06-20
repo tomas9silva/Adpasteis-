@@ -2306,6 +2306,7 @@ let active=jogadores[0]||"Jogador 1";
 let outTemp=null, inTemp=null, details=false, time=dur*60, timer=null, selectedEventIndex=null;
 let subsOutTemp=[], subsInTemp=[];
 let pendingAssistGoal=null;
+let jogoMinutosAtivo=localStorage.getItem("jogo_minutos_ativo_pasteis")==="1";
 let casaGoals=+localStorage.getItem("golos_casa_pasteis")||0;
 let foraGoals=+localStorage.getItem("golos_fora_pasteis")||0;
 let attackSide=localStorage.getItem("attack_side_pasteis")||"right";
@@ -3039,8 +3040,13 @@ function setActiveControl(tipo){
 JOGO: CRONÓMETRO
 ===================================== */
 function start(){
- garantirTitularesIniciais();
  if(timer)return;
+
+ if(!jogoMinutosAtivo){
+  jogoMinutosAtivo=true;
+  localStorage.setItem("jogo_minutos_ativo_pasteis","1");
+  garantirTitularesIniciais();
+ }
 
  timer=setInterval(()=>{
   if(time>0){
@@ -3053,7 +3059,11 @@ function start(){
  },1000);
 }
 function pause(){clearInterval(timer);timer=null}
-function resetTimer(){pause();time=dur*60;updateTimer()}
+function resetTimer(){
+ pause();
+ time=dur*60;
+ updateTimer();
+}
 function updateTimer(){
  if($("tempo"))$("tempo").innerText=t();
 
@@ -3473,6 +3483,11 @@ function calcularMinutosJogadores(){
   periodos.forEach(p=>resultado[j][p]=0);
  });
 
+ if(!jogoMinutosAtivo){
+  return resultado;
+ }
+
+ let periodoAtual=$("periodo")?$("periodo").value:"1.º período";
  let emCampo=titularesIniciais().filter(j=>jogadores.includes(j));
  let timeline={};
  periodos.forEach(p=>timeline[p]=[]);
@@ -3492,7 +3507,20 @@ function calcularMinutosJogadores(){
   let ultimo=0;
   let eventos=(timeline[p]||[]).sort((a,b)=>a.segundo-b.segundo);
 
+  let limitePeriodo;
+  if(periodos.indexOf(p)<periodos.indexOf(periodoAtual)){
+   limitePeriodo=dur*60;
+  }else if(p===periodoAtual){
+   limitePeriodo=minutoJogadoNoPeriodo(t());
+  }else{
+   limitePeriodo=0;
+  }
+
+  limitePeriodo=Math.max(0,Math.min(dur*60,limitePeriodo));
+
   eventos.forEach(ev=>{
+   if(ev.segundo>limitePeriodo)return;
+
    let delta=Math.max(0,ev.segundo-ultimo);
    emCampo.forEach(j=>{
     if(resultado[j])resultado[j][p]+=delta;
@@ -3504,8 +3532,7 @@ function calcularMinutosJogadores(){
    ultimo=ev.segundo;
   });
 
-  let fim=dur*60;
-  let deltaFinal=Math.max(0,fim-ultimo);
+  let deltaFinal=Math.max(0,limitePeriodo-ultimo);
   emCampo.forEach(j=>{
    if(resultado[j])resultado[j][p]+=deltaFinal;
   });
@@ -3617,6 +3644,8 @@ function guardarSessaoAtual(){
   reg:JSON.parse(JSON.stringify(reg)),
   subs:JSON.parse(JSON.stringify(subs)),
   attackSide:attackSide,
+  jogoMinutosAtivo:jogoMinutosAtivo,
+  titularesIniciais:titularesIniciais(),
   treino:{tipo:tipoTreinoAtual,nome:localStorage.getItem("nome_treino_pasteis")||"",data:localStorage.getItem("data_treino_pasteis")||"",duracao:localStorage.getItem("duracao_treino_pasteis")||"",objetivo:localStorage.getItem("objetivo_treino_pasteis")||"",jogadores:treinoJogadores,exercicios:exerciciosTreino,presencas:presencasTreino,treinadores:treinoTreinadores,presencasTreinadores:presencasTreinadores,medico:departamentoMedico}
  };
  let lista=getSessoes();
@@ -3674,6 +3703,8 @@ function carregarSessao(id){
  localStorage.setItem("registos_pasteis",JSON.stringify(s.reg||[]));
  localStorage.setItem("subs_pasteis",JSON.stringify(s.subs||[]));
  localStorage.setItem("attack_side_pasteis",s.attackSide||"right");
+ localStorage.setItem("jogo_minutos_ativo_pasteis",s.jogoMinutosAtivo?"1":"0");
+ if(s.titularesIniciais)localStorage.setItem("titulares_iniciais_pasteis",JSON.stringify(s.titularesIniciais));
  localStorage.setItem("abrir_direto_pasteis","1");
  location.reload();
 }
@@ -4293,7 +4324,7 @@ function importBackupJSON(event){
  reader.readAsText(file);
 }
 
-function clearGame(){if(confirm("Apagar todos os registos deste jogo/treino?")){reg=[];subs=[];casaGoals=0;foraGoals=0;localStorage.removeItem("registos_pasteis");localStorage.removeItem("subs_pasteis");localStorage.setItem("golos_casa_pasteis",0);localStorage.setItem("golos_fora_pasteis",0);loadGame();renderAll()}}
+function clearGame(){if(confirm("Apagar todos os registos deste jogo/treino?")){reg=[];subs=[];casaGoals=0;foraGoals=0;localStorage.removeItem("registos_pasteis");localStorage.removeItem("subs_pasteis");localStorage.removeItem("jogo_minutos_ativo_pasteis");localStorage.removeItem("titulares_iniciais_pasteis");jogoMinutosAtivo=false;localStorage.setItem("golos_casa_pasteis",0);localStorage.setItem("golos_fora_pasteis",0);loadGame();renderAll()}}
 function clearMapOnly(){if(confirm("Apagar apenas ações com localização no campo?")){reg=reg.filter(r=>r.x===""||r.x===undefined);localStorage.setItem("registos_pasteis",JSON.stringify(reg));renderAll()}}
 function fullReset(){if(confirm("Apagar tudo e repor a aplicação?")){localStorage.clear();location.reload()}}
 
