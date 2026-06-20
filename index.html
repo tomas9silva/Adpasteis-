@@ -4177,29 +4177,95 @@ function exportDashboardIndividual(jogadora){
  const W=1080,H=1920,navy="#06152B",red="#D71920",white="#FFFFFF",gold="#FFD21A",sand="#D8BD7E";
 
  function rr(x,y,w,h,r,fill,stroke,lw){
-  ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();
-  if(fill){ctx.fillStyle=fill;ctx.fill();} if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||2;ctx.stroke();}
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);
+  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);
+  ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);
+  ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+  if(fill){ctx.fillStyle=fill;ctx.fill();}
+  if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||2;ctx.stroke();}
  }
- function tx(t,x,y,s,c,w,a){ctx.fillStyle=c||white;ctx.font=(w||700)+" "+s+"px Arial";ctx.textAlign=a||"left";ctx.textBaseline="top";ctx.fillText(String(t),x,y);}
+
+ function tx(t,x,y,s,c,w,a){
+  ctx.fillStyle=c||white;
+  ctx.font=(w||700)+" "+s+"px Arial";
+  ctx.textAlign=a||"left";
+  ctx.textBaseline="top";
+  ctx.fillText(String(t),x,y);
+ }
+
  function center(t,x,y,s,c,w){tx(t,x,y,s,c,w,"center");}
  function right(t,x,y,s,c,w){tx(t,x,y,s,c,w,"right");}
- function fit(t,x,y,maxW,s,c,w,a){ctx.fillStyle=c||white;ctx.font=(w||700)+" "+s+"px Arial";ctx.textAlign=a||"left";ctx.textBaseline="top";let txt=String(t||"");while(ctx.measureText(txt).width>maxW&&txt.length>4)txt=txt.slice(0,-2)+"…";ctx.fillText(txt,x,y);}
- function bg(){let g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,"#06152B");g.addColorStop(1,"#020A18");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);}
- function stat(x,y,w,h,label,value){rr(x,y,w,h,12,"rgba(255,255,255,.045)","rgba(255,255,255,.32)",1);center(label,x+w/2,y+15,15,white,900);center(value,x+w/2,y+44,36,white,900);}
+
+ function fit(t,x,y,maxW,s,c,w,a){
+  ctx.fillStyle=c||white;
+  ctx.font=(w||700)+" "+s+"px Arial";
+  ctx.textAlign=a||"left";
+  ctx.textBaseline="top";
+  let txt=String(t||"");
+  while(ctx.measureText(txt).width>maxW&&txt.length>4){
+   txt=txt.slice(0,-2)+"…";
+  }
+  ctx.fillText(txt,x,y);
+ }
+
+ function bg(){
+  let g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,"#06152B");
+  g.addColorStop(1,"#020A18");
+  ctx.fillStyle=g;
+  ctx.fillRect(0,0,W,H);
+ }
+
+ function stat(x,y,w,h,label,value){
+  rr(x,y,w,h,12,"rgba(255,255,255,.045)","rgba(255,255,255,.32)",1);
+  center(label,x+w/2,y+15,15,white,900);
+  center(value,x+w/2,y+44,36,white,900);
+ }
+
  function pitch(x,y,w,h,title,events){
+  let lado=events.length?ladoAtaquePeriodo(events[0].periodo):attackSide;
+
   rr(x,y,w,h,12,"rgba(255,255,255,.04)","rgba(255,255,255,.32)",1);
-  rr(x,y,w,36,8,red,null,0);center(title+" "+(lado==="left"?"←":"→"),x+w/2,y+8,15,white,900);
+  rr(x,y,w,36,8,red,null,0);
+  center(title+" "+(lado==="left"?"←":"→"),x+w/2,y+8,15,white,900);
+
   let px=x+10,py=y+46,pw=w-20,ph=h-58;
   rr(px,py,pw,ph,0,sand,"rgba(255,255,255,.75)",1);
-  ctx.strokeStyle="rgba(255,255,255,.85)";ctx.lineWidth=1.3;
-  ctx.beginPath();ctx.moveTo(px+8,py+8);ctx.lineTo(px+pw-8,py+8);ctx.lineTo(px+pw-8,py+ph-8);ctx.lineTo(px+8,py+ph-8);ctx.closePath();ctx.stroke();
-  ctx.strokeRect(px+2,py+ph/2-18,12,36);ctx.strokeRect(px+pw-14,py+ph/2-18,12,36);
-  let lado=events.length?ladoAtaquePeriodo(events[0].periodo):attackSide;
-  ctx.fillStyle="rgba(255,255,255,.45)";ctx.font="900 18px Arial";ctx.textAlign="center";ctx.textBaseline="middle";
-  events.forEach(r=>{let rawX=Number(r.x||50);let plotX=(r.attackSide==="left")?(100-rawX):rawX;let ex=px+(plotX/100)*pw;let ey=py+(Number(r.y||50)/100)*ph;ctx.font="14px Arial";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(r.emoji||acaoObj(r.acao).emoji,ex,ey);});
+
+  ctx.strokeStyle="rgba(255,255,255,.85)";
+  ctx.lineWidth=1.3;
+  ctx.beginPath();
+  ctx.moveTo(px+8,py+8);
+  ctx.lineTo(px+pw-8,py+8);
+  ctx.lineTo(px+pw-8,py+ph-8);
+  ctx.lineTo(px+8,py+ph-8);
+  ctx.closePath();
+  ctx.stroke();
+
+  ctx.strokeRect(px+2,py+ph/2-18,12,36);
+  ctx.strokeRect(px+pw-14,py+ph/2-18,12,36);
+
+  events.forEach(r=>{
+   let rawX=Number(r.x||50);
+   let plotX=(r.attackSide==="left")?(100-rawX):rawX;
+   let ex=px+(plotX/100)*pw;
+   let ey=py+(Number(r.y||50)/100)*ph;
+   ctx.font="14px Arial";
+   ctx.textAlign="center";
+   ctx.textBaseline="middle";
+   ctx.fillText(r.emoji||acaoObj(r.acao).emoji,ex,ey);
+  });
  }
 
  bg();
+
  center("DASHBOARD INDIVIDUAL",540,40,28,white,900);
  fit(jogadora,70,94,520,56,white,900);
  right(casaGoals+"-"+foraGoals,1010,92,62,white,900);
@@ -4224,6 +4290,7 @@ function exportDashboardIndividual(jogadora){
  pitch(40,pY,320,220,"1.º PERÍODO",reg.filter(r=>r.jogador===jogadora&&r.periodo==="1.º período"&&r.x!==""&&r.x!==undefined));
  pitch(380,pY,320,220,"2.º PERÍODO",reg.filter(r=>r.jogador===jogadora&&r.periodo==="2.º período"&&r.x!==""&&r.x!==undefined));
  pitch(720,pY,320,220,"3.º PERÍODO",reg.filter(r=>r.jogador===jogadora&&r.periodo==="3.º período"&&r.x!==""&&r.x!==undefined));
+
  pY=740;
  pitch(40,pY,320,220,"PROLONGAMENTO",reg.filter(r=>r.jogador===jogadora&&r.periodo==="Prolongamento"&&r.x!==""&&r.x!==undefined));
  pitch(380,pY,320,220,"PENÁLTIS",reg.filter(r=>r.jogador===jogadora&&r.periodo==="Penáltis"&&r.x!==""&&r.x!==undefined));
@@ -4231,6 +4298,7 @@ function exportDashboardIndividual(jogadora){
 
  rr(40,1000,1000,455,16,"rgba(255,255,255,.045)","rgba(255,255,255,.22)",1);
  center("AÇÕES POR PERÍODO",540,1025,24,white,900);
+
  let rowY=1075;
  periodos.forEach((p,i)=>{
   let ep=reg.filter(r=>r.jogador===jogadora&&r.periodo===p);
@@ -4238,6 +4306,7 @@ function exportDashboardIndividual(jogadora){
   let gs=ep.filter(r=>r.acao==="Golo sofrido").length;
   let pf=ep.filter(r=>r.acao==="Passe falhado").length;
   let yy=rowY+i*68;
+
   tx(p,70,yy,21,white,900);
   right("MIN "+minutosTexto(minutos[p]||0),1010,yy,18,gold,900);
   tx(`G ${sp.golos}   R ${sp.remates}   A ${sp.assist}   D ${sp.defesas}   REC ${sp.rec}   PER ${sp.perdas}   PF ${pf}   GS ${gs}`,70,yy+32,18,white,700);
@@ -4251,8 +4320,23 @@ function exportDashboardIndividual(jogadora){
  center("PAIXÃO  •  ENTREGA  •  FAMÍLIA",540,1848,22,white,900);
 
  let nome="dashboard_individual_"+jogadora+"_"+casa+"_vs_"+fora+".png";
- if(canvas.toBlob){canvas.toBlob(blob=>{let url=URL.createObjectURL(blob);let a=document.createElement("a");a.href=url;a.download=nome;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);},"image/png");}
- else{let a=document.createElement("a");a.href=canvas.toDataURL("image/png");a.download=nome;a.click();}
+ if(canvas.toBlob){
+  canvas.toBlob(blob=>{
+   let url=URL.createObjectURL(blob);
+   let a=document.createElement("a");
+   a.href=url;
+   a.download=nome;
+   document.body.appendChild(a);
+   a.click();
+   a.remove();
+   URL.revokeObjectURL(url);
+  },"image/png");
+ }else{
+  let a=document.createElement("a");
+  a.href=canvas.toDataURL("image/png");
+  a.download=nome;
+  a.click();
+ }
 }
 
 function exportBackupJSON(){
