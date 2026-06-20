@@ -2247,7 +2247,8 @@ DEFINIÇÕES / ESTATÍSTICAS / HISTÓRICO
     <button class="dark" onclick="document.getElementById('backupInput').click()">Importar backup</button>
   </div>
   <input id="backupInput" type="file" accept=".json,application/json" style="display:none" onchange="importBackupJSON(event)">
-  <button class="yellow" onclick="exportCSV()">Exportar Excel/Dashboard</button>
+  <button class="yellow" onclick="exportCSV()">Exportar Excel</button>
+  <button class="blue" onclick="exportDashboard()">Exportar Dashboard PNG</button>
   <button class="danger" onclick="clearGame()">Limpar jogo/treino atual</button>
   <button class="danger" onclick="clearMapOnly()">Limpar só mapa</button>
   <button class="danger" onclick="fullReset()">Reset completo</button>
@@ -3474,6 +3475,154 @@ function apagarSessao(id){
  setSessoes(lista);
  openSessoes();
 }
+function exportDashboard(){
+ let casa=($("casa")?$("casa").value:"AD Pastéis")||"AD Pastéis";
+ let fora=($("fora")?$("fora").value:"Adversário")||"Adversário";
+ let resumo=calcularResumoJogo();
+ let minutos=calcularMinutosJogadores();
+
+ let topJogadoras=Object.entries(resumo.porJogador).sort((a,b)=>{
+  let sa=a[1].golos*4+a[1].assist*3+a[1].defesas*2+a[1].remates+a[1].total*.1-a[1].passesFalhados;
+  let sb=b[1].golos*4+b[1].assist*3+b[1].defesas*2+b[1].remates+b[1].total*.1-b[1].passesFalhados;
+  return sb-sa;
+ }).slice(0,5);
+
+ let zonas={};
+ reg.forEach(r=>{
+  let z=zonaEvento(r);
+  zonas[z]=(zonas[z]||0)+1;
+ });
+ let zonasTop=Object.entries(zonas).sort((a,b)=>b[1]-a[1]).slice(0,5);
+ let minsTop=Object.entries(minutos).sort((a,b)=>(b[1].total||0)-(a[1].total||0)).slice(0,7);
+
+ let canvas=document.createElement("canvas");
+ canvas.width=1080;
+ canvas.height=1350;
+ let ctx=canvas.getContext("2d");
+
+ function rr(x,y,w,h,r,fill,stroke){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);
+  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);
+  ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);
+  ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+  if(fill){ctx.fillStyle=fill;ctx.fill();}
+  if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke();}
+ }
+
+ function tx(t,x,y,s,c,w,a){
+  ctx.fillStyle=c||"#fff";
+  ctx.font=(w||700)+" "+s+"px Arial";
+  ctx.textAlign=a||"left";
+  ctx.textBaseline="top";
+  ctx.fillText(String(t),x,y);
+ }
+ function small(t,x,y){tx(t,x,y,24,"rgba(255,255,255,.72)",500);}
+ function title(t,x,y){tx(t,x,y,32,"#fff",900);}
+ function gold(t,x,y,s,a){tx(t,x,y,s||42,"#FFD21A",900,a);}
+
+ function card(x,y,w,h,label,value){
+  rr(x,y,w,h,28,"rgba(255,255,255,.075)","rgba(255,255,255,.13)");
+  small(label,x+28,y+24);
+  gold(value,x+28,y+60,48);
+ }
+
+ let grad=ctx.createLinearGradient(0,0,0,1350);
+ grad.addColorStop(0,"#0B1B34");
+ grad.addColorStop(1,"#071326");
+ ctx.fillStyle=grad;
+ ctx.fillRect(0,0,1080,1350);
+
+ ctx.globalAlpha=.06;
+ ctx.fillStyle="#fff";
+ ctx.beginPath();
+ ctx.arc(540,650,260,0,Math.PI*2);
+ ctx.fill();
+ ctx.globalAlpha=1;
+
+ tx("AD PASTÉIS",70,60,54,"#fff",900);
+ small("Dashboard pós-jogo · Futebol Praia",74,122);
+ tx(casa+" vs "+fora,74,164,30,"#FFD21A",900);
+ tx(casaGoals+"-"+foraGoals,1010,72,78,"#fff",900,"right");
+
+ ctx.strokeStyle="rgba(255,255,255,.14)";
+ ctx.lineWidth=2;
+ ctx.beginPath();
+ ctx.moveTo(70,230);
+ ctx.lineTo(1010,230);
+ ctx.stroke();
+
+ let x0=70,y0=270,g=20,cw=300,ch=142;
+ card(x0,y0,cw,ch,"Golos",resumo.totalGolos);
+ card(x0+cw+g,y0,cw,ch,"Remates",resumo.totalRemates);
+ card(x0+(cw+g)*2,y0,cw,ch,"Eficácia",resumo.eficacia+"%");
+ card(x0,y0+ch+g,cw,ch,"Assistências",resumo.totalAssist);
+ card(x0+cw+g,y0+ch+g,cw,ch,"Defesas",resumo.totalDefesas);
+ card(x0+(cw+g)*2,y0+ch+g,cw,ch,"Passes falhados",resumo.totalPassesFalhados);
+
+ rr(70,600,450,170,28,"rgba(255,210,26,.16)","rgba(255,210,26,.35)");
+ title("MVP sugerido",100,630);
+ gold(resumo.mvp,100,684,46);
+ small("Baseado nas ações registadas",100,742);
+
+ rr(550,600,460,270,28,"rgba(255,255,255,.075)","rgba(255,255,255,.13)");
+ title("Zonas mais usadas",580,630);
+ if(!zonasTop.length){small("Sem zonas registadas",580,690);}
+ zonasTop.forEach(([z,n],i)=>{
+  small(z,580,690+i*36);
+  gold(n,960,690+i*36,26,"right");
+ });
+
+ rr(70,800,450,410,28,"rgba(255,255,255,.075)","rgba(255,255,255,.13)");
+ title("Top jogadoras",100,830);
+ if(!topJogadoras.length){small("Sem ações registadas",100,890);}
+ topJogadoras.forEach(([j,s],i)=>{
+  let y=890+i*58;
+  tx(j,100,y,25,"#fff",800);
+  small(`${s.golos}G · ${s.assist}A · ${s.defesas}D · ${s.remates}R`,100,y+28);
+ });
+
+ rr(550,900,460,310,28,"rgba(255,255,255,.075)","rgba(255,255,255,.13)");
+ title("Minutos jogados",580,930);
+ if(!minsTop.length){small("Sem atletas",580,990);}
+ minsTop.forEach(([j,m],i)=>{
+  let y=990+i*30;
+  small(j,580,y);
+  gold(minutosTexto(m.total||0),960,y,24,"right");
+ });
+
+ ctx.strokeStyle="rgba(255,255,255,.12)";
+ ctx.beginPath();
+ ctx.moveTo(70,1265);
+ ctx.lineTo(1010,1265);
+ ctx.stroke();
+ small("Gerado automaticamente pela StatS · AD Pastéis",70,1290);
+
+ let nome="dashboard_"+casa+"_vs_"+fora+".png";
+ if(canvas.toBlob){
+  canvas.toBlob(blob=>{
+   let url=URL.createObjectURL(blob);
+   let a=document.createElement("a");
+   a.href=url;
+   a.download=nome;
+   document.body.appendChild(a);
+   a.click();
+   a.remove();
+   URL.revokeObjectURL(url);
+  },"image/png");
+ }else{
+  let a=document.createElement("a");
+  a.href=canvas.toDataURL("image/png");
+  a.download=nome;
+  a.click();
+ }
+}
 function exportBackupJSON(){
  let backup={
   versao:"1.0",
@@ -3561,49 +3710,24 @@ function exportCSV(){
  let periodos=periodoOrdem();
 
  let resumoRows=[
-  ["Jogo",jogo],
-  ["Resultado",resultado],
-  ["Detalhes",det],
-  ["Golos",resumo.totalGolos],
-  ["Golos sofridos",resumo.totalGolosSofridos],
-  ["Remates",resumo.totalRemates],
-  ["Assistências",resumo.totalAssist],
-  ["Defesas",resumo.totalDefesas],
-  ["Passes falhados",resumo.totalPassesFalhados],
-  ["Eficácia",resumo.eficacia+"%"],
-  ["MVP sugerido",resumo.mvp]
+  ["Jogo",jogo],["Resultado",resultado],["Detalhes",det],
+  ["Golos",resumo.totalGolos],["Golos sofridos",resumo.totalGolosSofridos],
+  ["Remates",resumo.totalRemates],["Assistências",resumo.totalAssist],
+  ["Defesas",resumo.totalDefesas],["Passes falhados",resumo.totalPassesFalhados],
+  ["Eficácia",resumo.eficacia+"%"],["MVP sugerido",resumo.mvp]
  ];
 
  let eventosRows=[];
  periodoOrdem().forEach(p=>{
   reg.filter(r=>r.periodo===p).forEach(r=>{
-   eventosRows.push([
-    r.periodo,
-    r.tempo,
-    r.jogador,
-    r.acao,
-    r.emoji||acaoObj(r.acao).emoji,
-    zonaEvento(r),
-    r.x||"",
-    r.y||"",
-    r.attackSide==="left"?"Ataque esquerda":"Ataque direita",
-    r.data
-   ]);
+   eventosRows.push([r.periodo,r.tempo,r.jogador,r.acao,r.emoji||acaoObj(r.acao).emoji,zonaEvento(r),r.x||"",r.y||"",r.attackSide==="left"?"Ataque esquerda":"Ataque direita",r.data]);
   });
  });
 
- let subsRows=subs.slice().reverse().map(s=>[
-  s.periodo,
-  s.tempo,
-  s.sai,
-  s.entra,
-  s.data
- ]);
+ let subsRows=subs.slice().reverse().map(s=>[s.periodo,s.tempo,s.sai,s.entra,s.data]);
 
  let minutosRows=Object.entries(minutos).map(([j,m])=>[
-  j,
-  ...periodos.map(p=>minutosTexto(m[p]||0)),
-  minutosTexto(m.total||0)
+  j,...periodos.map(p=>minutosTexto(m[p]||0)),minutosTexto(m.total||0)
  ]);
 
  let jogadorasRows=Object.entries(resumo.porJogador).map(([j,s])=>[
@@ -3611,43 +3735,24 @@ function exportCSV(){
  ]);
 
  let htmlExcel=`
- <html>
- <head>
-  <meta charset="UTF-8">
-  <style>
-   body{font-family:Arial}
-   h1{background:#071326;color:white;padding:10px}
-   h2{color:#071326}
-   table{border-collapse:collapse;margin-bottom:22px;width:100%}
-   th{background:#071326;color:white}
-   td,th{padding:6px;border:1px solid #999}
-  </style>
- </head>
- <body>
-  <h1>${escapeExcel(jogo)} · ${escapeExcel(resultado)}</h1>
-
-  <h2>Resumo</h2>
-  ${tableHTML(["Indicador","Valor"],resumoRows)}
-
-  <h2>Eventos por período</h2>
-  ${tableHTML(["Período","Tempo","Jogador","Ação","Emoji","Zona","X","Y","Lado ataque","Data"],eventosRows)}
-
-  <h2>Estatísticas por jogadora</h2>
-  ${tableHTML(["Jogadora","Golos","Remates","Assistências","Defesas","Passes falhados","Total ações"],jogadorasRows)}
-
-  <h2>Substituições</h2>
-  ${tableHTML(["Período","Tempo","Sai","Entra","Data"],subsRows)}
-
-  <h2>Minutos jogados</h2>
-  ${tableHTML(["Atleta",...periodos,"Total"],minutosRows)}
- </body>
- </html>`;
+ <html><head><meta charset="UTF-8"><style>
+ body{font-family:Arial}h1{background:#071326;color:white;padding:10px}h2{color:#071326}
+ table{border-collapse:collapse;margin-bottom:22px;width:100%}th{background:#071326;color:white}
+ td,th{padding:6px;border:1px solid #999}
+ </style></head><body>
+ <h1>${escapeExcel(jogo)} · ${escapeExcel(resultado)}</h1>
+ <h2>Resumo</h2>${tableHTML(["Indicador","Valor"],resumoRows)}
+ <h2>Eventos por período</h2>${tableHTML(["Período","Tempo","Jogador","Ação","Emoji","Zona","X","Y","Lado ataque","Data"],eventosRows)}
+ <h2>Estatísticas por jogadora</h2>${tableHTML(["Jogadora","Golos","Remates","Assistências","Defesas","Passes falhados","Total ações"],jogadorasRows)}
+ <h2>Substituições</h2>${tableHTML(["Período","Tempo","Sai","Entra","Data"],subsRows)}
+ <h2>Minutos jogados</h2>${tableHTML(["Atleta",...periodos,"Total"],minutosRows)}
+ </body></html>`;
 
  let blob=new Blob([htmlExcel],{type:"application/vnd.ms-excel;charset=utf-8"});
  let url=URL.createObjectURL(blob);
  let a=document.createElement("a");
  a.href=url;
- a.download="dashboard_"+casa+"_vs_"+fora+".xls";
+ a.download="excel_"+casa+"_vs_"+fora+".xls";
  a.click();
  URL.revokeObjectURL(url);
 }
