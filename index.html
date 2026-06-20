@@ -3641,27 +3641,21 @@ function exportDashboard(){
   rr(px,py,pw,ph,0,sand,"rgba(255,255,255,.78)",1);
 
   ctx.strokeStyle="rgba(255,255,255,.88)";
-  ctx.lineWidth=1.2;
+  ctx.lineWidth=1.4;
 
-  // linhas exteriores
-  ctx.strokeRect(px+8,py+8,pw-16,ph-16);
-
-  // meio campo
+  // Apenas quatro linhas laterais + balizas à esquerda e direita
   ctx.beginPath();
-  ctx.moveTo(px+pw/2,py+8);
-  ctx.lineTo(px+pw/2,py+ph-8);
+  ctx.moveTo(px+8,py+8);
+  ctx.lineTo(px+pw-8,py+8);
+  ctx.lineTo(px+pw-8,py+ph-8);
+  ctx.lineTo(px+8,py+ph-8);
+  ctx.closePath();
   ctx.stroke();
 
-  // círculo central
-  ctx.beginPath();
-  ctx.arc(px+pw/2,py+ph/2,14,0,Math.PI*2);
-  ctx.stroke();
-
-  // áreas/balizas
-  ctx.strokeRect(px+pw/2-30,py+8,60,22);
-  ctx.strokeRect(px+pw/2-30,py+ph-30,60,22);
-  ctx.strokeRect(px+pw/2-22,py+1,44,8);
-  ctx.strokeRect(px+pw/2-22,py+ph-9,44,8);
+  // Baliza esquerda
+  ctx.strokeRect(px+2,py+ph/2-20,12,40);
+  // Baliza direita
+  ctx.strokeRect(px+pw-14,py+ph/2-20,12,40);
 
   // emojis iguais à aplicação
   events.forEach(r=>{
@@ -3716,7 +3710,7 @@ function exportDashboard(){
  }
 
  function minutosWide(x,y,w,h){
-  rr(x,y,w,h,12,"rgba(255,255,255,.045)","rgba(255,255,255,.34)",1);
+  // sem rebordo exterior, apenas barra de título
   rr(x,y,w,42,8,red,null,0);
   center("MINUTOS JOGADOS",x+w/2,y+10,19,white,900);
 
@@ -3740,10 +3734,8 @@ function exportDashboard(){
  }
 
  function distributionCompact(x,y,w,h){
-  // sem rebordo para ganhar espaço
-  center("DISTRIBUIÇÃO DAS AÇÕES",x+w/2,y+8,19,white,900);
-
-  let cx=x+115,cy=y+96,r=48,start=-Math.PI/2;
+  // sem título e sem rebordo para ganhar espaço
+  let cx=x+115,cy=y+88,r=48,start=-Math.PI/2;
   dist.forEach(d=>{
    let a=(d[1]/distTotal)*Math.PI*2;
    ctx.beginPath();ctx.moveTo(cx,cy);ctx.fillStyle=d[2];ctx.arc(cx,cy,r,start,start+a);ctx.closePath();ctx.fill();
@@ -3752,7 +3744,7 @@ function exportDashboard(){
   ctx.fillStyle=navy;ctx.beginPath();ctx.arc(cx,cy,25,0,Math.PI*2);ctx.fill();
 
   dist.forEach((d,i)=>{
-   let yy=y+42+i*24;
+   let yy=y+34+i*24;
    ctx.fillStyle=d[2];ctx.fillRect(x+220,yy,16,16);
    tx(d[0],x+246,yy-2,14,white,700);
    right(d[1],x+w-75,yy-2,14,white,800);
@@ -3781,9 +3773,10 @@ function exportDashboard(){
  statCard(702,topY,168,122,"EFICÁCIA",resumo.eficacia+"%",resumo.totalGolos+" G / "+resumo.totalRemates+" R");
  statCard(870,topY,180,122,"GOLOS SOFR.",resumo.totalGolosSofridos,(resumo.totalGolosSofridos/3).toFixed(2).replace(".",",")+" / PERÍODO");
 
- // Resultado por período — sem caixas internas para não sobrepor
+ // Resultado — sem texto longo
  rr(30,372,1020,84,12,"rgba(255,255,255,.03)","rgba(255,255,255,.28)",1);
- tx("RESULTADO POR PERÍODO",55,402,21,white,900);
+ rr(55,394,138,40,5,red,null,0);
+ center("RESULTADO",124,403,21,white,900);
  cleanResultCell(290,390,120,56,"1.º",p1.golos,p1.sofridos);
  cleanResultCell(480,390,120,56,"2.º",p2.golos,p2.sofridos);
  cleanResultCell(670,390,120,56,"3.º",p3.golos,p3.sofridos);
@@ -3791,7 +3784,8 @@ function exportDashboard(){
 
  // Eficácia — sem bordas internas e só percentagem
  rr(30,470,1020,84,12,"rgba(255,255,255,.03)","rgba(255,255,255,.28)",1);
- tx("EFICÁCIA REMATE",55,500,21,white,900);
+ rr(55,492,178,40,5,red,null,0);
+ center("EFICÁCIA REMATE",144,501,19,white,900);
  cleanEffCell(290,488,120,54,"1.º",p1.eficacia);
  cleanEffCell(480,488,120,54,"2.º",p2.eficacia);
  cleanEffCell(670,488,120,54,"3.º",p3.eficacia);
@@ -3811,11 +3805,11 @@ function exportDashboard(){
  leaderboard(410,938,260,250,"TOP 3 AÇÕES",topAcoes,"acoes");
  coletivoBox(730,938,260,250);
 
- // Minutos mais baixo, mas sem tocar na distribuição
+ // Minutos sem rebordo
  minutosWide(30,1220,1020,340);
 
- // Distribuição compacta e sem rebordo
- distributionCompact(30,1590,1020,170);
+ // Distribuição compacta sem título
+ distributionCompact(30,1590,1020,155);
 
  center("PAIXÃO  •  ENTREGA  •  FAMÍLIA",540,1848,22,white,900);
 
