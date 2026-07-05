@@ -2000,6 +2000,14 @@ CONTROLO DIRETO DE MINUTOS
  font-size:12px!important;
  padding:9px 6px!important;
 }
+.finalSummaryBtn{
+ margin-top:6px!important;
+ background:transparent!important;
+ border:1px solid rgba(35,134,255,.45)!important;
+ color:#65a9ff!important;
+ font-size:12px!important;
+ padding:9px 6px!important;
+}
 .periodSummaryCard{
  background:linear-gradient(160deg,#071326,#101b31);
  color:white;
@@ -2287,7 +2295,7 @@ MÓDULO JOGO
    <div class="matchCenter">
     <div class="matchScoreline"><span id="gc">0</span> - <span id="gf">0</span></div>
     <div class="matchGlow"></div>
-    <div id="tempo" class="matchTimer">00:00</div>
+    <div id="tempo" class="matchTimer">12:00</div>
     <div class="matchPeriodRow">
      <select id="periodo" onchange="renderMinuteRoster()">
       <option>1.º período</option>
@@ -2320,6 +2328,7 @@ MÓDULO JOGO
    <div class="minuteRosterTitle"><span>Em campo agora</span><span id="minuteRosterCount" class="minuteRosterCount">0/5</span></div>
    <div id="minuteRosterList" class="minuteRosterList"></div>
    <button class="periodSummaryBtn" onclick="openPeriodSummary()">📸 Resumo do período</button>
+   <button class="finalSummaryBtn" onclick="openFinalSummary()">🏁 Resumo final (3 períodos)</button>
  </aside>
  </div>
 
@@ -2536,6 +2545,7 @@ window.abrirMenu=abrirMenu;
 
 function toggle(id){$(id).classList.toggle("hidden")}
 function t(){let m=Math.floor(time/60),s=time%60;return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")}
+function tempoRestante(){let restante=Math.max(0,dur*60-time),m=Math.floor(restante/60),s=restante%60;return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")}
 function saveAll(){localStorage.setItem("jogadores_pasteis",JSON.stringify(jogadores));localStorage.setItem("campo_pasteis",JSON.stringify(campo));localStorage.setItem("banco_pasteis",JSON.stringify(banco));localStorage.setItem("registos_pasteis",JSON.stringify(reg));localStorage.setItem("subs_pasteis",JSON.stringify(subs))}
 
 function normalizarMinutosTracker(){
@@ -2616,6 +2626,23 @@ function openPeriodSummary(){
  modal.classList.add("show");
 }
 function closePeriodSummary(){let m=$("periodSummaryModal");if(m)m.classList.remove("show")}
+function openFinalSummary(){
+ normalizarMinutosTracker();
+ let modal=$("periodSummaryModal"), box=$("periodSummaryContent");
+ if(!modal||!box)return;
+ let mins=calcularMinutosJogadores();
+ let casa=($("casa")&&$("casa").value)||"AD Pastéis";
+ let fora=($("fora")&&$("fora").value)||"Adversário";
+ let ps=["1.º período","2.º período","3.º período"];
+ let rows=jogadores.map(j=>{
+  let m=mins[j]||{};
+  let total3=ps.reduce((acc,p)=>acc+(+m[p]||0),0);
+  return {j,m,total3};
+ }).sort((a,b)=>b.total3-a.total3 || a.j.localeCompare(b.j,"pt"));
+ let body=rows.map(({j,m,total3})=>`<tr><td>${j}</td><td>${minutosTexto(m[ps[0]]||0)}</td><td>${minutosTexto(m[ps[1]]||0)}</td><td>${minutosTexto(m[ps[2]]||0)}</td><td><b>${minutosTexto(total3)}</b></td></tr>`).join("");
+ box.innerHTML=`<div class="periodSummaryCard"><div class="periodSummaryBrand">StatS</div><div class="periodSummarySub">RESUMO FINAL · 3 PERÍODOS</div><div class="periodSummaryScore">${casaGoals} - ${foraGoals}</div><div style="text-align:center;font-size:12px;opacity:.8;margin-top:-10px;margin-bottom:10px">${casa} vs ${fora}</div><div style="overflow:auto"><table class="periodSummaryTable"><thead><tr><th>Jogadora</th><th>1.º</th><th>2.º</th><th>3.º</th><th>Total</th></tr></thead><tbody>${body}</tbody></table></div></div>`;
+ modal.classList.add("show");
+}
 
 
 /* =====================================
@@ -3292,7 +3319,7 @@ function resetTimer(){
  updateTimer();
 }
 function updateTimer(){
- if($("tempo"))$("tempo").innerText=t();
+ if($("tempo"))$("tempo").innerText=tempoRestante();
  if(time>=dur*60 && timer){
   pause();
   alert("⚠️ Fim do período. Abre o resumo para enviar ao banco.");
