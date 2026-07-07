@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-PT">
 <head>
@@ -1905,6 +1904,153 @@ DASHBOARD E MINUTOS
  color:white!important;
 }
 
+
+/* =====================================
+STATS V2 — VISUAL PROFISSIONAL
+Camada visual apenas. Não altera funcionalidades.
+===================================== */
+:root{
+ --stats-bg:#050B16;
+ --stats-bg2:#071326;
+ --stats-panel:rgba(12,24,44,.78);
+ --stats-panel2:rgba(255,255,255,.055);
+ --stats-border:rgba(255,255,255,.10);
+ --stats-border2:rgba(255,255,255,.18);
+ --stats-text:#F8FAFC;
+ --stats-muted:rgba(248,250,252,.68);
+ --stats-red:#D71920;
+ --stats-red2:#F0444C;
+ --stats-gold:#F3C969;
+ --stats-blue:#2F80ED;
+ --stats-green:#21B26F;
+ --stats-shadow:0 18px 46px rgba(0,0,0,.34);
+ --stats-radius:22px;
+ --stats-radius2:16px;
+}
+*{-webkit-tap-highlight-color:transparent}
+html{background:var(--stats-bg)}
+body{
+ background:
+  radial-gradient(circle at 16% 4%,rgba(215,25,32,.16),transparent 28%),
+  radial-gradient(circle at 90% 0%,rgba(47,128,237,.10),transparent 26%),
+  linear-gradient(180deg,var(--stats-bg),var(--stats-bg2) 45%,#030812)!important;
+ color:var(--stats-text)!important;
+ font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,Helvetica,sans-serif!important;
+ letter-spacing:-.01em;
+}
+body:before{opacity:.035!important;filter:grayscale(1);background-size:68%!important}
+.app,.trainingPage,.convocatoriaPage{max-width:540px!important;padding:12px 12px 95px!important}
+.gameBrandMain,.trainingBrandMain,.convBrandMain,.landingContent h1{
+ font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif!important;
+ font-weight:950!important;letter-spacing:.04em!important;text-transform:none!important
+}
+.gameBrandMain,.trainingBrandMain,.convBrandMain{font-size:31px!important}
+.gameBrandSub,.trainingBrandSub,.convBrandSub,.landingSub{
+ color:var(--stats-muted)!important;letter-spacing:.12em!important;text-transform:uppercase;font-weight:750!important
+}
+.landingPage{
+ background:
+  radial-gradient(circle at 50% 22%,rgba(215,25,32,.18),transparent 26%),
+  radial-gradient(circle at 50% 78%,rgba(47,128,237,.08),transparent 30%),
+  linear-gradient(180deg,#050B16,#071326 55%,#030812)!important
+}
+.landingPage::before{opacity:.035!important;background-size:310px!important}
+.landingContent{width:min(92vw,420px);padding:26px 18px}
+.landingContent h1{font-size:64px!important;line-height:.92!important;margin-bottom:8px!important}
+.landingSub{font-size:12px!important;margin-bottom:24px!important}
+.landingVersion{color:rgba(255,255,255,.32)!important}
+.enterBtn{
+ width:100%!important;min-height:66px!important;border-radius:22px!important;
+ border:1px solid var(--stats-border2)!important;
+ background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.035))!important;
+ color:var(--stats-text)!important;font-size:15px!important;letter-spacing:.12em!important;text-transform:uppercase!important;
+ box-shadow:var(--stats-shadow)!important;margin-top:10px!important;
+ transition:transform .15s ease,border-color .15s ease,background .15s ease!important
+}
+.enterBtn:hover,.enterBtn:active{
+ transform:translateY(-1px);border-color:rgba(215,25,32,.65)!important;
+ background:linear-gradient(180deg,rgba(215,25,32,.26),rgba(255,255,255,.045))!important;color:white!important
+}
+.gameHeader,.trainingHeader,.convHeader,.settingsHeader{
+ background:rgba(255,255,255,.035);border:1px solid var(--stats-border);border-radius:20px;
+ padding:9px 10px;box-shadow:0 10px 28px rgba(0,0,0,.18);
+ backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)
+}
+.gameBack,.trainingBack,.convBack,.settingsBack{
+ background:rgba(255,255,255,.055)!important;border:1px solid var(--stats-border)!important;
+ color:var(--stats-text)!important;border-radius:14px!important;min-width:44px
+}
+.card,.pitchCard,.trainingCard,.convCard,.dashboardBox,.playerCard,.collectiveBox,.playerAccordion,.percentReport,.trainingExercise,.individualBox,.collectiveCounterBox,.convPreviewBox,.sessionItem,.medicalRow,.trainingPlayerRow,.coachRow,.playerStatBlock,.stat,.log{
+ background:var(--stats-panel2)!important;border:1px solid var(--stats-border)!important;border-radius:var(--stats-radius2)!important;
+ box-shadow:0 10px 30px rgba(0,0,0,.18)!important;color:var(--stats-text)!important
+}
+.card h2,.card h3,.pitchCard h3,.trainingCard h3,.convCard h3{
+ margin-top:0!important;font-weight:900!important;letter-spacing:-.02em!important
+}
+.small{color:var(--stats-muted)!important;opacity:1!important}
+input,select,textarea{
+ background:rgba(255,255,255,.075)!important;border:1px solid var(--stats-border)!important;color:var(--stats-text)!important;
+ border-radius:14px!important;outline:none!important;box-shadow:none!important
+}
+input::placeholder,textarea::placeholder{color:rgba(255,255,255,.42)!important}
+label{color:rgba(255,255,255,.72);font-size:12px;text-transform:uppercase;letter-spacing:.06em;font-weight:800}
+button{border-radius:15px!important;font-weight:850!important;letter-spacing:-.01em;transition:transform .12s ease,background .12s ease,border-color .12s ease!important}
+button:active{transform:scale(.985)}
+.dark,.trainingSecondaryBtn,.exerciseSmallBtn,.trainingModeBtn,.trainingTabs button,.trainingSubTabs button,.medicalFilter button,.presenceBtn,.pbtn,.convCheck{
+ background:rgba(255,255,255,.065)!important;border:1px solid var(--stats-border)!important;color:var(--stats-text)!important
+}
+.red,.danger{background:linear-gradient(180deg,var(--stats-red2),var(--stats-red))!important;color:white!important;border:1px solid rgba(255,255,255,.10)!important}
+.green,.trainingStartBtn,.collectiveHit{background:linear-gradient(180deg,#2ED081,#1A9F5E)!important;color:white!important;border:1px solid rgba(255,255,255,.10)!important}
+.blue{background:linear-gradient(180deg,#3B8CFF,#1766D8)!important;color:white!important}
+.yellow{background:linear-gradient(180deg,#FFE08A,#F3C969)!important;color:#08101F!important}
+.matchBoard{
+ border-radius:28px!important;border:1px solid rgba(255,255,255,.12)!important;
+ background:radial-gradient(circle at 50% 0%,rgba(215,25,32,.22),transparent 24%),linear-gradient(180deg,rgba(14,29,54,.96),rgba(5,13,27,.96))!important;
+ box-shadow:0 24px 64px rgba(0,0,0,.42),inset 0 0 0 1px rgba(255,255,255,.04)!important
+}
+.matchBoard:before{background:linear-gradient(180deg,transparent,rgba(255,255,255,.035))!important}
+.matchTeam input{font-size:12px!important;letter-spacing:.08em!important;color:rgba(255,255,255,.92)!important;text-transform:uppercase}
+.matchScoreline{font-size:72px!important;letter-spacing:-.07em!important}
+.matchTimer{font-size:36px!important;color:var(--stats-gold)!important}
+.matchGlow,.teamUnderline{background:linear-gradient(90deg,transparent,var(--stats-red),transparent)!important;box-shadow:0 0 20px rgba(215,25,32,.8)!important}
+.teamUnderline.away{background:linear-gradient(90deg,transparent,var(--stats-blue),transparent)!important;box-shadow:0 0 20px rgba(47,128,237,.65)!important}
+.matchControls button{background:rgba(255,255,255,.06)!important;border:1px solid rgba(255,255,255,.12)!important;color:white!important}
+.matchControls button.controlActive{border-color:rgba(215,25,32,.72)!important;background:rgba(215,25,32,.18)!important}
+.pitchCard{padding:13px!important}
+.fieldTitleRow h3{font-size:14px!important;letter-spacing:.14em!important;text-transform:uppercase;color:rgba(255,255,255,.78)!important}
+.pitch{border-radius:22px!important;border:2px solid rgba(0,87,184,.88)!important;box-shadow:0 20px 48px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.20)!important}
+.attackTinyOutside{border-radius:13px!important;background:rgba(255,255,255,.08)!important;border:1px solid rgba(255,255,255,.14)!important}
+.modal{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.modalContent{background:linear-gradient(180deg,#F8FAFC,#E8EDF5)!important;color:#071326!important;border-radius:26px!important;box-shadow:0 30px 90px rgba(0,0,0,.48)!important}
+.modalContent h2{margin-top:0!important;letter-spacing:-.03em}
+.modalContent .small{color:rgba(7,19,38,.65)!important}
+.modalContent input,.modalContent select,.modalContent textarea{background:white!important;color:#071326!important;border:1px solid rgba(7,19,38,.14)!important}
+.quickFlowGrid button,.players button{min-height:48px!important}
+.dashboardGrid,.percentGrid{gap:8px!important}
+.dashboardStat,.percentItem,.trainingExerciseStat,.collectiveStat{
+ background:rgba(255,255,255,.065)!important;border:1px solid var(--stats-border)!important;border-radius:16px!important
+}
+.dashboardStat b,.percentItem b,.trainingExerciseStat b,.collectiveStat b{color:var(--stats-gold)!important}
+.playerAccordionHeader{background:rgba(255,255,255,.07)!important;border-bottom:1px solid var(--stats-border)!important}
+.convPreview{
+ background:radial-gradient(circle at 50% 0%,rgba(215,25,32,.18),transparent 24%),linear-gradient(160deg,#061225,#101B31)!important;
+ border:1px solid rgba(215,25,32,.44)!important;border-radius:26px!important;box-shadow:var(--stats-shadow)!important
+}
+.convPreviewTitle{font-size:28px!important}
+.trainingTabs.verticalTabs button{min-height:54px;text-transform:uppercase;letter-spacing:.06em}
+.trainingTabs button.active,.trainingSubTabs button.active,.trainingModeBtn.active,.presenceBtn.active,.convCheck.active,.pbtn.active,.pbtn.choose,.starterPick{
+ background:linear-gradient(180deg,var(--stats-red2),var(--stats-red))!important;color:white!important;border-color:rgba(255,255,255,.14)!important
+}
+.sessionActions,.exerciseActions,.trainingPlayerActions,.medicalActions,.confirmActions{gap:8px!important}
+@media(max-width:420px){
+ .landingContent h1{font-size:58px!important}
+ .matchBoard{border-radius:24px!important}
+ .matchScoreline{font-size:62px!important}
+ .matchTimer{font-size:31px!important}
+ .gameBrandMain,.trainingBrandMain,.convBrandMain{font-size:28px!important}
+ .players{grid-template-columns:repeat(3,1fr)!important}
+}
+
 </style>
 </head>
 <body>
@@ -1937,7 +2083,7 @@ PÁGINA INICIAL
 <div id="landingPage" class="landingPage">
   <div class="landingContent">
    <h1>𝕊𝕥𝕒𝕥𝕊</h1>
-<p class="landingSub">Match Analysis Platform</p>
+<p class="landingSub">Performance Analysis Platform</p>
 <p class="landingVersion">Version 1.0</p>
     <button id="enterMainBtn" type="button" onclick="abrirMenu();return false;" class="enterBtn">ENTRAR</button>
   </div>
@@ -1949,7 +2095,7 @@ MENU PRINCIPAL
 <div id="menuPage" class="landingPage hidden">
   <div class="landingContent">
     <h1>𝕊𝕥𝕒𝕥𝕊</h1>
-    <p class="landingSub">Match Analysis</p>
+    <p class="landingSub">Performance Analysis Platform</p>
 
     <button class="enterBtn" onclick="entrarJogo()">
       Jogo
@@ -2248,7 +2394,7 @@ DEFINIÇÕES / ESTATÍSTICAS / HISTÓRICO
     <button class="dark" onclick="document.getElementById('backupInput').click()">Importar backup</button>
   </div>
   <input id="backupInput" type="file" accept=".json,application/json" style="display:none" onchange="importBackupJSON(event)">
-  <button class="yellow" onclick="exportCSV()">Exportar CSV jogo</button>
+  <button class="yellow" onclick="exportCSV()">Exportar Excel</button>
   <button class="blue" onclick="exportDashboard()">Exportar Dashboard PNG</button>
   <button class="blue" onclick="openIndividualDashboardModal()">Dashboard Individual PNG</button>
   <button class="dark" onclick="openImportSubsModal()">📄 Importar Substituições</button>
@@ -4426,39 +4572,30 @@ function exportCSV(){
  let minutos=calcularMinutosJogadores();
  let periodos=periodoOrdem();
 
- function csvEscape(v){
-  return `"${String(v??"").replace(/"/g,'""')}"`;
- }
-
- function csvRow(arr){
-  return arr.map(csvEscape).join(",")+"\n";
- }
-
  let csv="\ufeff";
 
- csv+="RESUMO\n";
- csv+=csvRow(["Indicador","Valor"]);
- csv+=csvRow(["Jogo",jogo]);
- csv+=csvRow(["Resultado",resultado]);
- csv+=csvRow(["Detalhes",det]);
- csv+=csvRow(["Golos",resumo.totalGolos]);
- csv+=csvRow(["Golos sofridos",resumo.totalGolosSofridos]);
- csv+=csvRow(["Remates",resumo.totalRemates]);
- csv+=csvRow(["Assistências",resumo.totalAssist]);
- csv+=csvRow(["Defesas GR",resumo.totalDefesas]);
- csv+=csvRow(["Passes falhados",resumo.totalPassesFalhados]);
- csv+=csvRow(["Recuperações",resumo.totalRecuperacoes]);
- csv+=csvRow(["Perdas de bola",resumo.totalPerdas]);
- csv+=csvRow(["Expulsões",resumo.totalExpulsoes]);
- csv+=csvRow(["Eficácia",resumo.eficacia+"%"]);
- csv+=csvRow(["MVP sugerido",resumo.mvp]);
- csv+="\n";
+ csv+="RESUMO\\n";
+ csv+=csvLine(["Jogo",jogo]);
+ csv+=csvLine(["Resultado",resultado]);
+ csv+=csvLine(["Detalhes",det]);
+ csv+=csvLine(["Golos",resumo.totalGolos]);
+ csv+=csvLine(["Golos sofridos",resumo.totalGolosSofridos]);
+ csv+=csvLine(["Remates",resumo.totalRemates]);
+ csv+=csvLine(["Assistências",resumo.totalAssist]);
+ csv+=csvLine(["Defesas GR",resumo.totalDefesas]);
+ csv+=csvLine(["Passes falhados",resumo.totalPassesFalhados]);
+ csv+=csvLine(["Recuperações",resumo.totalRecuperacoes]);
+ csv+=csvLine(["Perdas de bola",resumo.totalPerdas]);
+ csv+=csvLine(["Expulsões",resumo.totalExpulsoes]);
+ csv+=csvLine(["Eficácia",resumo.eficacia+"%"]);
+ csv+=csvLine(["MVP sugerido",resumo.mvp]);
+ csv+="\\n";
 
- csv+="EVENTOS POR PERÍODO\n";
- csv+=csvRow(["Período","Tempo","Jogador","Ação","Emoji","Zona","X","Y","Lado ataque","Relacionado","Data"]);
+ csv+="EVENTOS POR PERÍODO\\n";
+ csv+=csvLine(["Período","Tempo","Jogador","Ação","Emoji","Zona","X","Y","Lado ataque","Relacionado","Data"]);
  periodoOrdem().forEach(p=>{
   reg.filter(r=>r.periodo===p).forEach(r=>{
-   csv+=csvRow([
+   csv+=csvLine([
     r.periodo,
     r.tempo,
     r.jogador,
@@ -4473,47 +4610,34 @@ function exportCSV(){
    ]);
   });
  });
- csv+="\n";
+ csv+="\\n";
 
- csv+="ESTATÍSTICAS POR JOGADORA\n";
- csv+=csvRow(["Jogadora","Golos","Remates","Assistências","Defesas GR","Passes falhados","Recuperações","Perdas","Expulsões","Total ações"]);
+ csv+="ESTATÍSTICAS POR JOGADORA\\n";
+ csv+=csvLine(["Jogadora","Golos","Remates","Assistências","Defesas GR","Passes falhados","Recuperações","Perdas","Expulsões","Total ações"]);
  Object.entries(resumo.porJogador).forEach(([j,s])=>{
-  csv+=csvRow([
-   j,
-   s.golos||0,
-   s.remates||0,
-   s.assist||0,
-   s.defesas||0,
-   s.passesFalhados||0,
-   s.recuperacoes||0,
-   s.perdas||0,
-   s.expulsoes||0,
-   s.total||0
-  ]);
+  csv+=csvLine([j,s.golos,s.remates,s.assist,s.defesas,s.passesFalhados,s.recuperacoes,s.perdas,s.expulsoes,s.total]);
  });
- csv+="\n";
+ csv+="\\n";
 
- csv+="SUBSTITUIÇÕES\n";
- csv+=csvRow(["Período","Tempo","Sai","Entra","Data"]);
+ csv+="SUBSTITUIÇÕES\\n";
+ csv+=csvLine(["Período","Tempo","Sai","Entra","Data"]);
  subs.slice().reverse().forEach(s=>{
-  csv+=csvRow([s.periodo,s.tempo,s.sai,s.entra,s.data]);
+  csv+=csvLine([s.periodo,s.tempo,s.sai,s.entra,s.data]);
  });
- csv+="\n";
+ csv+="\\n";
 
- csv+="MINUTOS JOGADOS\n";
- csv+=csvRow(["Atleta",...periodos,"Total"]);
+ csv+="MINUTOS JOGADOS\\n";
+ csv+=csvLine(["Atleta",...periodos,"Total"]);
  Object.entries(minutos).forEach(([j,m])=>{
-  csv+=csvRow([j,...periodos.map(p=>minutosTexto(m[p]||0)),minutosTexto(m.total||0)]);
+  csv+=csvLine([j,...periodos.map(p=>minutosTexto(m[p]||0)),minutosTexto(m.total||0)]);
  });
 
  let blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
  let url=URL.createObjectURL(blob);
  let a=document.createElement("a");
  a.href=url;
- a.download="jogo_"+casa+"_vs_"+fora+".csv";
- document.body.appendChild(a);
+ a.download="excel_"+casa+"_vs_"+fora+".csv";
  a.click();
- a.remove();
  URL.revokeObjectURL(url);
 }
 
@@ -5783,7 +5907,154 @@ function exportPDFTreino(){
   body+=`</ul><p><b>Observações:</b> ${ex.observacoes||"-"}</p><hr>`;
  });
 
- win.document.write(`<html><head><title>Relatório Treino</title><style>body{font-family:Arial;padding:24px;color:#111}h1,h2{margin-bottom:4px}hr{margin:18px 0}</style></head><body>${body}<script>window.print()<\/script></body></html>`);
+ win.document.write(`<html><head><title>Relatório Treino</title><style>body{font-family:Arial;padding:24px;color:#111}h1,h2{margin-bottom:4px}hr{margin:18px 0}
+/* =====================================
+STATS V2 — VISUAL PROFISSIONAL
+Camada visual apenas. Não altera funcionalidades.
+===================================== */
+:root{
+ --stats-bg:#050B16;
+ --stats-bg2:#071326;
+ --stats-panel:rgba(12,24,44,.78);
+ --stats-panel2:rgba(255,255,255,.055);
+ --stats-border:rgba(255,255,255,.10);
+ --stats-border2:rgba(255,255,255,.18);
+ --stats-text:#F8FAFC;
+ --stats-muted:rgba(248,250,252,.68);
+ --stats-red:#D71920;
+ --stats-red2:#F0444C;
+ --stats-gold:#F3C969;
+ --stats-blue:#2F80ED;
+ --stats-green:#21B26F;
+ --stats-shadow:0 18px 46px rgba(0,0,0,.34);
+ --stats-radius:22px;
+ --stats-radius2:16px;
+}
+*{-webkit-tap-highlight-color:transparent}
+html{background:var(--stats-bg)}
+body{
+ background:
+  radial-gradient(circle at 16% 4%,rgba(215,25,32,.16),transparent 28%),
+  radial-gradient(circle at 90% 0%,rgba(47,128,237,.10),transparent 26%),
+  linear-gradient(180deg,var(--stats-bg),var(--stats-bg2) 45%,#030812)!important;
+ color:var(--stats-text)!important;
+ font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,Helvetica,sans-serif!important;
+ letter-spacing:-.01em;
+}
+body:before{opacity:.035!important;filter:grayscale(1);background-size:68%!important}
+.app,.trainingPage,.convocatoriaPage{max-width:540px!important;padding:12px 12px 95px!important}
+.gameBrandMain,.trainingBrandMain,.convBrandMain,.landingContent h1{
+ font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif!important;
+ font-weight:950!important;letter-spacing:.04em!important;text-transform:none!important
+}
+.gameBrandMain,.trainingBrandMain,.convBrandMain{font-size:31px!important}
+.gameBrandSub,.trainingBrandSub,.convBrandSub,.landingSub{
+ color:var(--stats-muted)!important;letter-spacing:.12em!important;text-transform:uppercase;font-weight:750!important
+}
+.landingPage{
+ background:
+  radial-gradient(circle at 50% 22%,rgba(215,25,32,.18),transparent 26%),
+  radial-gradient(circle at 50% 78%,rgba(47,128,237,.08),transparent 30%),
+  linear-gradient(180deg,#050B16,#071326 55%,#030812)!important
+}
+.landingPage::before{opacity:.035!important;background-size:310px!important}
+.landingContent{width:min(92vw,420px);padding:26px 18px}
+.landingContent h1{font-size:64px!important;line-height:.92!important;margin-bottom:8px!important}
+.landingSub{font-size:12px!important;margin-bottom:24px!important}
+.landingVersion{color:rgba(255,255,255,.32)!important}
+.enterBtn{
+ width:100%!important;min-height:66px!important;border-radius:22px!important;
+ border:1px solid var(--stats-border2)!important;
+ background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.035))!important;
+ color:var(--stats-text)!important;font-size:15px!important;letter-spacing:.12em!important;text-transform:uppercase!important;
+ box-shadow:var(--stats-shadow)!important;margin-top:10px!important;
+ transition:transform .15s ease,border-color .15s ease,background .15s ease!important
+}
+.enterBtn:hover,.enterBtn:active{
+ transform:translateY(-1px);border-color:rgba(215,25,32,.65)!important;
+ background:linear-gradient(180deg,rgba(215,25,32,.26),rgba(255,255,255,.045))!important;color:white!important
+}
+.gameHeader,.trainingHeader,.convHeader,.settingsHeader{
+ background:rgba(255,255,255,.035);border:1px solid var(--stats-border);border-radius:20px;
+ padding:9px 10px;box-shadow:0 10px 28px rgba(0,0,0,.18);
+ backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)
+}
+.gameBack,.trainingBack,.convBack,.settingsBack{
+ background:rgba(255,255,255,.055)!important;border:1px solid var(--stats-border)!important;
+ color:var(--stats-text)!important;border-radius:14px!important;min-width:44px
+}
+.card,.pitchCard,.trainingCard,.convCard,.dashboardBox,.playerCard,.collectiveBox,.playerAccordion,.percentReport,.trainingExercise,.individualBox,.collectiveCounterBox,.convPreviewBox,.sessionItem,.medicalRow,.trainingPlayerRow,.coachRow,.playerStatBlock,.stat,.log{
+ background:var(--stats-panel2)!important;border:1px solid var(--stats-border)!important;border-radius:var(--stats-radius2)!important;
+ box-shadow:0 10px 30px rgba(0,0,0,.18)!important;color:var(--stats-text)!important
+}
+.card h2,.card h3,.pitchCard h3,.trainingCard h3,.convCard h3{
+ margin-top:0!important;font-weight:900!important;letter-spacing:-.02em!important
+}
+.small{color:var(--stats-muted)!important;opacity:1!important}
+input,select,textarea{
+ background:rgba(255,255,255,.075)!important;border:1px solid var(--stats-border)!important;color:var(--stats-text)!important;
+ border-radius:14px!important;outline:none!important;box-shadow:none!important
+}
+input::placeholder,textarea::placeholder{color:rgba(255,255,255,.42)!important}
+label{color:rgba(255,255,255,.72);font-size:12px;text-transform:uppercase;letter-spacing:.06em;font-weight:800}
+button{border-radius:15px!important;font-weight:850!important;letter-spacing:-.01em;transition:transform .12s ease,background .12s ease,border-color .12s ease!important}
+button:active{transform:scale(.985)}
+.dark,.trainingSecondaryBtn,.exerciseSmallBtn,.trainingModeBtn,.trainingTabs button,.trainingSubTabs button,.medicalFilter button,.presenceBtn,.pbtn,.convCheck{
+ background:rgba(255,255,255,.065)!important;border:1px solid var(--stats-border)!important;color:var(--stats-text)!important
+}
+.red,.danger{background:linear-gradient(180deg,var(--stats-red2),var(--stats-red))!important;color:white!important;border:1px solid rgba(255,255,255,.10)!important}
+.green,.trainingStartBtn,.collectiveHit{background:linear-gradient(180deg,#2ED081,#1A9F5E)!important;color:white!important;border:1px solid rgba(255,255,255,.10)!important}
+.blue{background:linear-gradient(180deg,#3B8CFF,#1766D8)!important;color:white!important}
+.yellow{background:linear-gradient(180deg,#FFE08A,#F3C969)!important;color:#08101F!important}
+.matchBoard{
+ border-radius:28px!important;border:1px solid rgba(255,255,255,.12)!important;
+ background:radial-gradient(circle at 50% 0%,rgba(215,25,32,.22),transparent 24%),linear-gradient(180deg,rgba(14,29,54,.96),rgba(5,13,27,.96))!important;
+ box-shadow:0 24px 64px rgba(0,0,0,.42),inset 0 0 0 1px rgba(255,255,255,.04)!important
+}
+.matchBoard:before{background:linear-gradient(180deg,transparent,rgba(255,255,255,.035))!important}
+.matchTeam input{font-size:12px!important;letter-spacing:.08em!important;color:rgba(255,255,255,.92)!important;text-transform:uppercase}
+.matchScoreline{font-size:72px!important;letter-spacing:-.07em!important}
+.matchTimer{font-size:36px!important;color:var(--stats-gold)!important}
+.matchGlow,.teamUnderline{background:linear-gradient(90deg,transparent,var(--stats-red),transparent)!important;box-shadow:0 0 20px rgba(215,25,32,.8)!important}
+.teamUnderline.away{background:linear-gradient(90deg,transparent,var(--stats-blue),transparent)!important;box-shadow:0 0 20px rgba(47,128,237,.65)!important}
+.matchControls button{background:rgba(255,255,255,.06)!important;border:1px solid rgba(255,255,255,.12)!important;color:white!important}
+.matchControls button.controlActive{border-color:rgba(215,25,32,.72)!important;background:rgba(215,25,32,.18)!important}
+.pitchCard{padding:13px!important}
+.fieldTitleRow h3{font-size:14px!important;letter-spacing:.14em!important;text-transform:uppercase;color:rgba(255,255,255,.78)!important}
+.pitch{border-radius:22px!important;border:2px solid rgba(0,87,184,.88)!important;box-shadow:0 20px 48px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.20)!important}
+.attackTinyOutside{border-radius:13px!important;background:rgba(255,255,255,.08)!important;border:1px solid rgba(255,255,255,.14)!important}
+.modal{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.modalContent{background:linear-gradient(180deg,#F8FAFC,#E8EDF5)!important;color:#071326!important;border-radius:26px!important;box-shadow:0 30px 90px rgba(0,0,0,.48)!important}
+.modalContent h2{margin-top:0!important;letter-spacing:-.03em}
+.modalContent .small{color:rgba(7,19,38,.65)!important}
+.modalContent input,.modalContent select,.modalContent textarea{background:white!important;color:#071326!important;border:1px solid rgba(7,19,38,.14)!important}
+.quickFlowGrid button,.players button{min-height:48px!important}
+.dashboardGrid,.percentGrid{gap:8px!important}
+.dashboardStat,.percentItem,.trainingExerciseStat,.collectiveStat{
+ background:rgba(255,255,255,.065)!important;border:1px solid var(--stats-border)!important;border-radius:16px!important
+}
+.dashboardStat b,.percentItem b,.trainingExerciseStat b,.collectiveStat b{color:var(--stats-gold)!important}
+.playerAccordionHeader{background:rgba(255,255,255,.07)!important;border-bottom:1px solid var(--stats-border)!important}
+.convPreview{
+ background:radial-gradient(circle at 50% 0%,rgba(215,25,32,.18),transparent 24%),linear-gradient(160deg,#061225,#101B31)!important;
+ border:1px solid rgba(215,25,32,.44)!important;border-radius:26px!important;box-shadow:var(--stats-shadow)!important
+}
+.convPreviewTitle{font-size:28px!important}
+.trainingTabs.verticalTabs button{min-height:54px;text-transform:uppercase;letter-spacing:.06em}
+.trainingTabs button.active,.trainingSubTabs button.active,.trainingModeBtn.active,.presenceBtn.active,.convCheck.active,.pbtn.active,.pbtn.choose,.starterPick{
+ background:linear-gradient(180deg,var(--stats-red2),var(--stats-red))!important;color:white!important;border-color:rgba(255,255,255,.14)!important
+}
+.sessionActions,.exerciseActions,.trainingPlayerActions,.medicalActions,.confirmActions{gap:8px!important}
+@media(max-width:420px){
+ .landingContent h1{font-size:58px!important}
+ .matchBoard{border-radius:24px!important}
+ .matchScoreline{font-size:62px!important}
+ .matchTimer{font-size:31px!important}
+ .gameBrandMain,.trainingBrandMain,.convBrandMain{font-size:28px!important}
+ .players{grid-template-columns:repeat(3,1fr)!important}
+}
+
+</style></head><body>${body}<script>window.print()<\/script></body></html>`);
  win.document.close();
 }
 
