@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-PT">
 <head>
@@ -6,7 +7,6 @@
 <title>AD Pastéis Jogo</title>
 <style>
 *{box-sizing:border-box}
- 
 
 /* =====================================
 BASE GERAL
@@ -1905,144 +1905,6 @@ DASHBOARD E MINUTOS
  color:white!important;
 }
 
-
-
-/* =====================================
-CONTROLO DIRETO DE MINUTOS
-===================================== */
-#main{max-width:920px}
-.matchTopLayout{
- display:grid;
- grid-template-columns:minmax(0,1fr) 210px;
- gap:10px;
- align-items:stretch;
-}
-.matchTopLayout .matchBoard{margin:8px 0 12px}
-.matchControls{grid-template-columns:1fr 1fr 1fr}
-.minuteRoster{
- background:linear-gradient(180deg,rgba(6,18,36,.98),rgba(5,12,24,.96));
- border:1px solid rgba(255,255,255,.14);
- border-radius:22px;
- padding:12px 10px;
- margin:8px 0 12px;
- min-width:0;
- box-shadow:0 14px 35px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.03);
- display:flex;
- flex-direction:column;
-}
-.minuteRosterTitle{
- display:flex;
- align-items:center;
- justify-content:space-between;
- gap:6px;
- font-size:12px;
- font-weight:900;
- letter-spacing:.8px;
- text-transform:uppercase;
- margin-bottom:8px;
-}
-.minuteRosterCount{color:#ffd21a;white-space:nowrap}
-.minuteRosterList{
- display:flex;
- flex-direction:column;
- gap:5px;
- max-height:430px;
- overflow:auto;
- padding-right:2px;
- flex:1;
-}
-.minutePlayerRow{
- display:grid;
- grid-template-columns:30px minmax(0,1fr) auto;
- gap:6px;
- align-items:center;
- background:rgba(255,255,255,.045);
- border:1px solid rgba(255,255,255,.10);
- border-radius:11px;
- padding:6px;
- min-height:42px;
-}
-.minutePlayerRow.onField{
- background:rgba(38,166,38,.16);
- border-color:rgba(38,166,38,.55);
-}
-.minuteToggle{
- width:30px!important;
- height:30px!important;
- min-height:30px!important;
- padding:0!important;
- margin:0!important;
- border-radius:9px!important;
- font-size:14px!important;
- background:rgba(255,255,255,.08)!important;
- border:1px solid rgba(255,255,255,.14)!important;
-}
-.minutePlayerRow.onField .minuteToggle{background:#26a626!important}
-.minutePlayerName{
- overflow:hidden;
- text-overflow:ellipsis;
- white-space:nowrap;
- font-size:12px;
- font-weight:800;
- cursor:pointer;
-}
-.minutePlayerTime{
- font-variant-numeric:tabular-nums;
- font-size:12px;
- font-weight:900;
- color:rgba(255,255,255,.86);
- white-space:nowrap;
-}
-.periodSummaryBtn{
- margin-top:9px!important;
- background:transparent!important;
- border:1px solid rgba(255,210,26,.45)!important;
- color:#ffd21a!important;
- font-size:12px!important;
- padding:9px 6px!important;
-}
-.finalSummaryBtn{
- margin-top:6px!important;
- background:transparent!important;
- border:1px solid rgba(35,134,255,.45)!important;
- color:#65a9ff!important;
- font-size:12px!important;
- padding:9px 6px!important;
-}
-.periodSummaryCard{
- background:linear-gradient(160deg,#071326,#101b31);
- color:white;
- border:2px solid rgba(215,25,32,.72);
- border-radius:20px;
- padding:18px;
- position:relative;
- overflow:hidden;
-}
-.periodSummaryCard:before{
- content:"";
- position:absolute;
- inset:0;
- background:url("logo-pasteis.png") center 30%/220px no-repeat;
- opacity:.055;
- pointer-events:none;
-}
-.periodSummaryCard>*{position:relative;z-index:2}
-.periodSummaryBrand{text-align:center;font-size:30px;font-weight:900;letter-spacing:3px}
-.periodSummarySub{text-align:center;color:#d71920;font-size:14px;font-weight:900;margin:4px 0 12px}
-.periodSummaryScore{text-align:center;font-size:34px;font-weight:900;margin:8px 0 14px}
-.periodSummaryTable{width:100%;border-collapse:collapse;font-size:13px}
-.periodSummaryTable th,.periodSummaryTable td{padding:7px 4px;border-bottom:1px solid rgba(255,255,255,.10)}
-.periodSummaryTable th{text-align:left;color:rgba(255,255,255,.72);font-size:11px;text-transform:uppercase}
-.periodSummaryTable td:nth-child(n+2),.periodSummaryTable th:nth-child(n+2){text-align:right}
-.periodSummaryOnField{margin-top:12px;padding:10px;border-radius:12px;background:rgba(38,166,38,.12);border:1px solid rgba(38,166,38,.35);font-size:12px}
-
-@media(max-width:760px){
- #main{max-width:520px}
- .matchTopLayout{grid-template-columns:1fr}
- .minuteRoster{margin-top:-2px}
- .minuteRosterList{max-height:255px}
-}
-
 </style>
 </head>
 <body>
@@ -2281,7 +2143,6 @@ MÓDULO JOGO
   <button class="gameBack" onclick="openSettings()">⚙️</button>
  </div>
 
- <div class="matchTopLayout">
  <div class="matchBoard">
 <div class="matchScore">
    <div class="matchTeam">
@@ -2298,7 +2159,7 @@ MÓDULO JOGO
     <div class="matchGlow"></div>
     <div id="tempo" class="matchTimer">12:00</div>
     <div class="matchPeriodRow">
-     <select id="periodo" onchange="renderMinuteRoster()">
+     <select id="periodo">
       <option>1.º período</option>
       <option>2.º período</option>
       <option>3.º período</option>
@@ -2322,15 +2183,9 @@ MÓDULO JOGO
    <button id="ctrl_start" class="startBtn" onclick="setActiveControl('start');start()">▶ Iniciar</button>
    <button id="ctrl_pause" onclick="setActiveControl('pause');pause()">Ⅱ Pausa</button>
    <button id="ctrl_reset" onclick="setActiveControl('reset');resetTimer()">↻ Resetar</button>
+   <button class="iconBtn purpleBtn" id="startMini" onclick="openStarters()">👥</button>
+   <button class="iconBtn blueBtn" id="subMini" onclick="openSubs()">🔄</button>
   </div>
- </div>
-
- <aside class="minuteRoster" aria-label="Controlo de minutos das jogadoras">
-   <div class="minuteRosterTitle"><span>Em campo agora</span><span id="minuteRosterCount" class="minuteRosterCount">0/5</span></div>
-   <div id="minuteRosterList" class="minuteRosterList"></div>
-   <button class="periodSummaryBtn" onclick="openPeriodSummary()">📸 Resumo do período</button>
-   <button class="finalSummaryBtn" onclick="openFinalSummary()">🏁 Resumo final (3 períodos)</button>
- </aside>
  </div>
 
  <div class="pitchCard">
@@ -2393,7 +2248,7 @@ DEFINIÇÕES / ESTATÍSTICAS / HISTÓRICO
     <button class="dark" onclick="document.getElementById('backupInput').click()">Importar backup</button>
   </div>
   <input id="backupInput" type="file" accept=".json,application/json" style="display:none" onchange="importBackupJSON(event)">
-  <button class="yellow" onclick="exportCSV()">Exportar Excel</button>
+  <button class="yellow" onclick="exportCSV()">Exportar CSV jogo</button>
   <button class="blue" onclick="exportDashboard()">Exportar Dashboard PNG</button>
   <button class="blue" onclick="openIndividualDashboardModal()">Dashboard Individual PNG</button>
   <button class="dark" onclick="openImportSubsModal()">📄 Importar Substituições</button>
@@ -2431,14 +2286,6 @@ MODAIS
 <div id="subsModal" class="modal"><div class="modalContent"><h2>Substituições</h2><h4>Em campo</h4><div class="small">Seleciona uma ou mais atletas para sair.</div><div id="campoGrid" class="players"></div><h4>Banco</h4><div class="small">Seleciona o mesmo número de atletas para entrar.</div><div id="bancoGrid" class="players"></div><div id="subInfo" class="playerCard">Seleciona quem sai e quem entra.</div><button class="green" onclick="confirmSub()">Confirmar substituições</button><button class="danger" onclick="closeSubs()">Cancelar</button><div id="subsHist"></div></div></div>
 <div id="editModal" class="modal"><div class="modalContent"><h2 id="editTitle">Editar estatísticas</h2><div id="editStats"></div><button class="danger" onclick="closeEditStats()">Fechar</button></div></div>
 <div id="eventModal" class="modal"><div class="modalContent"><h2 id="eventTitle">Ação</h2><div id="eventInfo"></div></div></div>
-
-<div id="periodSummaryModal" class="modal">
-  <div class="modalContent">
-    <div id="periodSummaryContent"></div>
-    <button class="danger" onclick="closePeriodSummary()">Fechar</button>
-  </div>
-</div>
-
 <div id="individualDashModal" class="modal"><div class="modalContent"><h2>Dashboard individual</h2><div class="small">Escolhe a jogadora.</div><div id="individualDashPlayers" class="players"></div><button class="danger" onclick="closeIndividualDashboardModal()">Fechar</button></div></div>
 <div id="importSubsModal" class="modal"><div class="modalContent"><h2>Importar substituições</h2><div class="small">Formato: 03:12 Jamila &gt; Crespo</div><textarea id="subsImportText" style="min-height:190px" placeholder="1P&#10;03:12 Jamila > Crespo&#10;07:45 Maria > Joana&#10;&#10;2P&#10;02:10 Joana > Maria"></textarea><button class="green" onclick="importarSubstituicoesTexto()">Importar e calcular minutos</button><button class="danger" onclick="closeImportSubsModal()">Fechar</button></div></div>
 
@@ -2457,12 +2304,10 @@ let banco=JSON.parse(localStorage.getItem("banco_pasteis")||"null")||jogadores.s
 let reg=JSON.parse(localStorage.getItem("registos_pasteis")||"[]");
 let subs=JSON.parse(localStorage.getItem("subs_pasteis")||"[]");
 let active=jogadores[0]||"Jogador 1";
-let outTemp=null, inTemp=null, details=false, time=0, timer=null, selectedEventIndex=null;
+let outTemp=null, inTemp=null, details=false, time=dur*60, timer=null, selectedEventIndex=null;
 let subsOutTemp=[], subsInTemp=[];
 let pendingAssistGoal=null;
 let jogoMinutosAtivo=localStorage.getItem("jogo_minutos_ativo_pasteis")==="1";
-let minutosTracker=JSON.parse(localStorage.getItem("minutos_tracker_pasteis")||"null")||{active:[],byPlayer:{}};
-let minutosSaveTick=0;
 let casaGoals=+localStorage.getItem("golos_casa_pasteis")||0;
 let foraGoals=+localStorage.getItem("golos_fora_pasteis")||0;
 let attackSide=localStorage.getItem("attack_side_pasteis")||"right";
@@ -2513,7 +2358,8 @@ const acoes=[
  {nome:"Assistência",emoji:"🎁"},
  {nome:"Passe falhado",emoji:"⚠️"},
  {nome:"Recuperação de bola",emoji:"🔙"},
- {nome:"Perda de bola",emoji:"⛔️"}
+ {nome:"Perda de bola",emoji:"⛔️"},
+ {nome:"Expulsão",emoji:"🟥"}
 ]
 
 
@@ -2546,105 +2392,7 @@ window.abrirMenu=abrirMenu;
 
 function toggle(id){$(id).classList.toggle("hidden")}
 function t(){let m=Math.floor(time/60),s=time%60;return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")}
-function tempoRestante(){let restante=Math.max(0,dur*60-time),m=Math.floor(restante/60),s=restante%60;return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")}
 function saveAll(){localStorage.setItem("jogadores_pasteis",JSON.stringify(jogadores));localStorage.setItem("campo_pasteis",JSON.stringify(campo));localStorage.setItem("banco_pasteis",JSON.stringify(banco));localStorage.setItem("registos_pasteis",JSON.stringify(reg));localStorage.setItem("subs_pasteis",JSON.stringify(subs))}
-
-function normalizarMinutosTracker(){
- if(!minutosTracker || typeof minutosTracker!=="object")minutosTracker={active:[],byPlayer:{}};
- if(!Array.isArray(minutosTracker.active))minutosTracker.active=[];
- if(!minutosTracker.byPlayer || typeof minutosTracker.byPlayer!=="object")minutosTracker.byPlayer={};
- let ps=periodoOrdem();
- jogadores.forEach(j=>{
-  if(!minutosTracker.byPlayer[j])minutosTracker.byPlayer[j]={};
-  ps.forEach(p=>minutosTracker.byPlayer[j][p]=Math.max(0,+minutosTracker.byPlayer[j][p]||0));
- });
- minutosTracker.active=minutosTracker.active.filter(j=>jogadores.includes(j)).slice(0,inField);
- Object.keys(minutosTracker.byPlayer).forEach(j=>{if(!jogadores.includes(j))delete minutosTracker.byPlayer[j]});
-}
-function saveMinutosTracker(){
- normalizarMinutosTracker();
- localStorage.setItem("minutos_tracker_pasteis",JSON.stringify(minutosTracker));
-}
-function togglePlayerMinute(j){
- normalizarMinutosTracker();
- let i=minutosTracker.active.indexOf(j);
- if(i>=0){
-  minutosTracker.active.splice(i,1);
- }else{
-  if(minutosTracker.active.length>=inField){alert("Já existem "+inField+" jogadoras a contar minutos. Pausa uma primeiro.");return;}
-  minutosTracker.active.push(j);
- }
- campo=[...minutosTracker.active];
- banco=jogadores.filter(x=>!campo.includes(x));
- saveAll();
- saveMinutosTracker();
- renderMinuteRoster();
-}
-function setActiveFromMinuteRoster(j){
- active=j;
- renderPlayerCard();
-}
-function renderMinuteRoster(){
- normalizarMinutosTracker();
- let list=$("minuteRosterList"), countEl=$("minuteRosterCount");
- if(!list)return;
- let mins=calcularMinutosJogadores();
- let p=$("periodo")?$("periodo").value:"1.º período";
- countEl.textContent=minutosTracker.active.length+"/"+inField;
- list.innerHTML="";
- jogadores.forEach(j=>{
-  let on=minutosTracker.active.includes(j);
-  let row=document.createElement("div");
-  row.className="minutePlayerRow"+(on?" onField":"");
-  row.innerHTML=`<button class="minuteToggle" title="${on?"Pausar minutos":"Começar minutos"}">${on?"⏸":"▶"}</button><div class="minutePlayerName" title="Selecionar jogadora ativa">${j}</div><div class="minutePlayerTime">${minutosTexto((mins[j]&&mins[j][p])||0)}</div>`;
-  row.querySelector(".minuteToggle").onclick=()=>togglePlayerMinute(j);
-  row.querySelector(".minutePlayerName").onclick=()=>setActiveFromMinuteRoster(j);
-  list.appendChild(row);
- });
-}
-function tickPlayerMinutes(){
- normalizarMinutosTracker();
- let p=$("periodo")?$("periodo").value:"1.º período";
- minutosTracker.active.forEach(j=>{
-  if(!minutosTracker.byPlayer[j])minutosTracker.byPlayer[j]={};
-  minutosTracker.byPlayer[j][p]=(+minutosTracker.byPlayer[j][p]||0)+1;
- });
- minutosSaveTick++;
- if(minutosSaveTick>=5){minutosSaveTick=0;saveMinutosTracker();}
-}
-function openPeriodSummary(){
- normalizarMinutosTracker();
- let modal=$("periodSummaryModal"), box=$("periodSummaryContent");
- if(!modal||!box)return;
- let p=$("periodo")?$("periodo").value:"1.º período";
- let mins=calcularMinutosJogadores();
- let casa=($("casa")&&$("casa").value)||"AD Pastéis";
- let fora=($("fora")&&$("fora").value)||"Adversário";
- let rows=Object.entries(mins).sort((a,b)=>(b[1][p]||0)-(a[1][p]||0) || (b[1].total||0)-(a[1].total||0));
- let body=rows.map(([j,m])=>`<tr><td>${j}</td><td>${minutosTexto(m[p]||0)}</td><td><b>${minutosTexto(m.total||0)}</b></td></tr>`).join("");
- let emCampo=minutosTracker.active.length?minutosTracker.active.join(" • "):"Nenhuma jogadora ativa";
- box.innerHTML=`<div class="periodSummaryCard"><div class="periodSummaryBrand">StatS</div><div class="periodSummarySub">${p.toUpperCase()}</div><div class="periodSummaryScore">${casaGoals} - ${foraGoals}</div><div style="text-align:center;font-size:12px;opacity:.8;margin-top:-10px;margin-bottom:10px">${casa} vs ${fora}</div><table class="periodSummaryTable"><thead><tr><th>Jogadora</th><th>Período</th><th>Total</th></tr></thead><tbody>${body}</tbody></table><div class="periodSummaryOnField"><b>Em campo no final:</b><br>${emCampo}</div></div>`;
- modal.classList.add("show");
-}
-function closePeriodSummary(){let m=$("periodSummaryModal");if(m)m.classList.remove("show")}
-function openFinalSummary(){
- normalizarMinutosTracker();
- let modal=$("periodSummaryModal"), box=$("periodSummaryContent");
- if(!modal||!box)return;
- let mins=calcularMinutosJogadores();
- let casa=($("casa")&&$("casa").value)||"AD Pastéis";
- let fora=($("fora")&&$("fora").value)||"Adversário";
- let ps=["1.º período","2.º período","3.º período"];
- let rows=jogadores.map(j=>{
-  let m=mins[j]||{};
-  let total3=ps.reduce((acc,p)=>acc+(+m[p]||0),0);
-  return {j,m,total3};
- }).sort((a,b)=>b.total3-a.total3 || a.j.localeCompare(b.j,"pt"));
- let body=rows.map(({j,m,total3})=>`<tr><td>${j}</td><td>${minutosTexto(m[ps[0]]||0)}</td><td>${minutosTexto(m[ps[1]]||0)}</td><td>${minutosTexto(m[ps[2]]||0)}</td><td><b>${minutosTexto(total3)}</b></td></tr>`).join("");
- box.innerHTML=`<div class="periodSummaryCard"><div class="periodSummaryBrand">StatS</div><div class="periodSummarySub">RESUMO FINAL · 3 PERÍODOS</div><div class="periodSummaryScore">${casaGoals} - ${foraGoals}</div><div style="text-align:center;font-size:12px;opacity:.8;margin-top:-10px;margin-bottom:10px">${casa} vs ${fora}</div><div style="overflow:auto"><table class="periodSummaryTable"><thead><tr><th>Jogadora</th><th>1.º</th><th>2.º</th><th>3.º</th><th>Total</th></tr></thead><tbody>${body}</tbody></table></div></div>`;
- modal.classList.add("show");
-}
-
 
 /* =====================================
 JOGO: MARCADOR E EQUIPAS
@@ -2900,7 +2648,8 @@ function abrirPopupAcoes(){
   {nome:"Assistência",emoji:"🎁"},
   {nome:"Passe falhado",emoji:"⚠️"},
   {nome:"Recuperação de bola",emoji:"🔙"},
-  {nome:"Perda de bola",emoji:"⛔️"}
+  {nome:"Perda de bola",emoji:"⛔️"},
+  {nome:"Expulsão",emoji:"🟥"}
  ];
 
  content.innerHTML="<div class='quickFlowGrid'>"+
@@ -3095,7 +2844,7 @@ function openSettings(){
  renderHistory();
 }
 function closeSettings(){$("settingsPage").classList.add("hidden");$("main").classList.remove("hidden")}
-function saveSettings(){total=Math.max(1,+$("setTotal").value||12);inField=Math.max(1,Math.min(+$("setCampo").value||5,total));dur=Math.max(1,+$("setDur").value||12);localStorage.setItem("total_jogadores_pasteis",total);localStorage.setItem("jogadores_campo_pasteis",inField);localStorage.setItem("duracao_periodo_pasteis",dur);localStorage.setItem("equipa_casa_pasteis",$("setCasa").value||"Equipa da Casa");localStorage.setItem("equipa_fora_pasteis",$("setFora").value||"");localStorage.setItem("detalhes_jogo_pasteis",$("detalhes").value||"");while(jogadores.length<total)jogadores.push("Jogador "+(jogadores.length+1));while(jogadores.length>total)jogadores.pop();campo=jogadores.slice(0,inField);banco=jogadores.slice(inField);active=jogadores[0]||"Jogador 1";time=0;pause();saveAll();loadGame();updateTimer();renderAll();alert("Definições guardadas.")}
+function saveSettings(){total=Math.max(1,+$("setTotal").value||12);inField=Math.max(1,Math.min(+$("setCampo").value||5,total));dur=Math.max(1,+$("setDur").value||12);localStorage.setItem("total_jogadores_pasteis",total);localStorage.setItem("jogadores_campo_pasteis",inField);localStorage.setItem("duracao_periodo_pasteis",dur);localStorage.setItem("equipa_casa_pasteis",$("setCasa").value||"Equipa da Casa");localStorage.setItem("equipa_fora_pasteis",$("setFora").value||"");localStorage.setItem("detalhes_jogo_pasteis",$("detalhes").value||"");while(jogadores.length<total)jogadores.push("Jogador "+(jogadores.length+1));while(jogadores.length>total)jogadores.pop();campo=jogadores.slice(0,inField);banco=jogadores.slice(inField);active=jogadores[0]||"Jogador 1";time=dur*60;pause();saveAll();loadGame();updateTimer();renderAll();alert("Definições guardadas.")}
 function renderEditNames(){let e=$("editNames");e.innerHTML="";jogadores.forEach((j,i)=>e.innerHTML+=`<input id="nome${i}" value="${j}">`);e.innerHTML+=`<button class="green" onclick="saveNames()">Guardar nomes</button><button class="danger" onclick="resetNames()">Repor Jogador 1-${total}</button>`}
 function saveNames(){let old=[...jogadores];jogadores=jogadores.map((j,i)=>$("nome"+i).value||("Jogador "+(i+1)));reg.forEach(r=>{let idx=old.indexOf(r.jogador);if(idx>=0)r.jogador=jogadores[idx]});subs.forEach(s=>{let a=old.indexOf(s.sai),b=old.indexOf(s.entra);if(a>=0)s.sai=jogadores[a];if(b>=0)s.entra=jogadores[b]});campo=campo.map(p=>{let i=old.indexOf(p);return i>=0?jogadores[i]:p});banco=banco.map(p=>{let i=old.indexOf(p);return i>=0?jogadores[i]:p});active=jogadores[0]||"Jogador 1";saveAll();renderAll();renderEditNames()}
 function resetNames(){jogadores=[];for(let i=1;i<=total;i++)jogadores.push("Jogador "+i);campo=jogadores.slice(0,inField);banco=jogadores.slice(inField);active=jogadores[0]||"Jogador 1";saveAll();renderAll();renderEditNames()}
@@ -3293,37 +3042,35 @@ JOGO: CRONÓMETRO
 ===================================== */
 function start(){
  if(timer)return;
- jogoMinutosAtivo=true;
- localStorage.setItem("jogo_minutos_ativo_pasteis","1");
- normalizarMinutosTracker();
+
+ if(!jogoMinutosAtivo){
+  jogoMinutosAtivo=true;
+  localStorage.setItem("jogo_minutos_ativo_pasteis","1");
+  garantirTitularesIniciais();
+ }
+
  timer=setInterval(()=>{
-  if(time<dur*60){
-   time++;
-   tickPlayerMinutes();
+  if(time>0){
+   time--;
    updateTimer();
-   renderMinuteRoster();
   }else{
    pause();
-   alert("⚠️ Fim do período. Abre o resumo para enviar ao banco.");
+   alert("⚠️ Mudar período e direção do jogo");
   }
  },1000);
 }
-function pause(){
- clearInterval(timer);
- timer=null;
- saveMinutosTracker();
- renderMinuteRoster();
-}
+function pause(){clearInterval(timer);timer=null}
 function resetTimer(){
  pause();
- time=0;
+ time=dur*60;
  updateTimer();
 }
 function updateTimer(){
- if($("tempo"))$("tempo").innerText=tempoRestante();
- if(time>=dur*60 && timer){
+ if($("tempo"))$("tempo").innerText=t();
+
+ if(time<=0 && timer){
   pause();
-  alert("⚠️ Fim do período. Abre o resumo para enviar ao banco.");
+  alert("⚠️ Mudar período e direção do jogo");
  }
 }
 
@@ -3548,9 +3295,9 @@ function segundosDoTempo(str){
  return (+p[0]||0)*60+(+p[1]||0);
 }
 
-function minutoJogadoNoPeriodo(tempoDecorrido){
- let jogado=segundosDoTempo(tempoDecorrido);
- return Math.max(0,Math.min(dur*60,jogado));
+function minutoJogadoNoPeriodo(tempoRestante){
+ let jogado=(dur*60)-segundosDoTempo(tempoRestante);
+ return Math.max(0,jogado);
 }
 
 function minutosTexto(seg){
@@ -3681,7 +3428,7 @@ function calcularResumoJogo(){
  let totalPassesFalhados=reg.filter(r=>r.acao==="Passe falhado").length;
  let totalRecuperacoes=reg.filter(r=>r.acao==="Recuperação de bola").length;
  let totalPerdas=reg.filter(r=>r.acao==="Perda de bola").length;
- let totalExpulsoes=0;
+ let totalExpulsoes=reg.filter(r=>r.acao==="Expulsão").length;
  let eficacia=totalRemates?Math.round((totalGolos/totalRemates)*100):0;
 
  let porJogador={};
@@ -3695,12 +3442,13 @@ function calcularResumoJogo(){
   if(r.acao==="Passe falhado")porJogador[r.jogador].passesFalhados++;
   if(r.acao==="Recuperação de bola")porJogador[r.jogador].recuperacoes++;
   if(r.acao==="Perda de bola")porJogador[r.jogador].perdas++;
+  if(r.acao==="Expulsão")porJogador[r.jogador].expulsoes++;
  });
 
  let mvp="-";
  let best=-1;
  Object.entries(porJogador).forEach(([j,s])=>{
-  let score=s.golos*4+s.assist*3+s.defesas*2+s.recuperacoes*1.5+s.remates+s.total*.1-s.passesFalhados-s.perdas;
+  let score=s.golos*4+s.assist*3+s.defesas*2+s.recuperacoes*1.5+s.remates+s.total*.1-s.passesFalhados-s.perdas-s.expulsoes*3;
   if(score>best){best=score;mvp=j;}
  });
 
@@ -3722,23 +3470,79 @@ function renderDashboardJogo(){
    <div class="dashboardStat">Defesas GR<b>${r.totalDefesas}</b></div>
    <div class="dashboardStat">🔙 Recuperações<b>${r.totalRecuperacoes}</b></div>
    <div class="dashboardStat">⛔️ Perdas<b>${r.totalPerdas}</b></div>
+   <div class="dashboardStat">🟥 Expulsões<b>${r.totalExpulsoes}</b></div>
    <div class="dashboardStat">Eficácia<b>${r.eficacia}%</b></div>
   </div>
  </div>`;
 }
 
 function calcularMinutosJogadores(){
- normalizarMinutosTracker();
  let periodos=periodoOrdem();
  let resultado={};
  jogadores.forEach(j=>{
   resultado[j]={total:0};
-  periodos.forEach(p=>{
-   let v=Math.max(0,+((minutosTracker.byPlayer[j]||{})[p])||0);
-   resultado[j][p]=v;
-   resultado[j].total+=v;
+  periodos.forEach(p=>resultado[j][p]=0);
+ });
+
+ if(!jogoMinutosAtivo){
+  return resultado;
+ }
+
+ let periodoAtual=$("periodo")?$("periodo").value:"1.º período";
+ let emCampo=titularesIniciais().filter(j=>jogadores.includes(j));
+ let timeline={};
+ periodos.forEach(p=>timeline[p]=[]);
+
+ subs.slice().reverse().forEach(s=>{
+  let p=s.periodo||"1.º período";
+  if(!timeline[p])timeline[p]=[];
+  timeline[p].push({
+   sai:s.sai,
+   entra:s.entra,
+   tempo:s.tempo,
+   segundo:minutoJogadoNoPeriodo(s.tempo||"00:00")
   });
  });
+
+ periodos.forEach(p=>{
+  let ultimo=0;
+  let eventos=(timeline[p]||[]).sort((a,b)=>a.segundo-b.segundo);
+
+  let limitePeriodo;
+  if(periodos.indexOf(p)<periodos.indexOf(periodoAtual)){
+   limitePeriodo=dur*60;
+  }else if(p===periodoAtual){
+   limitePeriodo=minutoJogadoNoPeriodo(t());
+  }else{
+   limitePeriodo=0;
+  }
+
+  limitePeriodo=Math.max(0,Math.min(dur*60,limitePeriodo));
+
+  eventos.forEach(ev=>{
+   if(ev.segundo>limitePeriodo)return;
+
+   let delta=Math.max(0,ev.segundo-ultimo);
+   emCampo.forEach(j=>{
+    if(resultado[j])resultado[j][p]+=delta;
+   });
+
+   emCampo=emCampo.filter(j=>j!==ev.sai);
+   if(ev.entra && !emCampo.includes(ev.entra))emCampo.push(ev.entra);
+
+   ultimo=ev.segundo;
+  });
+
+  let deltaFinal=Math.max(0,limitePeriodo-ultimo);
+  emCampo.forEach(j=>{
+   if(resultado[j])resultado[j][p]+=deltaFinal;
+  });
+ });
+
+ Object.keys(resultado).forEach(j=>{
+  resultado[j].total=periodos.reduce((acc,p)=>acc+(resultado[j][p]||0),0);
+ });
+
  return resultado;
 }
 
@@ -3747,7 +3551,7 @@ function tabelaMinutosHTML(){
  let periodos=periodoOrdem();
 
  let html='<div class="dashboardBox"><h3>⏱️ Minutos jogados</h3>';
- html+='<div class="small">Contagem direta: só avança para as jogadoras ativas quando o relógio principal está a correr.</div>';
+ html+='<div class="small">Contagem baseada nas titulares e nas substituições registadas.</div>';
  html+='<div style="overflow:auto"><table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:8px">';
  html+='<tr><th style="text-align:left">Atleta</th>'+periodos.map(p=>`<th>${p}</th>`).join("")+'<th>Total</th></tr>';
 
@@ -3843,7 +3647,6 @@ function guardarSessaoAtual(){
   attackSide:attackSide,
   jogoMinutosAtivo:jogoMinutosAtivo,
   titularesIniciais:titularesIniciais(),
-  minutosTracker:JSON.parse(JSON.stringify(minutosTracker)),
   treino:{tipo:tipoTreinoAtual,nome:localStorage.getItem("nome_treino_pasteis")||"",data:localStorage.getItem("data_treino_pasteis")||"",duracao:localStorage.getItem("duracao_treino_pasteis")||"",objetivo:localStorage.getItem("objetivo_treino_pasteis")||"",jogadores:treinoJogadores,exercicios:exerciciosTreino,presencas:presencasTreino,treinadores:treinoTreinadores,presencasTreinadores:presencasTreinadores,medico:departamentoMedico}
  };
  let lista=getSessoes();
@@ -3903,7 +3706,6 @@ function carregarSessao(id){
  localStorage.setItem("attack_side_pasteis",s.attackSide||"right");
  localStorage.setItem("jogo_minutos_ativo_pasteis",s.jogoMinutosAtivo?"1":"0");
  if(s.titularesIniciais)localStorage.setItem("titulares_iniciais_pasteis",JSON.stringify(s.titularesIniciais));
- if(s.minutosTracker){minutosTracker=s.minutosTracker;saveMinutosTracker();}
  localStorage.setItem("abrir_direto_pasteis","1");
  location.reload();
 }
@@ -3945,7 +3747,8 @@ function exportDashboard(){
   ["Assist.",resumo.totalAssist,"#1E7CFF"],
   ["Defesas",resumo.totalDefesas,"#18A64A"],
   ["Recup.",resumo.totalRecuperacoes,"#1E7CFF"],
-  ["Perdas",resumo.totalPerdas,"#BFC7D5"]
+  ["Perdas",resumo.totalPerdas,"#BFC7D5"],
+  ["Expuls.",resumo.totalExpulsoes,"#8C1D40"]
  ];
  let distTotal=dist.reduce((a,b)=>a+(+b[1]||0),0)||1;
 
@@ -4343,10 +4146,6 @@ function closeIndividualDashboardModal(){
  if(m)m.classList.remove("show");
 }
 
-window.openIndividualDashboardModal=openIndividualDashboardModal;
-window.closeIndividualDashboardModal=closeIndividualDashboardModal;
-window.exportDashboardIndividual=exportDashboardIndividual;
-
 function estatisticasJogadora(jogadora,dados){
  let ev=dados||reg.filter(r=>r.jogador===jogadora);
  let golos=ev.filter(r=>r.acao&&r.acao.startsWith("Golo")&&r.acao!=="Golo sofrido").length;
@@ -4355,8 +4154,9 @@ function estatisticasJogadora(jogadora,dados){
  let defesas=ev.filter(r=>defesaDashboard(r)).length;
  let rec=ev.filter(r=>r.acao==="Recuperação de bola").length;
  let perdas=ev.filter(r=>r.acao==="Perda de bola").length;
+ let exp=ev.filter(r=>r.acao==="Expulsão").length;
  let eficacia=remates?Math.round((golos/remates)*100):0;
- return {ev,golos,remates,assist,defesas,rec,perdas,eficacia,total:ev.length};
+ return {ev,golos,remates,assist,defesas,rec,perdas,exp,eficacia,total:ev.length};
 }
 
 function exportDashboardIndividual(jogadora){
@@ -4516,7 +4316,7 @@ function exportDashboardIndividual(jogadora){
  rr(40,1485,1000,170,16,"rgba(255,255,255,.035)","rgba(255,255,255,.16)",1);
  center("LEGENDA",540,1510,22,white,900);
  tx("⚽ Golo    ✔️ Remate    🎁 Assistência    🧤 Defesa    🔙 Recuperação",80,1560,20,white,700);
- tx("⛔️ Perda de bola    ⚠️ Passe falhado    🔴 Golo sofrido",80,1600,20,white,700);
+ tx("⛔️ Perda de bola    ⚠️ Passe falhado    🔴 Golo sofrido    🟥 Expulsão",80,1600,20,white,700);
 
  center("PAIXÃO  •  ENTREGA  •  FAMÍLIA",540,1848,22,white,900);
 
@@ -4609,7 +4409,7 @@ function importBackupJSON(event){
  reader.readAsText(file);
 }
 
-function clearGame(){if(confirm("Apagar todos os registos deste jogo/treino?")){reg=[];subs=[];casaGoals=0;foraGoals=0;localStorage.removeItem("registos_pasteis");localStorage.removeItem("subs_pasteis");localStorage.removeItem("jogo_minutos_ativo_pasteis");localStorage.removeItem("titulares_iniciais_pasteis");localStorage.removeItem("minutos_tracker_pasteis");minutosTracker={active:[],byPlayer:{}};jogoMinutosAtivo=false;time=0;pause();localStorage.setItem("golos_casa_pasteis",0);localStorage.setItem("golos_fora_pasteis",0);loadGame();updateTimer();renderAll()}}
+function clearGame(){if(confirm("Apagar todos os registos deste jogo/treino?")){reg=[];subs=[];casaGoals=0;foraGoals=0;localStorage.removeItem("registos_pasteis");localStorage.removeItem("subs_pasteis");localStorage.removeItem("jogo_minutos_ativo_pasteis");localStorage.removeItem("titulares_iniciais_pasteis");jogoMinutosAtivo=false;localStorage.setItem("golos_casa_pasteis",0);localStorage.setItem("golos_fora_pasteis",0);loadGame();renderAll()}}
 function clearMapOnly(){if(confirm("Apagar apenas ações com localização no campo?")){reg=reg.filter(r=>r.x===""||r.x===undefined);localStorage.setItem("registos_pasteis",JSON.stringify(reg));renderAll()}}
 function fullReset(){if(confirm("Apagar tudo e repor a aplicação?")){localStorage.clear();location.reload()}}
 
@@ -4626,29 +4426,39 @@ function exportCSV(){
  let minutos=calcularMinutosJogadores();
  let periodos=periodoOrdem();
 
+ function csvEscape(v){
+  return `"${String(v??"").replace(/"/g,'""')}"`;
+ }
+
+ function csvRow(arr){
+  return arr.map(csvEscape).join(",")+"\n";
+ }
+
  let csv="\ufeff";
 
- csv+="RESUMO\\n";
- csv+=csvLine(["Jogo",jogo]);
- csv+=csvLine(["Resultado",resultado]);
- csv+=csvLine(["Detalhes",det]);
- csv+=csvLine(["Golos",resumo.totalGolos]);
- csv+=csvLine(["Golos sofridos",resumo.totalGolosSofridos]);
- csv+=csvLine(["Remates",resumo.totalRemates]);
- csv+=csvLine(["Assistências",resumo.totalAssist]);
- csv+=csvLine(["Defesas GR",resumo.totalDefesas]);
- csv+=csvLine(["Passes falhados",resumo.totalPassesFalhados]);
- csv+=csvLine(["Recuperações",resumo.totalRecuperacoes]);
- csv+=csvLine(["Perdas de bola",resumo.totalPerdas]);
- csv+=csvLine(["Eficácia",resumo.eficacia+"%"]);
- csv+=csvLine(["MVP sugerido",resumo.mvp]);
- csv+="\\n";
+ csv+="RESUMO\n";
+ csv+=csvRow(["Indicador","Valor"]);
+ csv+=csvRow(["Jogo",jogo]);
+ csv+=csvRow(["Resultado",resultado]);
+ csv+=csvRow(["Detalhes",det]);
+ csv+=csvRow(["Golos",resumo.totalGolos]);
+ csv+=csvRow(["Golos sofridos",resumo.totalGolosSofridos]);
+ csv+=csvRow(["Remates",resumo.totalRemates]);
+ csv+=csvRow(["Assistências",resumo.totalAssist]);
+ csv+=csvRow(["Defesas GR",resumo.totalDefesas]);
+ csv+=csvRow(["Passes falhados",resumo.totalPassesFalhados]);
+ csv+=csvRow(["Recuperações",resumo.totalRecuperacoes]);
+ csv+=csvRow(["Perdas de bola",resumo.totalPerdas]);
+ csv+=csvRow(["Expulsões",resumo.totalExpulsoes]);
+ csv+=csvRow(["Eficácia",resumo.eficacia+"%"]);
+ csv+=csvRow(["MVP sugerido",resumo.mvp]);
+ csv+="\n";
 
- csv+="EVENTOS POR PERÍODO\\n";
- csv+=csvLine(["Período","Tempo","Jogador","Ação","Emoji","Zona","X","Y","Lado ataque","Relacionado","Data"]);
+ csv+="EVENTOS POR PERÍODO\n";
+ csv+=csvRow(["Período","Tempo","Jogador","Ação","Emoji","Zona","X","Y","Lado ataque","Relacionado","Data"]);
  periodoOrdem().forEach(p=>{
   reg.filter(r=>r.periodo===p).forEach(r=>{
-   csv+=csvLine([
+   csv+=csvRow([
     r.periodo,
     r.tempo,
     r.jogador,
@@ -4663,34 +4473,47 @@ function exportCSV(){
    ]);
   });
  });
- csv+="\\n";
+ csv+="\n";
 
- csv+="ESTATÍSTICAS POR JOGADORA\\n";
- csv+=csvLine(["Jogadora","Golos","Remates","Assistências","Defesas GR","Passes falhados","Recuperações","Perdas","Total ações"]);
+ csv+="ESTATÍSTICAS POR JOGADORA\n";
+ csv+=csvRow(["Jogadora","Golos","Remates","Assistências","Defesas GR","Passes falhados","Recuperações","Perdas","Expulsões","Total ações"]);
  Object.entries(resumo.porJogador).forEach(([j,s])=>{
-  csv+=csvLine([j,s.golos,s.remates,s.assist,s.defesas,s.passesFalhados,s.recuperacoes,s.perdas,s.total]);
+  csv+=csvRow([
+   j,
+   s.golos||0,
+   s.remates||0,
+   s.assist||0,
+   s.defesas||0,
+   s.passesFalhados||0,
+   s.recuperacoes||0,
+   s.perdas||0,
+   s.expulsoes||0,
+   s.total||0
+  ]);
  });
- csv+="\\n";
+ csv+="\n";
 
- csv+="SUBSTITUIÇÕES\\n";
- csv+=csvLine(["Período","Tempo","Sai","Entra","Data"]);
+ csv+="SUBSTITUIÇÕES\n";
+ csv+=csvRow(["Período","Tempo","Sai","Entra","Data"]);
  subs.slice().reverse().forEach(s=>{
-  csv+=csvLine([s.periodo,s.tempo,s.sai,s.entra,s.data]);
+  csv+=csvRow([s.periodo,s.tempo,s.sai,s.entra,s.data]);
  });
- csv+="\\n";
+ csv+="\n";
 
- csv+="MINUTOS JOGADOS\\n";
- csv+=csvLine(["Atleta",...periodos,"Total"]);
+ csv+="MINUTOS JOGADOS\n";
+ csv+=csvRow(["Atleta",...periodos,"Total"]);
  Object.entries(minutos).forEach(([j,m])=>{
-  csv+=csvLine([j,...periodos.map(p=>minutosTexto(m[p]||0)),minutosTexto(m.total||0)]);
+  csv+=csvRow([j,...periodos.map(p=>minutosTexto(m[p]||0)),minutosTexto(m.total||0)]);
  });
 
  let blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
  let url=URL.createObjectURL(blob);
  let a=document.createElement("a");
  a.href=url;
- a.download="excel_"+casa+"_vs_"+fora+".csv";
+ a.download="jogo_"+casa+"_vs_"+fora+".csv";
+ document.body.appendChild(a);
  a.click();
+ a.remove();
  URL.revokeObjectURL(url);
 }
 
@@ -4702,8 +4525,7 @@ function exportCSV(){
 ENTRADA NO JOGO
 ===================================== */
 function entrarJogo(){
- normalizarMinutosTracker();
- renderMinuteRoster();
+ garantirTitularesIniciais();
  localStorage.setItem("modo_pasteis","jogo");
 
  if($("landingPage"))$("landingPage").classList.add("hidden");
@@ -6083,7 +5905,7 @@ function textoConvocatoria(){
 }
 function copiarConvocatoriaWhatsApp(){saveConvocatoria();let texto=textoConvocatoria();if(navigator.clipboard){navigator.clipboard.writeText(texto).then(()=>alert("Texto da convocatória copiado para WhatsApp."))}else{alert(texto)}}
 
-function renderAll(){renderAttack();renderMap();renderFlow();renderPlayerCard();renderMinuteRoster();renderStats();renderReport();renderHistory();renderSubs();atualizarTreinoResumo();aplicarModoVisual()}
+function renderAll(){renderAttack();renderMap();renderFlow();renderPlayerCard();renderStats();renderReport();renderHistory();renderSubs();atualizarTreinoResumo();aplicarModoVisual()}
 function bindEntradaInicial(){
  const btn=$("enterMainBtn");
  if(btn){
@@ -6106,10 +5928,6 @@ try{
  console.error("Erro ao iniciar aplicação:",err);
  bindEntradaInicial();
 }
-
-
-window.addEventListener("beforeunload",saveMinutosTracker);
-setTimeout(()=>{normalizarMinutosTracker();renderMinuteRoster();},0);
 
 </script>
 </body>
