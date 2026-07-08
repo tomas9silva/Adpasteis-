@@ -3282,6 +3282,244 @@ Esta camada força mesmo o layout horizontal.
  }
 }
 
+
+/* STATS V2.9 — RESTAURAR ACESSOS IMPORTANTES */
+.proTopTools{
+ grid-column:1 / -1!important;
+ display:flex;
+ justify-content:flex-end;
+ gap:8px;
+ margin-bottom:-4px;
+}
+.proToolBtn{
+ width:42px!important;
+ height:42px!important;
+ min-height:42px!important;
+ padding:0!important;
+ margin:0!important;
+ border-radius:14px!important;
+ background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.035))!important;
+ border:1px solid rgba(255,255,255,.16)!important;
+ color:white!important;
+ font-size:18px!important;
+ box-shadow:0 10px 24px rgba(0,0,0,.22)!important;
+}
+.proToolBtn:active{
+ transform:scale(.96);
+}
+.statsSideNav button:nth-child(6){
+ display:block!important;
+}
+@media(max-width:760px){
+ .proTopTools{
+  position:sticky;
+  top:0;
+  z-index:90;
+  padding:8px 0;
+  margin:0 0 6px 0;
+  background:linear-gradient(180deg,rgba(5,11,22,.96),rgba(5,11,22,.72));
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+ }
+ .proToolBtn{
+  width:46px!important;
+  height:46px!important;
+ }
+}
+
+/* As páginas antigas continuam acessíveis e não são escondidas pela V2 */
+#settingsPage,
+#trainingPage,
+#convocatoriaPage,
+#menuPage{
+ z-index:100;
+}
+
+
+/* =====================================
+STATS V3.0 — BASE DE NAVEGAÇÃO E IDENTIDADE
+- Voltar ao menu no canto esquerdo
+- Roda de definições no canto direito
+- Logo StatS no centro
+- Treino e Jogo visualmente separados
+===================================== */
+
+.v3TopBar{
+ grid-column:1 / -1!important;
+ display:grid!important;
+ grid-template-columns:48px 1fr 48px!important;
+ align-items:center!important;
+ gap:10px!important;
+ margin:0 0 8px 0!important;
+ padding:8px 10px!important;
+ border-radius:18px!important;
+ background:linear-gradient(180deg,rgba(8,22,42,.96),rgba(4,12,24,.92))!important;
+ border:1px solid rgba(255,255,255,.13)!important;
+ box-shadow:0 16px 38px rgba(0,0,0,.26)!important;
+}
+
+.proNavBtn{
+ width:44px!important;
+ height:44px!important;
+ min-height:44px!important;
+ padding:0!important;
+ margin:0!important;
+ display:flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+ border-radius:14px!important;
+ background:rgba(255,255,255,.065)!important;
+ border:1px solid rgba(255,255,255,.14)!important;
+ color:white!important;
+ font-size:22px!important;
+}
+
+.v3Brand{
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ gap:10px;
+ min-width:0;
+}
+
+.v3Logo{
+ width:42px;
+ height:42px;
+ object-fit:contain;
+ filter:drop-shadow(0 8px 16px rgba(0,0,0,.35));
+}
+
+.v3BrandMain{
+ font-size:28px;
+ font-weight:950;
+ line-height:.9;
+ letter-spacing:-.05em;
+ color:white;
+}
+
+.v3BrandMain span{
+ color:#e51c2b;
+}
+
+.v3BrandSub{
+ margin-top:4px;
+ color:rgba(255,255,255,.58);
+ font-size:10px;
+ font-weight:850;
+ letter-spacing:.16em;
+ text-transform:uppercase;
+}
+
+.v3MenuLogo{
+ width:112px;
+ height:112px;
+ object-fit:contain;
+ margin:0 auto 14px;
+ display:block;
+ filter:drop-shadow(0 18px 32px rgba(0,0,0,.35));
+}
+
+/* A roda antiga dentro do header do jogo fica escondida; a v3TopBar substitui-a */
+.statsShell>.statsMain>.gameHeader{
+ display:none!important;
+}
+
+/* Definições: continuam exatamente no painel antigo */
+#settingsPage{
+ background:
+  radial-gradient(circle at 14% 0%,rgba(215,25,32,.14),transparent 25%),
+  linear-gradient(180deg,#050b16,#071326)!important;
+}
+
+/* Treino: módulo separado, sem aparência de jogo */
+#trainingPage{
+ background:
+  radial-gradient(circle at 80% 0%,rgba(47,128,237,.14),transparent 26%),
+  linear-gradient(180deg,#050b16,#071326)!important;
+ min-height:100vh;
+}
+
+#trainingPage .trainingHeader{
+ display:flex!important;
+}
+
+#trainingPage .trainingBrandMain::after{
+ content:"";
+}
+
+#trainingPage .trainingCard{
+ background:linear-gradient(180deg,rgba(8,22,42,.88),rgba(4,12,24,.88))!important;
+ border:1px solid rgba(255,255,255,.12)!important;
+}
+
+/* Convocatória também fica módulo próprio */
+#convocatoriaPage{
+ background:
+  radial-gradient(circle at 50% 0%,rgba(215,25,32,.16),transparent 24%),
+  linear-gradient(180deg,#050b16,#071326)!important;
+ min-height:100vh;
+}
+
+/* Correção final de contraste nos popups */
+.modalContent,
+.modalContent *{
+ text-shadow:none!important;
+}
+
+.modalContent button{
+ color:#071326!important;
+}
+
+.modalContent .danger,
+.modalContent .green,
+.modalContent .red{
+ color:white!important;
+}
+
+.modalContent .pbtn,
+.modalContent .actionBtn,
+.modalContent .quickFlowGrid button,
+.modalContent .players button{
+ background:#eef2f7!important;
+ color:#071326!important;
+ border:1px solid rgba(7,19,38,.14)!important;
+}
+
+.modalContent .pbtn.active,
+.modalContent .pbtn.choose,
+.modalContent .starterPick{
+ background:linear-gradient(180deg,#e51c2b,#9d101a)!important;
+ color:white!important;
+}
+
+/* Mobile: mantém barra visível no topo */
+@media(max-width:760px){
+ .v3TopBar{
+  position:sticky;
+  top:0;
+  z-index:80;
+  grid-template-columns:46px 1fr 46px!important;
+  padding:7px 8px!important;
+  margin-bottom:8px!important;
+  border-radius:16px!important;
+ }
+ .v3Logo{
+  width:36px;
+  height:36px;
+ }
+ .v3BrandMain{
+  font-size:23px;
+ }
+ .v3BrandSub{
+  font-size:8px;
+ }
+ .proNavBtn{
+  width:42px!important;
+  height:42px!important;
+  min-height:42px!important;
+ }
+}
+
 </style>
 </head>
 <body>
@@ -3313,7 +3551,7 @@ PÁGINA INICIAL
 ===================================== -->
 <div id="landingPage" class="landingPage">
   <div class="landingContent">
-   <h1>𝕊𝕥𝕒𝕥𝕊</h1>
+   <img src="logo-pasteis.png" class="v3MenuLogo" alt="StatS"><h1>StatS</h1>
 <p class="landingSub">Performance Analysis Platform</p>
 <p class="landingVersion">Version 1.0</p>
     <button id="enterMainBtn" type="button" onclick="abrirMenu();return false;" class="enterBtn">ENTRAR</button>
@@ -3325,7 +3563,7 @@ MENU PRINCIPAL
 ===================================== -->
 <div id="menuPage" class="landingPage hidden">
   <div class="landingContent">
-    <h1>𝕊𝕥𝕒𝕥𝕊</h1>
+    <img src="logo-pasteis.png" class="v3MenuLogo" alt="StatS"><h1>StatS</h1>
     <p class="landingSub">Performance Analysis Platform</p>
 
     <button class="enterBtn" onclick="entrarJogo()">
@@ -3524,6 +3762,17 @@ MÓDULO JOGO
   <div class="statsSidebarFooter"><img src="logo-pasteis.png"><b>AD PASTÉIS</b><span>Futebol de Praia</span><small>StatS v2.2</small></div>
  </aside>
  <section class="statsMain">
+ <div class="proTopTools v3TopBar">
+  <button class="proNavBtn" onclick="voltarMenu()" title="Voltar ao menu">←</button>
+  <div class="v3Brand">
+    <img src="logo-pasteis.png" class="v3Logo" alt="StatS">
+    <div>
+      <div class="v3BrandMain">Stat<span>S</span></div>
+      <div class="v3BrandSub">Performance Analysis</div>
+    </div>
+  </div>
+  <button class="proNavBtn" onclick="openSettings()" title="Definições">⚙️</button>
+ </div>
  <div class="gameHeader">
   <button class="gameBack" onclick="voltarMenu()">←</button>
   <div class="gameBrand">
@@ -8675,6 +8924,244 @@ Esta camada força mesmo o layout horizontal.
 @media(max-width:760px){
  #main .proStatsGrid{
   grid-template-columns:1fr 1fr!important;
+ }
+}
+
+
+/* STATS V2.9 — RESTAURAR ACESSOS IMPORTANTES */
+.proTopTools{
+ grid-column:1 / -1!important;
+ display:flex;
+ justify-content:flex-end;
+ gap:8px;
+ margin-bottom:-4px;
+}
+.proToolBtn{
+ width:42px!important;
+ height:42px!important;
+ min-height:42px!important;
+ padding:0!important;
+ margin:0!important;
+ border-radius:14px!important;
+ background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.035))!important;
+ border:1px solid rgba(255,255,255,.16)!important;
+ color:white!important;
+ font-size:18px!important;
+ box-shadow:0 10px 24px rgba(0,0,0,.22)!important;
+}
+.proToolBtn:active{
+ transform:scale(.96);
+}
+.statsSideNav button:nth-child(6){
+ display:block!important;
+}
+@media(max-width:760px){
+ .proTopTools{
+  position:sticky;
+  top:0;
+  z-index:90;
+  padding:8px 0;
+  margin:0 0 6px 0;
+  background:linear-gradient(180deg,rgba(5,11,22,.96),rgba(5,11,22,.72));
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+ }
+ .proToolBtn{
+  width:46px!important;
+  height:46px!important;
+ }
+}
+
+/* As páginas antigas continuam acessíveis e não são escondidas pela V2 */
+#settingsPage,
+#trainingPage,
+#convocatoriaPage,
+#menuPage{
+ z-index:100;
+}
+
+
+/* =====================================
+STATS V3.0 — BASE DE NAVEGAÇÃO E IDENTIDADE
+- Voltar ao menu no canto esquerdo
+- Roda de definições no canto direito
+- Logo StatS no centro
+- Treino e Jogo visualmente separados
+===================================== */
+
+.v3TopBar{
+ grid-column:1 / -1!important;
+ display:grid!important;
+ grid-template-columns:48px 1fr 48px!important;
+ align-items:center!important;
+ gap:10px!important;
+ margin:0 0 8px 0!important;
+ padding:8px 10px!important;
+ border-radius:18px!important;
+ background:linear-gradient(180deg,rgba(8,22,42,.96),rgba(4,12,24,.92))!important;
+ border:1px solid rgba(255,255,255,.13)!important;
+ box-shadow:0 16px 38px rgba(0,0,0,.26)!important;
+}
+
+.proNavBtn{
+ width:44px!important;
+ height:44px!important;
+ min-height:44px!important;
+ padding:0!important;
+ margin:0!important;
+ display:flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+ border-radius:14px!important;
+ background:rgba(255,255,255,.065)!important;
+ border:1px solid rgba(255,255,255,.14)!important;
+ color:white!important;
+ font-size:22px!important;
+}
+
+.v3Brand{
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ gap:10px;
+ min-width:0;
+}
+
+.v3Logo{
+ width:42px;
+ height:42px;
+ object-fit:contain;
+ filter:drop-shadow(0 8px 16px rgba(0,0,0,.35));
+}
+
+.v3BrandMain{
+ font-size:28px;
+ font-weight:950;
+ line-height:.9;
+ letter-spacing:-.05em;
+ color:white;
+}
+
+.v3BrandMain span{
+ color:#e51c2b;
+}
+
+.v3BrandSub{
+ margin-top:4px;
+ color:rgba(255,255,255,.58);
+ font-size:10px;
+ font-weight:850;
+ letter-spacing:.16em;
+ text-transform:uppercase;
+}
+
+.v3MenuLogo{
+ width:112px;
+ height:112px;
+ object-fit:contain;
+ margin:0 auto 14px;
+ display:block;
+ filter:drop-shadow(0 18px 32px rgba(0,0,0,.35));
+}
+
+/* A roda antiga dentro do header do jogo fica escondida; a v3TopBar substitui-a */
+.statsShell>.statsMain>.gameHeader{
+ display:none!important;
+}
+
+/* Definições: continuam exatamente no painel antigo */
+#settingsPage{
+ background:
+  radial-gradient(circle at 14% 0%,rgba(215,25,32,.14),transparent 25%),
+  linear-gradient(180deg,#050b16,#071326)!important;
+}
+
+/* Treino: módulo separado, sem aparência de jogo */
+#trainingPage{
+ background:
+  radial-gradient(circle at 80% 0%,rgba(47,128,237,.14),transparent 26%),
+  linear-gradient(180deg,#050b16,#071326)!important;
+ min-height:100vh;
+}
+
+#trainingPage .trainingHeader{
+ display:flex!important;
+}
+
+#trainingPage .trainingBrandMain::after{
+ content:"";
+}
+
+#trainingPage .trainingCard{
+ background:linear-gradient(180deg,rgba(8,22,42,.88),rgba(4,12,24,.88))!important;
+ border:1px solid rgba(255,255,255,.12)!important;
+}
+
+/* Convocatória também fica módulo próprio */
+#convocatoriaPage{
+ background:
+  radial-gradient(circle at 50% 0%,rgba(215,25,32,.16),transparent 24%),
+  linear-gradient(180deg,#050b16,#071326)!important;
+ min-height:100vh;
+}
+
+/* Correção final de contraste nos popups */
+.modalContent,
+.modalContent *{
+ text-shadow:none!important;
+}
+
+.modalContent button{
+ color:#071326!important;
+}
+
+.modalContent .danger,
+.modalContent .green,
+.modalContent .red{
+ color:white!important;
+}
+
+.modalContent .pbtn,
+.modalContent .actionBtn,
+.modalContent .quickFlowGrid button,
+.modalContent .players button{
+ background:#eef2f7!important;
+ color:#071326!important;
+ border:1px solid rgba(7,19,38,.14)!important;
+}
+
+.modalContent .pbtn.active,
+.modalContent .pbtn.choose,
+.modalContent .starterPick{
+ background:linear-gradient(180deg,#e51c2b,#9d101a)!important;
+ color:white!important;
+}
+
+/* Mobile: mantém barra visível no topo */
+@media(max-width:760px){
+ .v3TopBar{
+  position:sticky;
+  top:0;
+  z-index:80;
+  grid-template-columns:46px 1fr 46px!important;
+  padding:7px 8px!important;
+  margin-bottom:8px!important;
+  border-radius:16px!important;
+ }
+ .v3Logo{
+  width:36px;
+  height:36px;
+ }
+ .v3BrandMain{
+  font-size:23px;
+ }
+ .v3BrandSub{
+  font-size:8px;
+ }
+ .proNavBtn{
+  width:42px!important;
+  height:42px!important;
+  min-height:42px!important;
  }
 }
 
