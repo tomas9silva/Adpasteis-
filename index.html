@@ -3251,6 +3251,37 @@ Esta camada força mesmo o layout horizontal.
  #main .proLiveName{font-size:14px}
 }
 
+
+/* STATS V2.8 — LIMPO SEM AÇÕES RÁPIDAS/SUBSTITUIÇÕES */
+#main .proActionsPanel,
+#main .proSubsPanel{
+ display:none!important;
+}
+#main .proStatsPanel{
+ grid-column:4!important;
+ grid-row:auto!important;
+}
+#main .proStatsGrid{
+ grid-template-columns:1fr 1fr!important;
+}
+#main .proLivePanel{
+ grid-column:1!important;
+}
+#main .pitchCard{
+ grid-column:2 / 4!important;
+}
+#main .proFieldPanel{
+ grid-column:1 / 3!important;
+}
+#main .proBenchPanel{
+ grid-column:3 / 5!important;
+}
+@media(max-width:760px){
+ #main .proStatsGrid{
+  grid-template-columns:1fr 1fr!important;
+ }
+}
+
 </style>
 </head>
 <body>
@@ -3575,11 +3606,6 @@ MÓDULO JOGO
    
  </div>
 
- <div class="proPanel proActionsPanel">
-  <div class="proPanelTitle">Ações rápidas</div>
-  <div id="proQuickActions" class="proActionsGrid"></div>
- </div>
-
  <div class="proPanel proStatsPanel">
   <div class="proPanelTitle">Estatísticas rápidas</div>
   <div id="proQuickStats" class="proStatsGrid"></div>
@@ -3593,12 +3619,6 @@ MÓDULO JOGO
  <div class="proPanel proBenchPanel">
   <div class="proPanelTitle">Banco de suplentes <span id="proBenchCount"></span></div>
   <div id="proBenchPlayers" class="proPlayersRow"></div>
- </div>
-
- <div class="proPanel proSubsPanel">
-  <div class="proPanelTitle">Substituições</div>
-  <div id="proSubsTimeline"></div>
-  <button class="proPrimaryMini" onclick="openSubs()">+ Nova substituição</button>
  </div>
 
  <div class="proPanel proDashboardCard proIndividualCard">
@@ -8627,6 +8647,37 @@ Esta camada força mesmo o layout horizontal.
  #main .proLiveName{font-size:14px}
 }
 
+
+/* STATS V2.8 — LIMPO SEM AÇÕES RÁPIDAS/SUBSTITUIÇÕES */
+#main .proActionsPanel,
+#main .proSubsPanel{
+ display:none!important;
+}
+#main .proStatsPanel{
+ grid-column:4!important;
+ grid-row:auto!important;
+}
+#main .proStatsGrid{
+ grid-template-columns:1fr 1fr!important;
+}
+#main .proLivePanel{
+ grid-column:1!important;
+}
+#main .pitchCard{
+ grid-column:2 / 4!important;
+}
+#main .proFieldPanel{
+ grid-column:1 / 3!important;
+}
+#main .proBenchPanel{
+ grid-column:3 / 5!important;
+}
+@media(max-width:760px){
+ #main .proStatsGrid{
+  grid-template-columns:1fr 1fr!important;
+ }
+}
+
 </style></head><body>${body}<script>window.print()<\/script></body></html>`);
  win.document.close();
 }
@@ -8794,33 +8845,22 @@ function renderLivePlayersPanel(){
 }
 
 function renderProfessionalPanels(){
- let qa=$("proQuickActions");
- if(qa){
-  const acts=[
-   ["Golo","goal","iconGoal","G"],
-   ["Remate","shot","iconShot","R"],
-   ["Assistência","assist","iconAssist","A"],
-   ["Defesa","defense","iconDefense","D"],
-   ["Recuperação de bola","recover","iconRecover","REC"],
-   ["Perda de bola","loss","iconLoss","PER"]
-  ];
-  qa.innerHTML=acts.map(a=>`<button class="proActionBtn ${a[1]}" onclick="shortcutArenaAction('${esc(a[0])}')"><span class="iconBadge ${a[2]}">${a[3]}</span><span>${a[0].replace(" de bola","")}</span></button>`).join("");
- }
-
  let resumo=calcularResumoJogo();
+
  let qs=$("proQuickStats");
  if(qs){
+  let remDefendidos=reg.filter(r=>r.acao&&String(r.acao).startsWith("Remate")&&String(r.acao).endsWith("defesa")).length;
+  let remFora=reg.filter(r=>r.acao&&String(r.acao).startsWith("Remate")&&String(r.acao).endsWith("fora")).length;
+  let rec=reg.filter(r=>r.acao==="Recuperação de bola").length;
+  let perdas=reg.filter(r=>r.acao==="Perda de bola").length;
+
   let tiles=[
-   ["Golos",resumo.totalGolos],
-   ["Remates",resumo.totalRemates],
-   ["Assistências",resumo.totalAssist],
-   ["Defesas",resumo.totalDefesas],
-   ["Recuperações",resumo.totalRecuperacoes],
-   ["Perdas",resumo.totalPerdas],
-   ["Eficácia",resumo.eficacia+"%"],
-   ["Sofridos",resumo.totalGolosSofridos],
-   ["Expulsões",resumo.totalExpulsoes]
+   ["Remates defendidos",remDefendidos],
+   ["Remates fora",remFora],
+   ["Recuperações",rec],
+   ["Perdas",perdas]
   ];
+
   qs.innerHTML=tiles.map(t=>`<div class="proStatTile"><span>${t[0]}</span><b>${t[1]}</b></div>`).join("");
  }
 
@@ -8843,16 +8883,6 @@ function renderProfessionalPanels(){
    <div class="proPlayerName">${j}</div>
    <div class="proPlayerMeta">${tipoJogador(j)==="gr"?"GR":"SUP"} · ${proMinutesOf(j)}</div>
   </div>`).join("");
- }
-
- let st=$("proSubsTimeline");
- if(st){
-  let lista=subs.slice(0,4);
-  if(!lista.length){
-   st.innerHTML=`<div class="small">Sem substituições registadas.</div>`;
-  }else{
-   st.innerHTML=lista.map(s=>`<div class="proSubsRow"><span>${s.tempo||"--:--"}</span><b>${s.sai}</b><span class="arrow">→</span><b>${s.entra}</b><span>${(s.periodo||"").replace(" período","")}</span></div>`).join("");
-  }
  }
 
  renderLivePlayersPanel();
