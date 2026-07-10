@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-PT">
 <head>
@@ -294,6 +293,214 @@
  #main #periodo{min-width:48px!important;max-width:56px!important;height:10px!important;font-size:4px!important}
  #main .matchControls{width:54px!important;min-width:54px!important;max-width:54px!important;gap:2px!important}
  #main .matchControls button{font-size:3.8px!important;border-radius:5px!important}
+}
+</style>
+
+
+<style id="stats-scoreboard-linear-final-v2">
+/* Marcador linear final: equipa da casa | resultado/tempo | adversário | controlos */
+#main .matchBoard.statsFixedScoreboard{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) clamp(72px,8vw,105px)!important;
+  align-items:stretch!important;
+  gap:10px!important;
+  min-height:126px!important;
+  height:clamp(126px,18vh,154px)!important;
+  padding:10px 12px!important;
+  overflow:hidden!important;
+}
+#main .matchScore.statsFixedScore{
+  display:grid!important;
+  grid-template-columns:minmax(150px,1fr) clamp(112px,15vw,175px) minmax(150px,1fr)!important;
+  grid-template-rows:1fr!important;
+  align-items:center!important;
+  gap:12px!important;
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  overflow:hidden!important;
+}
+#main .matchTeam.statsTeam{
+  position:static!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:8px!important;
+  min-width:0!important;
+  height:auto!important;
+  padding:0!important;
+  overflow:hidden!important;
+}
+#main .matchTeam.statsHomeTeam{grid-column:1!important;grid-row:1!important;flex-direction:row!important}
+#main .matchCenter.statsScoreCenter{grid-column:2!important;grid-row:1!important}
+#main .matchTeam.statsAwayTeam{grid-column:3!important;grid-row:1!important;flex-direction:row-reverse!important}
+#main .matchTeam .statsTeamNameWrap{
+  position:static!important;
+  display:block!important;
+  flex:1 1 auto!important;
+  width:auto!important;
+  min-width:0!important;
+  overflow:hidden!important;
+}
+#main .matchTeam .statsTeamNameWrap input{
+  position:static!important;
+  display:block!important;
+  box-sizing:border-box!important;
+  width:100%!important;
+  min-width:0!important;
+  height:38px!important;
+  margin:0!important;
+  padding:0 10px!important;
+  font-size:clamp(11px,1.35vw,18px)!important;
+  font-weight:800!important;
+  line-height:38px!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+#main .matchTeam .teamGoalBtns,
+#main .matchTeam .statsHomeGoalBtns,
+#main .matchTeam .statsAwayGoalBtns{
+  position:static!important;
+  inset:auto!important;
+  transform:none!important;
+  flex:0 0 auto!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:6px!important;
+  z-index:auto!important;
+}
+#main .matchTeam .teamGoalBtns button,
+#main .matchTeam .statsHomeGoalBtns button,
+#main .matchTeam .statsAwayGoalBtns button{
+  width:34px!important;
+  min-width:34px!important;
+  height:30px!important;
+  min-height:30px!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:20px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  border-radius:8px!important;
+}
+#main .matchCenter.statsScoreCenter{
+  position:static!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:4px!important;
+  width:100%!important;
+  min-width:0!important;
+  height:auto!important;
+  overflow:visible!important;
+}
+#main .matchCenter .matchScoreline{
+  position:static!important;
+  width:100%!important;
+  margin:0!important;
+  font-size:clamp(30px,4vw,54px)!important;
+  font-weight:900!important;
+  line-height:.9!important;
+  letter-spacing:0!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+}
+#main .matchCenter .matchGlow{display:none!important}
+#main .matchCenter #tempo{
+  position:static!important;
+  margin:0!important;
+  font-size:clamp(13px,1.45vw,20px)!important;
+  font-weight:800!important;
+  line-height:1!important;
+}
+#main .matchCenter .matchPeriodRow{
+  position:static!important;
+  width:100%!important;
+  display:flex!important;
+  justify-content:center!important;
+}
+#main .matchCenter #periodo{
+  position:static!important;
+  box-sizing:border-box!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:130px!important;
+  height:24px!important;
+  min-height:24px!important;
+  padding:0 4px!important;
+  font-size:10px!important;
+  text-align:center!important;
+}
+#main .matchControls.statsFixedControls{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  grid-template-rows:repeat(5,minmax(0,1fr))!important;
+  align-self:stretch!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+  height:100%!important;
+  gap:5px!important;
+  overflow:hidden!important;
+}
+#main .matchControls.statsFixedControls button{
+  position:static!important;
+  box-sizing:border-box!important;
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0 4px!important;
+  font-size:clamp(7px,.72vw,10px)!important;
+  font-weight:800!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  border-radius:7px!important;
+}
+#main .matchControls.statsFixedControls .iconBtn{font-size:clamp(12px,1.3vw,18px)!important}
+
+@media screen and (orientation:landscape) and (max-width:950px) and (max-height:520px){
+  #main .matchBoard.statsFixedScoreboard{
+    grid-template-columns:minmax(0,1fr) 62px!important;
+    gap:5px!important;
+    min-height:94px!important;
+    height:104px!important;
+    padding:5px 7px!important;
+  }
+  #main .matchScore.statsFixedScore{
+    grid-template-columns:minmax(95px,1fr) 86px minmax(95px,1fr)!important;
+    gap:5px!important;
+  }
+  #main .matchTeam.statsTeam{gap:4px!important}
+  #main .matchTeam .statsTeamNameWrap input{
+    height:27px!important;
+    padding:0 4px!important;
+    font-size:9px!important;
+    line-height:27px!important;
+  }
+  #main .matchTeam .teamGoalBtns,
+  #main .matchTeam .statsHomeGoalBtns,
+  #main .matchTeam .statsAwayGoalBtns{gap:3px!important}
+  #main .matchTeam .teamGoalBtns button,
+  #main .matchTeam .statsHomeGoalBtns button,
+  #main .matchTeam .statsAwayGoalBtns button{
+    width:24px!important;min-width:24px!important;height:22px!important;min-height:22px!important;font-size:14px!important;border-radius:6px!important;
+  }
+  #main .matchCenter.statsScoreCenter{gap:2px!important}
+  #main .matchCenter .matchScoreline{font-size:28px!important}
+  #main .matchCenter #tempo{font-size:10px!important}
+  #main .matchCenter #periodo{height:16px!important;min-height:16px!important;max-width:76px!important;font-size:6px!important;padding:0!important}
+  #main .matchControls.statsFixedControls{gap:3px!important}
+  #main .matchControls.statsFixedControls button{font-size:5px!important;padding:0 1px!important;border-radius:5px!important}
+  #main .matchControls.statsFixedControls .iconBtn{font-size:10px!important}
 }
 </style>
 
