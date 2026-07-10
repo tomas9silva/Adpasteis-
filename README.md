@@ -1,28 +1,37 @@
-# StatS — versão modular para GitHub
+# StatS — AD Pastéis
 
-Esta versão mantém a aplicação com o mesmo aspeto e funcionamento, mas separa o ficheiro único em estrutura de projeto.
+Projeto organizado para GitHub Pages.
 
-## Estrutura
+## Estrutura correta
 
-- `index.html` — estrutura da página
-- `css/style.css` — todo o design
-- `js/app.js` — lógica principal original
-- `js/modules/` — ficheiros preparados para futuras alterações específicas
+- `index.html`
+- `css/style.css`
+- `js/app.js`
+- `js/dashboardColetivo.js`
+- `js/dashboardIndividual.js`
+- `js/heatmap.js`
+- `js/jogo.js`
+- `js/minutos.js`
+- `js/storage.js`
+- `js/treino.js`
+- `js/ui.js`
 
-## Como publicar no GitHub
+## Como publicar
 
-1. Abre o ZIP.
-2. Envia para o repositório todos os ficheiros e pastas.
-3. O ficheiro principal continua a ser `index.html`.
+No GitHub, envia estes ficheiros e pastas mantendo a estrutura:
 
-## Como editar daqui para a frente
+- pasta `css`
+- pasta `js`
+- `index.html`
+- `README.md`
 
-- Dashboard Individual → `js/modules/dashboardIndividual.js`
-- Dashboard Coletivo → `js/modules/dashboardColetivo.js`
-- Heat Map → `js/modules/heatmap.js`
-- Minutos → `js/modules/minutos.js`
-- Jogo/marcador/arena → `js/modules/jogo.js`
-- Treino → `js/modules/treino.js`
-- Visual/design → `css/style.css`
+Não coloques todos os ficheiros soltos se o `index.html` estiver a chamar `css/style.css` e `js/app.js`.
 
-Nesta primeira fase, a lógica original foi mantida em `js/app.js` para garantir estabilidade.
+## Próximas alterações
+
+A partir daqui:
+- Dashboard Individual → `js/dashboardIndividual.js`
+- Heat Map → `js/heatmap.js`
+- Minutos → `js/minutos.js`
+- Marcador/Arena → `js/jogo.js`
+- Design → `css/style.css`
