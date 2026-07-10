@@ -504,6 +504,176 @@
 }
 </style>
 
+
+<style id="stats-scoreboard-landscape-v3">
+/* Correção final do marcador em telemóvel horizontal */
+@media screen and (orientation:landscape) and (max-height:600px){
+  #main > .matchBoard.statsFixedScoreboard{
+    position:relative!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 68px!important;
+    grid-template-rows:1fr!important;
+    align-items:stretch!important;
+    gap:6px!important;
+    box-sizing:border-box!important;
+    width:100%!important;
+    min-width:0!important;
+    height:112px!important;
+    min-height:112px!important;
+    max-height:112px!important;
+    padding:7px 8px!important;
+    overflow:hidden!important;
+  }
+  #main > .matchBoard > .matchScore.statsFixedScore{
+    position:relative!important;
+    inset:auto!important;
+    transform:none!important;
+    display:grid!important;
+    grid-template-columns:minmax(72px,1fr) 25px 88px 25px minmax(72px,1fr)!important;
+    grid-template-rows:1fr!important;
+    align-items:center!important;
+    gap:5px!important;
+    box-sizing:border-box!important;
+    width:100%!important;
+    height:100%!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+  }
+  #main > .matchBoard > .matchScore > .matchTeam.statsTeam{
+    position:static!important;
+    inset:auto!important;
+    transform:none!important;
+    display:contents!important;
+    width:auto!important;
+    height:auto!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:visible!important;
+  }
+  #main > .matchBoard > .matchScore > .statsHomeTeam .statsTeamNameWrap{grid-column:1!important;grid-row:1!important}
+  #main > .matchBoard > .matchScore > .statsHomeTeam .statsHomeGoalBtns{grid-column:2!important;grid-row:1!important}
+  #main > .matchBoard > .matchScore > .statsScoreCenter{grid-column:3!important;grid-row:1!important}
+  #main > .matchBoard > .matchScore > .statsAwayTeam .statsAwayGoalBtns{grid-column:4!important;grid-row:1!important}
+  #main > .matchBoard > .matchScore > .statsAwayTeam .statsTeamNameWrap{grid-column:5!important;grid-row:1!important}
+  #main > .matchBoard .statsTeamNameWrap{
+    position:static!important;
+    inset:auto!important;
+    transform:none!important;
+    display:block!important;
+    box-sizing:border-box!important;
+    width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+  }
+  #main > .matchBoard .statsTeamNameWrap input{
+    position:static!important;
+    inset:auto!important;
+    transform:none!important;
+    display:block!important;
+    box-sizing:border-box!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    height:31px!important;
+    margin:0!important;
+    padding:0 5px!important;
+    font-size:10px!important;
+    line-height:31px!important;
+    text-align:center!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+  #main > .matchBoard .teamGoalBtns{
+    position:static!important;
+    inset:auto!important;
+    transform:none!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:4px!important;
+    width:25px!important;
+    min-width:25px!important;
+    height:auto!important;
+    margin:0!important;
+    padding:0!important;
+  }
+  #main > .matchBoard .teamGoalBtns button{
+    position:static!important;
+    transform:none!important;
+    box-sizing:border-box!important;
+    width:25px!important;
+    min-width:25px!important;
+    height:23px!important;
+    min-height:23px!important;
+    margin:0!important;
+    padding:0!important;
+    font-size:15px!important;
+    line-height:1!important;
+    border-radius:6px!important;
+  }
+  #main > .matchBoard .matchCenter.statsScoreCenter{
+    position:static!important;
+    inset:auto!important;
+    transform:none!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:2px!important;
+    box-sizing:border-box!important;
+    width:88px!important;
+    min-width:88px!important;
+    height:100%!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+  }
+  #main > .matchBoard .matchScoreline{font-size:27px!important;line-height:.9!important;margin:0!important}
+  #main > .matchBoard #tempo{font-size:10px!important;line-height:1!important;margin:0!important}
+  #main > .matchBoard .matchPeriodRow{width:100%!important;margin:0!important}
+  #main > .matchBoard #periodo{width:76px!important;min-width:76px!important;max-width:76px!important;height:17px!important;min-height:17px!important;font-size:6px!important;padding:0!important}
+  #main > .matchBoard > .matchControls.statsFixedControls{
+    position:static!important;
+    inset:auto!important;
+    transform:none!important;
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    grid-template-rows:repeat(5,minmax(0,1fr))!important;
+    gap:3px!important;
+    box-sizing:border-box!important;
+    width:68px!important;
+    min-width:68px!important;
+    max-width:68px!important;
+    height:100%!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+  }
+  #main > .matchBoard > .matchControls button{
+    position:static!important;
+    transform:none!important;
+    box-sizing:border-box!important;
+    width:100%!important;
+    height:100%!important;
+    min-width:0!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0 2px!important;
+    font-size:5px!important;
+    line-height:1!important;
+    border-radius:5px!important;
+    overflow:hidden!important;
+  }
+  #main > .matchBoard > .matchControls .iconBtn{font-size:10px!important}
+}
+</style>
+
 </head>
 <body>
 <!--
