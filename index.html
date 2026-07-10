@@ -838,6 +838,66 @@ html,body{
 })();
 </script>
 
+
+<style id="stats-ipad-minutes-compact">
+/* Popup de minutos compacto para mostrar 15+ jogadoras no iPad */
+#minutesModal .modalContent{
+  width:min(94vw,980px)!important;
+  max-width:980px!important;
+  max-height:88dvh!important;
+  padding:12px!important;
+  overflow:auto!important;
+}
+#minutesModal h2{margin:0 0 8px!important;font-size:20px!important;line-height:1.1!important}
+#minutesContent{
+  margin:0!important;
+  padding:0!important;
+  font-size:12px!important;
+  line-height:1.15!important;
+}
+#minutesContent table{width:100%!important;border-collapse:collapse!important;table-layout:fixed!important}
+#minutesContent th,#minutesContent td{padding:4px 5px!important;font-size:11px!important;line-height:1.1!important}
+#minutesContent .players,
+#minutesContent .playerGrid,
+#minutesContent .minutesGrid,
+#minutesContent .minuteGrid,
+#minutesContent [class*="grid"],
+#minutesContent [class*="Grid"]{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:5px!important;
+}
+#minutesContent .playerCard,
+#minutesContent .minuteCard,
+#minutesContent [class*="player"],
+#minutesContent [class*="Player"],
+#minutesContent [class*="minute"],
+#minutesContent [class*="Minute"]{
+  min-height:0!important;
+  margin:0!important;
+  padding:5px 7px!important;
+  font-size:11px!important;
+  line-height:1.1!important;
+  border-radius:7px!important;
+}
+#minutesContent button,#minutesContent input,#minutesContent select{
+  min-height:26px!important;
+  height:26px!important;
+  padding:2px 6px!important;
+  font-size:11px!important;
+}
+#minutesModal .danger{margin-top:8px!important;min-height:34px!important;padding:6px 12px!important}
+@media screen and (orientation:portrait) and (min-width:700px){
+  #minutesModal .modalContent{width:92vw!important;max-height:90dvh!important}
+  #minutesContent .players,
+  #minutesContent .playerGrid,
+  #minutesContent .minutesGrid,
+  #minutesContent .minuteGrid,
+  #minutesContent [class*="grid"],
+  #minutesContent [class*="Grid"]{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+</style>
+
 </head>
 <body>
 <!--
